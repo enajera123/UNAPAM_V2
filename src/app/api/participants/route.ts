@@ -4,10 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest, res: NextResponse) {
     try {
         const participants = await prisma.participant.findMany({
-            include: {
-                policy: true,
-                medicalReport: true
-            }
         });
         return NextResponse.json(participants, { status: 200 });
     } catch (error) {
@@ -20,13 +16,15 @@ export async function GET(req: NextRequest, res: NextResponse) {
 export async function POST(req: NextRequest, res: NextResponse) {
     try {
         const participant = await req.json();
+        console.log(participant)
         const newParticipant = await prisma.participant.create({
             data: {
-                ...participant
+                ...participant,
             }
         });
         return NextResponse.json(newParticipant, { status: 201 })
     } catch (error) {
+        console.log(error)
         return NextResponse.json(error, { status: 500 });
     }
 }

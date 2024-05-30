@@ -31,36 +31,24 @@ model User {
 }
 
 model Participant {
-  id                     Int                     @id @default(autoincrement())
-  firstName              String
-  firstSurname           String
-  secondSurname          String
-  email                  String
-  phoneNumber            String
-  birthDate              String
-  identification         String
-  hasWhatsApp            YesOrNo
-  photo                  String?
-  grade                  Grade
-  typeIdentification     TypeIdentification
-  medicalReport          MedicalReport?
-  participantAttachments ParticipantAttachment[]
-  participantHealths     ParticipantHealth?
-  participantsOnCourses  ParticipantOnCourse[]
-  policy                 Policy?
-  referenceContacts      ReferenceContact[]
-}
-
-model MedicalReport {
-  id             Int         @id @default(autoincrement())
-  expirationDate String
-  participant    Participant @relation(fields: [id], references: [id])
-}
-
-model Policy {
-  id             Int         @id @default(autoincrement())
-  expirationDate String
-  participant    Participant @relation(fields: [id], references: [id])
+  id                             Int                     @id @default(autoincrement())
+  firstName                      String
+  firstSurname                   String
+  secondSurname                  String
+  email                          String
+  phoneNumber                    String
+  birthDate                      String
+  identification                 String
+  hasWhatsApp                    YesOrNo
+  photo                          String?
+  grade                          Grade
+  typeIdentification             TypeIdentification
+  expirationDateMedicalInsurance String?
+  expirationDateMedicalReport    String?
+  participantAttachments         ParticipantAttachment[]
+  participantHealths             ParticipantHealth?
+  participantsOnCourses          ParticipantOnCourse[]
+  referenceContacts              ReferenceContact[]
 }
 
 model ParticipantAttachment {

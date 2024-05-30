@@ -58,8 +58,9 @@ export interface Participant {
     hasWhatsApp: YesOrNo;
     photo?: string;
     grade: Grade;
-    policy?: Policy;
-    medicalReport?: MedicalReport;
+    expirationDateMedicalReport?: string
+    expirationDateMedicalInsurance?: string
+    // medicalReport?: MedicalReport;
     referenceContacts?: ReferenceContact[];
     participantAttachments?: ParticipantAttachment[];
     typeIdentification: TypeIdentification;
@@ -67,17 +68,17 @@ export interface Participant {
     participantsOnCourses?: ParticipantOnCourse[];
 }
 
-export interface MedicalReport {
-    id?: number;
-    expirationDate: string;
-    participant?: Participant;
-}
+// export interface MedicalReport {
+//     id?: number;
+//     expirationDate: string;
+//     participant?: Participant;
+// }
 
-export interface Policy {
-    id?: number;
-    expirationDate: string;
-    participant?: Participant;
-}
+// export interface Policy {
+//     id?: number;
+//     expirationDate: string;
+//     participant?: Participant;
+// }
 
 export interface ParticipantAttachment {
     id?: number;

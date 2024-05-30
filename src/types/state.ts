@@ -1,4 +1,4 @@
-import { Course, GeneralInformation, MedicalReport, Participant, ParticipantAttachment, ParticipantDissease, ParticipantHealth, ParticipantMedicine, ParticipantOnCourse, Policy, ReferenceContact, User } from "./prisma";
+import { Course, GeneralInformation, Participant, ParticipantAttachment, ParticipantDissease, ParticipantHealth, ParticipantMedicine, ParticipantOnCourse, ReferenceContact, User } from "./prisma";
 
 
 export type UsersState = {
@@ -23,16 +23,6 @@ export type ReferenceContactState = {
   putContact: (id: number, contact: ReferenceContact) => Promise<ReferenceContact | null>;
   deleteContact: (id: number) => Promise<boolean>;
   searchContact: (searchTerm: string) => void;
-};
-
-export type PolicyState = {
-  policys: Policy[];
-  setPolicys: (policys: Policy[]) => void;
-  getPolicys: () => void;
-  getPolicyById: (id: number) => Promise<Policy | null>;
-  postPolicy: (policy: Policy) => Promise<Policy | null>;
-  putPolicy: (id: number, policy: Policy) => Promise<Policy | null>;
-  deletePolicy: (id: number) => Promise<boolean>;
 };
 
 export type ParticipantState = {
@@ -104,16 +94,6 @@ export type ParticipantAttachmentState = {
   postParticipantAttachment: (participantAttachment: ParticipantAttachment) => Promise<ParticipantAttachment | null>;
   putParticipantAttachment: (id: number, participantAttachment: ParticipantAttachment) => Promise<ParticipantAttachment | null>;
   deleteParticipantAttachment: (id: number) => Promise<boolean>;
-};
-
-export type MedicalReportState = {
-  reports: MedicalReport[];
-  setReports: (reports: MedicalReport[]) => void;
-  getMedicalReports: () => void;
-  getMedicalReportById: (id: number) => Promise<MedicalReport | null>;
-  postMedicalReport: (report: MedicalReport) => Promise<MedicalReport | null>;
-  putMedicalReport: (id: number, report: MedicalReport) => Promise<MedicalReport | null>;
-  deleteMedicalReport: (id: number) => Promise<boolean>;
 };
 
 export type GeneralInformationState = {

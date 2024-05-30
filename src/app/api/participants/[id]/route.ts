@@ -5,44 +5,22 @@ export async function PUT(req: NextRequest, { params }: ParameterId) {
     try {
         const fetchedId = parseInt(params.id);
         const participant = await req.json();
-        const { Policy } = participant
-        const [updatedParticipant, policy] = await prisma.$transaction([
-            prisma.participant.update({
-                where: {
-                    id: fetchedId,
-                },
-                data: {
-                    ...participant,
-                    Policy: {
-                        update: {
-                            ...Policy,
-                        },
-                    },
-                },
-                include: {
-                    policy: true,
-                    medicalReport: true,
-                    participantAttachments: true,
-                    participantHealths: true,
-                    participantsOnCourses: true,
-                    referenceContacts: true,
-                }
-            }),
-            prisma.policy.upsert({
-                where: {
-                    id: fetchedId,
-                },
-                update: {
-                    ...Policy,
-                },
-                create: {
-                    ...Policy,
-                    id: fetchedId,
-                },
-            }),
-        ]);
-        updatedParticipant.policy = policy;
-        return NextResponse.json(updatedParticipant, { status: 200 });
+        console.log(participant)
+        const participantUpdated = await prisma.participant.update({
+            where: {
+                id: fetchedId,
+            },
+            data: {
+                ...participant,
+            },
+            include: {
+                participantAttachments: true,
+                participantHealths: true,
+                participantsOnCourses: true,
+                referenceContacts: true,
+            }
+        });
+        return NextResponse.json(participantUpdated, { status: 200 });
     } catch (error) {
         console.log(error)
         return NextResponse.json(
@@ -76,8 +54,6 @@ export async function GET(req: NextRequest, { params }: ParameterId) {
                 id: fetchedId,
             },
             include: {
-                policy: true,
-                medicalReport: true,
                 participantAttachments: true,
                 participantHealths: true,
                 participantsOnCourses: true,

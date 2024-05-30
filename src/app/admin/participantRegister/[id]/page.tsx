@@ -1,5 +1,5 @@
 'use client'
-import Record from '@/components/Pages/Record/Record';
+import ParticipantRegister from '@/components/Pages/Participants/ParticipantRegister';
 import { useParticipantsStore } from '@/store/participantsStore';
 import { Participant } from '@/types/prisma';
 import { useEffect, useState } from 'react';
@@ -17,6 +17,6 @@ export default function Home({ params }: { params: { id: string } }) {
     }, [])
 
     return (
-        <Record participant={participant} />
+        <ParticipantRegister participant={participant} />
     )
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { RefObject, useRef, useState } from "react";
+import { useState } from "react";
 import { InputFieldProps } from "./type";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 

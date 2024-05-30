@@ -37,12 +37,12 @@ function Participants() {
                     handleSearch={() => handleSearch(participants)}
                     showSelect={false}
                 />
-                <Link href={'/admin/record'}><Button className="bg-red-gradient">Crear Participante</Button></Link>
+                <Link href={'/admin/participantRegister'}><Button className="bg-red-gradient">Crear Participante</Button></Link>
             </div>
             <div className="max-w-5xl">
                 {filteredData.length > 0 ? (
                     <Table
-                        doubleClickRowFunction={(id) => router.push(`/admin/record/${id}`)}
+                        doubleClickRowFunction={(id) => router.push(`/admin/participantRegister/${id}`)}
                         showEditColumn={true}
                         keys={['identification', 'firstName', 'firstSurname', 'secondSurname', 'Policy.expirationDate', 'MedicalReport.expirationDate']}
                         data={filteredData}

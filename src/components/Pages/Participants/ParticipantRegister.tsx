@@ -17,6 +17,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Grade, Participant, YesOrNo, TypeIdentification } from '@/types/prisma';
 import { useParticipantsStore } from '@/store/participantsStore';
+import { useRouter } from 'next/navigation';
 const optionsScholarship = [
     { value: "Sin_Estudio", label: "Sin estudio" },
     { value: "Primaria_Completa", label: "Primaria completa" },
@@ -26,8 +27,14 @@ const optionsScholarship = [
     { value: "Universidad_Incompleta", label: "Universidad completa" },
     { value: "Universidad_Completa", label: "Universidad incompleta" },
 ];
-export default function Record({ participant }: { participant: Participant | null }) {
-    const [hasPolicy, setHasPolicy] = useState(false)
+const optionsTypeIdentification = [
+    { value: "Nacional", label: "Nacional" },
+    { value: "DIMEX", label: "DIMEX" },
+];
+export default function ParticipantRegister({ participant }: { participant: Participant | null }) {
+    const router = useRouter()
+    const [hasMedicalInsurance, setHasMedicalInsurance] = useState(false)
+    const [hasMedicalReport, setHasMedicalReport] = useState(false)
     const [identification, setIdentification] = useState('')
     const [birthDate, setBirthDate] = useState('')
     const [scholarship, setScholarship] = useState('')
@@ -36,9 +43,10 @@ export default function Record({ participant }: { participant: Participant | nul
     const [firstLastName, setFirstLastName] = useState('')
     const [secondLastName, setSecondLastName] = useState('')
     const [email, setEmail] = useState('')
-    const [hasWhatsApp, setHasWhatsApp] = useState("")
-    const [expirationDatePolicy, setExpirationDatePolicy] = useState('')
-    // const [address, setAddress] = useState('')
+    const [hasWhatsApp, setHasWhatsApp] = useState(false)
+    const [expirationDateMedicalInsurance, setExpirationDateMedicalInsurance] = useState('')
+    const [expirationDateMedicalReport, setExpirationDateMedicalReport] = useState('')
+    const [typeIdentification, setTypeIdentification] = useState('Nacional')
     const { postParticipant, putParticipant } = useParticipantsStore()
     useEffect(() => {
         if (participant) {
@@ -50,16 +58,19 @@ export default function Record({ participant }: { participant: Participant | nul
             setFirstLastName(participant.firstName)
             setSecondLastName(participant.secondSurname)
             setEmail(participant.email)
-            setHasWhatsApp(participant.hasWhatsApp ? "Yes" : "No")
-            setHasPolicy(participant.policy ? true : false)
-            setExpirationDatePolicy(participant.policy?.expirationDate || '')
+            setHasWhatsApp(participant.hasWhatsApp === "Yes" as unknown as YesOrNo)
+            setHasMedicalInsurance(participant.expirationDateMedicalInsurance !== null)
+            setHasMedicalReport(participant.expirationDateMedicalReport !== null)
+            setTypeIdentification(participant.typeIdentification.toString())
+            setExpirationDateMedicalInsurance(participant.expirationDateMedicalInsurance || '')
+            setExpirationDateMedicalReport(participant.expirationDateMedicalReport || '')
         }
     }, [participant])
     const handleSave = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         const newParticipant: Participant = {
             identification,
-            hasWhatsApp: hasWhatsApp as unknown as YesOrNo,
+            hasWhatsApp: hasWhatsApp ? "Yes" as unknown as YesOrNo : "No" as unknown as YesOrNo,
             birthDate,
             grade: scholarship as unknown as Grade,
             firstName: name,
@@ -67,22 +78,32 @@ export default function Record({ participant }: { participant: Participant | nul
             firstSurname: firstLastName,
             secondSurname: secondLastName,
             email,
-            typeIdentification: "Nacional" as unknown as TypeIdentification,
-            policy: hasPolicy ? { expirationDate: expirationDatePolicy } : undefined
+            typeIdentification: typeIdentification as unknown as TypeIdentification,
+            expirationDateMedicalInsurance: hasMedicalInsurance ? expirationDateMedicalInsurance : null as unknown as undefined,
+            expirationDateMedicalReport: hasMedicalReport ? expirationDateMedicalReport : null as unknown as undefined
         }
         const response = participant !== null ? await putParticipant(participant?.id ?? 0, newParticipant) : await postParticipant(newParticipant)
-        participant = response ? null : participant
-
+        if (response) {
+            router.push('/admin/participants')
+        }
     }
     return (
         <div className="container mx-auto bg-gray-gradient p-10 h-auto max-w-4xl my-4 rounded-md gap-4">
             <div>
-
-                <div className='grid grid-cols-3 gap-5 items-center mb-3'>
+                <div className='grid grid-cols-4 gap-5 items-center mb-3'>
+                    <Select
+                        value={typeIdentification}
+                        onChange={(e) => setTypeIdentification(e.target.value)}
+                        label="Tipo de identificación"
+                        placeholder="Tipo de identificación"
+                        icon={<HiOutlineIdentification color="white" />}
+                        options={optionsTypeIdentification}
+                    />
                     <InputField
                         value={identification}
                         onChange={(e) => setIdentification(e.target.value)}
                         label="Identificación"
+                        type="text"
                         placeholder="Identificación"
                         iconStart={<HiOutlineIdentification color="white" />}
                     />
@@ -94,16 +115,17 @@ export default function Record({ participant }: { participant: Participant | nul
                         type="date"
                         iconStart={<FaRegCalendarAlt color="white" />}
                     />
-                    <div className='w-full flex justify-center'>
-                        <Image src={logoUNAPAM} alt="logoUNAPAM" height={150} width={150} />
+                    <div className='flex flex-col items-center justify-center'>
+                        <LuUserCircle2 className="w-32 h-auto text-white" />
+                        <Button className="bg-red-gradient">Foto</Button>
                     </div>
                 </div>
-                <div className='grid grid-cols-3 gap-5'>
+                <div className='grid grid-cols-3 gap-5 mb-6'>
                     <div>
                         <div className='flex gap-1 items-center'>
                             <RiWhatsappLine color='green' size={20} />
                             <label className='text-green-500' htmlFor="hasWhatsapp">Tiene Whatsapp</label>
-                            <input onChange={(e) => setHasWhatsApp(e.target.checked ? "Yes" : "No")} checked={hasWhatsApp === "Yes" ? true : false} type="checkbox" name="hasWhatsapp" id="hasWhatsapp" />
+                            <input onChange={(e) => setHasWhatsApp(e.target.checked ? true : false)} checked={hasWhatsApp} type="checkbox" name="hasWhatsapp" id="hasWhatsapp" />
                         </div>
                         <InputField
                             value={phone}
@@ -130,7 +152,7 @@ export default function Record({ participant }: { participant: Participant | nul
                     />
                 </div>
             </div>
-            <div className='grid grid-cols-3 grid-rows-2 gap-5'>
+            <div className='grid grid-cols-3 grid-rows-1 gap-5'>
                 <InputField
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -152,32 +174,47 @@ export default function Record({ participant }: { participant: Participant | nul
                     placeholder="Segundo Apellido"
                     iconStart={<GoPerson color="white" />}
                 />
-                <Checkbox
-                    checked={hasPolicy}
-                    onChange={(e) => setHasPolicy(e.target.checked ? true : false)}
-                    label="Tiene Poliza"
-                    placeholder="Tiene Poliza"
-                />
-                {hasPolicy && <div className='col-span-1'>
-                    <InputField
-                        value={expirationDatePolicy}
-                        onChange={(e) => setExpirationDatePolicy(e.target.value)}
-                        label="Vencimiento de Poliza"
-                        placeholder="Fecha de Vencimiento"
-                        type="date"
-                        iconStart={<FaRegCalendarAlt color="white" />} />
-                </div>}
             </div>
-            <div className='grid grid-cols-2'>
-                <TextArea
-                    placeholder="Dirección"
-                    rows={6}
-                >Direccion</TextArea>
-                <div className='flex flex-col items-center justify-center'>
-                    <LuUserCircle2 className="w-32 h-auto text-white" />
-                    <Button className="bg-red-gradient">Foto</Button>
+            <div>
+                <div>
+                    <Checkbox
+                        checked={hasMedicalInsurance}
+                        id='hasMedicalInsurance'
+                        onChange={(e) => setHasMedicalInsurance(e.target.checked ? true : false)}
+                        label="Tiene Poliza"
+                        placeholder="Tiene Poliza"
+                    />
+
+                    {hasMedicalInsurance && <div  >
+                        <InputField
+                            value={expirationDateMedicalInsurance}
+                            onChange={(e) => setExpirationDateMedicalInsurance(e.target.value)}
+                            label="Vencimiento de Poliza"
+                            placeholder="Fecha de Vencimiento"
+                            type="date"
+                            iconStart={<FaRegCalendarAlt color="white" />} />
+                    </div>}
+                </div>
+                <div className='h-auto'>
+                    <Checkbox
+                        id='hasMedicalReport'
+                        checked={hasMedicalReport}
+                        onChange={(e) => setHasMedicalReport(e.target.checked ? true : false)}
+                        label="Tiene Dictamen Medico"
+                        placeholder="Tiene Dictamen Medico"
+                    />
+                    {hasMedicalReport && <div >
+                        <InputField
+                            value={expirationDateMedicalReport}
+                            onChange={(e) => setExpirationDateMedicalReport(e.target.value)}
+                            label="Vencimiento de Dictamen Medico"
+                            placeholder="Fecha de Vencimiento"
+                            type="date"
+                            iconStart={<FaRegCalendarAlt color="white" />} />
+                    </div>}
                 </div>
             </div>
+
             <div className='flex justify-between mt-5'>
                 <Link href="/admin/record/1/health">
                     <Button className="bg-red-gradient w-52">Salud</Button>
