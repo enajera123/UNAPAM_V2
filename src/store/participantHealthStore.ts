@@ -9,6 +9,7 @@ import {
   getParticipantHealthByBloodType,
   getParticipantHealthByParticipantId,
 } from "@/services/participantHealthService";
+import { ParticipantHealth } from "@/types/prisma";
 
 export const useParticipantHealthStore = create<ParticipantHealthState>(
   (set) => ({
@@ -22,17 +23,20 @@ export const useParticipantHealthStore = create<ParticipantHealthState>(
 
     getParticipantHealthById: async (id: number) => {
       const participantHealth = await getParticipantHealthById(id);
+      if (!participantHealth) return null;
       set((state) => ({
         participantsHealth: state.participantsHealth.map((p) =>
           p.id === id ? participantHealth : p
         ),
       }));
+      return participantHealth;
     },
 
     postParticipantHealth: async (participantHealth: ParticipantHealth) => {
       const newParticipantHealth = await createParticipantHealth(
         participantHealth
       );
+      if (!newParticipantHealth) return null;
       if (newParticipantHealth) {
         set((state) => ({
           participantsHealth: [
@@ -41,6 +45,7 @@ export const useParticipantHealthStore = create<ParticipantHealthState>(
           ],
         }));
       }
+      return newParticipantHealth;
     },
 
     putParticipantHealth: async (
@@ -51,18 +56,22 @@ export const useParticipantHealthStore = create<ParticipantHealthState>(
         id,
         participantHealth
       );
+      if (!updatedParticipantHealth) return null;
       set((state) => ({
         participantsHealth: state.participantsHealth.map((p) =>
           p.id === id ? updatedParticipantHealth : p
         ),
       }));
+      return updatedParticipantHealth;
     },
 
     deleteParticipantHealth: async (id: number) => {
-      await deleteParticipantHealth(id);
+      const response = await deleteParticipantHealth(id);
+      if (!response) return false;
       set((state) => ({
         participantsHealth: state.participantsHealth.filter((p) => p.id !== id),
       }));
+      return true;
     },
 
     getParticipantHealthByBloodType: async (bloodType: string) => {

@@ -1,3 +1,4 @@
+import { ParticipantOnCourse } from "@/types/prisma";
 import axios from "axios";
 
 export async function getParticipantsOnCourse() {

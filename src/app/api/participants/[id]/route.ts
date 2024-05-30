@@ -20,12 +20,12 @@ export async function PUT(req: NextRequest, { params }: ParameterId) {
                     },
                 },
                 include: {
-                    Policy: true,
-                    MedicalReport: true,
-                    ParticipantAttachments: true,
-                    ParticipantHealths: true,
-                    ParticipantsOnCourses: true,
-                    ReferenceContacts: true,
+                    policy: true,
+                    medicalReport: true,
+                    participantAttachments: true,
+                    participantHealths: true,
+                    participantsOnCourses: true,
+                    referenceContacts: true,
                 }
             }),
             prisma.policy.upsert({
@@ -41,9 +41,7 @@ export async function PUT(req: NextRequest, { params }: ParameterId) {
                 },
             }),
         ]);
-        updatedParticipant.Policy = policy;
-        console.log(updatedParticipant)
-
+        updatedParticipant.policy = policy;
         return NextResponse.json(updatedParticipant, { status: 200 });
     } catch (error) {
         console.log(error)
@@ -78,13 +76,13 @@ export async function GET(req: NextRequest, { params }: ParameterId) {
                 id: fetchedId,
             },
             include: {
-                Policy: true,
-                MedicalReport: true,
-                ParticipantAttachments: true,
-                ParticipantHealths: true,
-                ParticipantsOnCourses: true,
-                ReferenceContacts: true,
-            },
+                policy: true,
+                medicalReport: true,
+                participantAttachments: true,
+                participantHealths: true,
+                participantsOnCourses: true,
+                referenceContacts: true,
+            }
         });
 
         return NextResponse.json(participant, { status: 200 });

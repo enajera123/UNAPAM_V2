@@ -55,10 +55,12 @@ export const useParticipantsStore = create<ParticipantState>((set) => ({
   },
 
   deleteParticipant: async (id: number) => {
-    await deleteParticipant(id);
+    const response = await deleteParticipant(id);
+    if (!response) return false
     set((state) => ({
       participants: state.participants.filter((p) => p.id !== id),
     }));
+    return true;
   },
 
   getParticipantByEmail: async (email: string) => {

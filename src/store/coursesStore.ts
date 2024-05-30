@@ -48,10 +48,11 @@ export const useCourseStore = create<CoursesState>((set) => ({
     },
 
     deleteCourse: async (id: number) => {
-        await deleteCourse(id);
+        const deletedCourse = await deleteCourse(id);
         set((state) => ({
             courses: state.courses.filter((c) => c.id !== id),
         }));
+        return deletedCourse
     },
 
     getCourseByCourseNumber: async (courseNumber: string) => {

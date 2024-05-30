@@ -1,3 +1,4 @@
+import { ParticipantAttachment } from "@/types/prisma";
 import axios from "axios";
 
 export async function getParticipantsAttachment() {

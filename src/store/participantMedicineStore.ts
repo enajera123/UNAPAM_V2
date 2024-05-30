@@ -9,6 +9,7 @@ import {
   getParticipantMedicineByMedicine,
   getParticipantMedicineByParticipantId,
 } from "@/services/participantMedicineService";
+import { ParticipantMedicine } from "@/types/prisma";
 
 export const useParticipantMedicineStore = create<ParticipantMedicineState>(
   (set) => ({
@@ -23,11 +24,13 @@ export const useParticipantMedicineStore = create<ParticipantMedicineState>(
 
     getParticipantMedicineById: async (id: number) => {
       const participantMedicine = await getParticipantMedicineById(id);
+      if (!participantMedicine) return null;
       set((state) => ({
         participantsMedicine: state.participantsMedicine.map((p) =>
           p.id === id ? participantMedicine : p
         ),
       }));
+      return participantMedicine;
     },
 
     postParticipantMedicine: async (
@@ -36,6 +39,7 @@ export const useParticipantMedicineStore = create<ParticipantMedicineState>(
       const newParticipantMedicine = await createParticipantMedicine(
         participantMedicine
       );
+      if (!newParticipantMedicine) return null;
       if (newParticipantMedicine) {
         set((state) => ({
           participantsMedicine: [
@@ -44,6 +48,7 @@ export const useParticipantMedicineStore = create<ParticipantMedicineState>(
           ],
         }));
       }
+      return newParticipantMedicine;
     },
 
     putParticipantMedicine: async (
@@ -54,20 +59,24 @@ export const useParticipantMedicineStore = create<ParticipantMedicineState>(
         id,
         participantMedicine
       );
+      if (!updatedParticipantMedicine) return null;
       set((state) => ({
         participantsMedicine: state.participantsMedicine.map((p) =>
           p.id === id ? updatedParticipantMedicine : p
         ),
       }));
+      return updatedParticipantMedicine;
     },
 
     deleteParticipantMedicine: async (id: number) => {
-      await deleteParticipantMedicine(id);
+      const response = await deleteParticipantMedicine(id);
+      if (!response) return false;
       set((state) => ({
         participantsMedicine: state.participantsMedicine.filter(
           (p) => p.id !== id
         ),
       }));
+      return true;
     },
 
     getParticipantMedicineByMedicine: async (medicine: string) => {

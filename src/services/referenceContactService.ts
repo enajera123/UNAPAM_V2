@@ -1,3 +1,4 @@
+import { ReferenceContact } from "@/types/prisma";
 import axios from "axios";
 
 export async function getReference() {

@@ -1,3 +1,4 @@
+import { Course } from "@/types/prisma";
 import axios from "axios";
 
 export async function getCourses() {

@@ -15,7 +15,7 @@ import { MdOutlineEmail } from 'react-icons/md';
 import Checkbox from '@/components/Checkbox/Checkbox';
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Grade, Participant, YesOrNo, typeIdentification } from '@/types/prisma';
+import { Grade, Participant, YesOrNo, TypeIdentification } from '@/types/prisma';
 import { useParticipantsStore } from '@/store/participantsStore';
 const optionsScholarship = [
     { value: "Sin_Estudio", label: "Sin estudio" },
@@ -51,8 +51,8 @@ export default function Record({ participant }: { participant: Participant | nul
             setSecondLastName(participant.secondSurname)
             setEmail(participant.email)
             setHasWhatsApp(participant.hasWhatsApp ? "Yes" : "No")
-            setHasPolicy(participant.Policy ? true : false)
-            setExpirationDatePolicy(participant.Policy?.expirationDate || '')
+            setHasPolicy(participant.policy ? true : false)
+            setExpirationDatePolicy(participant.policy?.expirationDate || '')
         }
     }, [participant])
     const handleSave = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -67,8 +67,8 @@ export default function Record({ participant }: { participant: Participant | nul
             firstSurname: firstLastName,
             secondSurname: secondLastName,
             email,
-            typeIdentification: "Nacional" as unknown as typeIdentification,
-            Policy: hasPolicy ? { expirationDate: expirationDatePolicy } : null
+            typeIdentification: "Nacional" as unknown as TypeIdentification,
+            policy: hasPolicy ? { expirationDate: expirationDatePolicy } : undefined
         }
         const response = participant !== null ? await putParticipant(participant?.id ?? 0, newParticipant) : await postParticipant(newParticipant)
         participant = response ? null : participant

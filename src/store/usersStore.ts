@@ -10,6 +10,7 @@ import {
   updateUser,
   deleteUser,
 } from "@/services/usersService";
+import { User } from "@/types/prisma";
 
 export const useUsersStore = create<UsersState>((set) => ({
   users: [] as User[],
@@ -58,12 +59,12 @@ export const useUsersStore = create<UsersState>((set) => ({
     }));
     return updatedUser
   },
-
   deleteUser: async (id: number) => {
-    await deleteUser(id);
+    const response = await deleteUser(id);
+    if (!response) return false
     set((state) => ({ users: state.users.filter((user) => user.id !== id) }));
+    return true;
   },
-
   authenticateUser: async (user: User) => {
     const authenticatedUser = await authenticateUser(user);
     if (authenticatedUser) {
@@ -72,7 +73,9 @@ export const useUsersStore = create<UsersState>((set) => ({
           u.id === authenticatedUser.id ? authenticatedUser : u
         ),
       }));
+      return authenticatedUser
     }
+    return null
   },
 
   putUserPassword: async (id: number, user: User) => {

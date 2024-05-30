@@ -1,11 +1,11 @@
 export interface GeneralInformation {
-    id: number;
+    id?: number;
     name: string;
     vision: string;
     mission: string;
     description: string;
     image: string;
-};
+}
 
 export enum State {
     Active,
@@ -24,14 +24,14 @@ export interface User {
     email: string;
     password: string;
     role: Role;
-};
+}
 
 export enum Role {
     Admin,
     User,
 }
 
-export enum typeIdentification {
+export enum TypeIdentification {
     Nacional,
     DIMEX,
 }
@@ -56,36 +56,36 @@ export interface Participant {
     birthDate: string;
     identification: string;
     hasWhatsApp: YesOrNo;
-    photo?: string | null;
+    photo?: string;
     grade: Grade;
-    Policy?: Policy | null;
-    MedicalReport?: MedicalReport | null;
-    ReferenceContacts?: ReferenceContact[];
-    ParticipantAttachments?: ParticipantAttachment[];
-    typeIdentification?: typeIdentification;
-    ParticipantHealths?: ParticipantHealth | null;
-    ParticipantsOnCourses?: ParticipantOnCourse[];
-};
+    policy?: Policy;
+    medicalReport?: MedicalReport;
+    referenceContacts?: ReferenceContact[];
+    participantAttachments?: ParticipantAttachment[];
+    typeIdentification: TypeIdentification;
+    participantHealths?: ParticipantHealth;
+    participantsOnCourses?: ParticipantOnCourse[];
+}
 
 export interface MedicalReport {
-    id: number;
+    id?: number;
     expirationDate: string;
-    participant: Participant;
-};
+    participant?: Participant;
+}
 
 export interface Policy {
     id?: number;
     expirationDate: string;
     participant?: Participant;
-};
+}
 
 export interface ParticipantAttachment {
-    id: number;
+    id?: number;
     name: string;
-    attachmentUrl: string;
+    attachmentFile: Uint8Array;
     participantId: number;
-    Participant: Participant;
-};
+    participant?: Participant;
+}
 
 export enum StateParticipantOnCourse {
     Retired,
@@ -97,45 +97,45 @@ export interface ParticipantOnCourse {
     participantId: number;
     courseId: number;
     state: StateParticipantOnCourse;
-    Participants: Participant;
-    Courses: Course;
-};
+    participants?: Participant;
+    courses?: Course;
+}
 
 export interface ReferenceContact {
-    id: number;
+    id?: number;
     firstName: string;
     firstSurname: string;
     secondSurname: string;
     phoneNumber: string;
     relationship: string;
     participantId: number;
-    Participant: Participant;
-};
+    participant?: Participant;
+}
 
 export interface ParticipantHealth {
-    id: number;
+    id?: number;
     bloodType: string;
-    ParticipantDisseases: ParticipantDissease[];
-    ParticipantMedicines: ParticipantMedicine[];
+    participantDisseases?: ParticipantDissease[];
+    participantMedicines?: ParticipantMedicine[];
     participantId: number;
-    Participant: Participant;
-};
+    participant?: Participant;
+}
 
 export interface ParticipantDissease {
-    id: number;
+    id?: number;
     disease: string;
-    description: string | null;
-    ParticipantHealth: ParticipantHealth;
+    description?: string;
+    participantHealth?: ParticipantHealth;
     participantHealthId: number;
-};
+}
 
 export interface ParticipantMedicine {
-    id: number;
+    id?: number;
     medicine: string;
-    description: string | null;
-    ParticipantHealth: ParticipantHealth;
+    description?: string;
+    participantHealth?: ParticipantHealth;
     participantHealthId: number;
-};
+}
 
 export enum YesOrNo {
     Yes,
@@ -148,11 +148,11 @@ export interface Course {
     initialDate: string;
     finalDate: string;
     name: string;
-    location: string | null;
+    location?: string;
     professor: string;
     quota: number;
-    description: string | null;
+    description?: string;
     state: State;
     needMedicalReport: YesOrNo;
-    ParticipantsOnCourses?: ParticipantOnCourse[];
-};
+    participantsOnCourses?: ParticipantOnCourse[];
+}

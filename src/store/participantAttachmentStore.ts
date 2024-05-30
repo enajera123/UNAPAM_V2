@@ -8,6 +8,7 @@ import {
     deleteParticipantAttachment,
     getParticipantAttachmentByParticipantId,
 } from "@/services/participantAttachmentService";
+import { ParticipantAttachment } from "@/types/prisma";
 
 export const useParticipantAttachmentStore = create<ParticipantAttachmentState>(
     (set) => ({
@@ -35,6 +36,7 @@ export const useParticipantAttachmentStore = create<ParticipantAttachmentState>(
             const newParticipantAttachment = await createParticipantAttachment(
                 participantAttachment
             );
+            if (!newParticipantAttachment) return null;
             if (newParticipantAttachment) {
                 set((state) => ({
                     participantsAttachment: [
@@ -43,6 +45,7 @@ export const useParticipantAttachmentStore = create<ParticipantAttachmentState>(
                     ],
                 }));
             }
+            return newParticipantAttachment;
         },
 
         putParticipantAttachment: async (
@@ -53,20 +56,23 @@ export const useParticipantAttachmentStore = create<ParticipantAttachmentState>(
                 id,
                 participantAttachment
             );
+            if (!updatedParticipantAttachment) return null;
             set((state) => ({
                 participantsAttachment: state.participantsAttachment.map((p) =>
                     p.id === id ? updatedParticipantAttachment : p
                 ),
             }));
+            return updatedParticipantAttachment;
         },
 
         deleteParticipantAttachment: async (id: number) => {
-            await deleteParticipantAttachment(id);
+            const deletedParticipantAttachment = await deleteParticipantAttachment(id);
             set((state) => ({
                 participantsAttachment: state.participantsAttachment.filter(
                     (p) => p.id !== id
                 ),
             }));
+            return deletedParticipantAttachment;
         },
 
         getParticipantAttachmentByParticipantId: async (participantId: number) => {

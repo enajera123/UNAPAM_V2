@@ -1,3 +1,4 @@
+import { User } from "@/types/prisma";
 import axios from "axios";
 
 export async function getUsers() {

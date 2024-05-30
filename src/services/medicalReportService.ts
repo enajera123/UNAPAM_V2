@@ -1,3 +1,4 @@
+import { MedicalReport } from "@/types/prisma";
 import axios from "axios";
 
 export async function getMedicalReports() {

@@ -9,6 +9,7 @@ import {
   getParticipantDiseaseByDisease,
   getParticipantDiseaseByParticipantHealthId,
 } from "@/services/participantDisseaseService";
+import { ParticipantDissease } from "@/types/prisma";
 
 export const useParticipantDisseaseStore = create<ParticipantDisseaseState>(
   (set) => ({
@@ -34,6 +35,7 @@ export const useParticipantDisseaseStore = create<ParticipantDisseaseState>(
       const newParticipantDisease = await createParticipantDissease(
         participantDisease
       );
+      if (!newParticipantDisease) return null;
       if (newParticipantDisease) {
         set((state) => ({
           participantsDisease: [
@@ -42,6 +44,7 @@ export const useParticipantDisseaseStore = create<ParticipantDisseaseState>(
           ],
         }));
       }
+      return newParticipantDisease;
     },
 
     putParticipantDisease: async (
@@ -52,20 +55,23 @@ export const useParticipantDisseaseStore = create<ParticipantDisseaseState>(
         id,
         participantDisease
       );
+      if (!updatedParticipantDisease) return null;
       set((state) => ({
         participantsDisease: state.participantsDisease.map((p) =>
           p.id === id ? updatedParticipantDisease : p
         ),
       }));
+      return updatedParticipantDisease;
     },
 
     deleteParticipantDisease: async (id: number) => {
-      await deleteParticipantDissease(id);
+      const response = await deleteParticipantDissease(id);
       set((state) => ({
         participantsDisease: state.participantsDisease.filter(
           (p) => p.id !== id
         ),
       }));
+      return response;
     },
 
     getParticipantDiseaseByDisease: async (disease: string) => {

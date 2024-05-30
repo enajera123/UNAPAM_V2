@@ -1,3 +1,4 @@
+import { Policy } from "@/types/prisma";
 import axios from "axios";
 
 export async function getPolicy() {

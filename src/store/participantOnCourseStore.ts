@@ -6,6 +6,7 @@ import {
   createParticipantOnCourse,
   getParticipantOnCourseByParticipantId,
 } from "@/services/participantOnCourseService";
+import { ParticipantOnCourse } from "@/types/prisma";
 
 export const useParticipantOnCourseStore = create<ParticipantOnCourseState>(
   (set) => ({
@@ -27,12 +28,9 @@ export const useParticipantOnCourseStore = create<ParticipantOnCourseState>(
       }));
     },
 
-    postParticipantOnCourse: async (
-      participantOnCourse: ParticipantOnCourse
-    ) => {
-      const newParticipantOnCourse = await createParticipantOnCourse(
-        participantOnCourse
-      );
+    postParticipantOnCourse: async (participantOnCourse: ParticipantOnCourse) => {
+      const newParticipantOnCourse = await createParticipantOnCourse(participantOnCourse);
+      if (!newParticipantOnCourse) return null;
       if (newParticipantOnCourse) {
         set((state) => ({
           participantsOnCourse: [
@@ -41,6 +39,7 @@ export const useParticipantOnCourseStore = create<ParticipantOnCourseState>(
           ],
         }));
       }
+      return newParticipantOnCourse;
     },
 
     getParticipantOnCourseByParticipantId: async (participantId: number) => {

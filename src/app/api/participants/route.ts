@@ -5,8 +5,8 @@ export async function GET(req: NextRequest, res: NextResponse) {
     try {
         const participants = await prisma.participant.findMany({
             include: {
-                Policy: true,
-                MedicalReport: true
+                policy: true,
+                medicalReport: true
             }
         });
         return NextResponse.json(participants, { status: 200 });
