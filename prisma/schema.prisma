@@ -1,0 +1,169 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model GeneralInformation {
+  id          Int    @id @default(autoincrement())
+  name        String
+  vision      String
+  mission     String
+  description String
+  image       String
+}
+
+enum State {
+  Active
+  Inactive
+}
+
+model User {
+  id             Int    @id @default(autoincrement())
+  firstName      String
+  firstSurname   String
+  secondSurname  String
+  phoneNumber    String
+  birthDate      String
+  identification String
+  state          State
+  email          String
+  password       String
+  role           Role
+}
+
+enum Role {
+  Admin
+  User
+}
+
+enum TypeIdentification {
+  Nacional
+  DIMEX
+}
+
+enum Grade {
+  Sin_Estudio
+  Primaria_Completa
+  Primaria_Incompleta
+  Secundaria_Completa
+  Secundaria_Incompleta
+  Universidad_Incompleta
+  Universidad_Completa
+}
+
+model Participant {
+  id                     Int                     @id @default(autoincrement())
+  firstName              String
+  firstSurname           String
+  secondSurname          String
+  email                  String
+  phoneNumber            String
+  birthDate              String
+  identification         String
+  hasWhatsApp            YesOrNo
+  photo                  String?
+  grade                  Grade
+  Policy                 Policy?
+  MedicalReport          MedicalReport?
+  ReferenceContacts      ReferenceContact[]
+  ParticipantAttachments ParticipantAttachment[]
+  typeIdentification     TypeIdentification
+  ParticipantHealths     ParticipantHealth?
+  ParticipantsOnCourses  ParticipantOnCourse[]
+}
+
+model MedicalReport {
+  id             Int         @id @default(autoincrement())
+  expirationDate String
+  participant    Participant @relation(fields: [id], references: [id])
+}
+
+model Policy {
+  id             Int         @id @default(autoincrement())
+  expirationDate String
+  participant    Participant @relation(fields: [id], references: [id])
+}
+
+model ParticipantAttachment {
+  id            Int         @id @default(autoincrement())
+  name          String
+  attachmentUrl String
+  participantId Int
+  Participant   Participant @relation(fields: [participantId], references: [id])
+}
+
+enum StateParticipantOnCourse {
+  Retired
+  Registered
+  Finished
+}
+
+model ParticipantOnCourse {
+  participantId Int
+  courseId      Int
+  state         StateParticipantOnCourse
+  Participants  Participant              @relation(fields: [participantId], references: [id])
+  Courses       Course                   @relation(fields: [courseId], references: [id])
+
+  @@id([participantId, courseId])
+}
+
+model ReferenceContact {
+  id            Int         @id @default(autoincrement())
+  firstName     String
+  firstSurname  String
+  secondSurname String
+  phoneNumber   String
+  relationship  String
+  participantId Int
+  Participant  Participant @relation(fields: [participantId], references: [id])
+}
+
+model ParticipantHealth {
+  id                   Int                   @id @default(autoincrement())
+  bloodType            String
+  ParticipantDisseases ParticipantDissease[]
+  ParticipantMedicines ParticipantMedicine[]
+  participantId        Int                   @unique
+  Participant          Participant           @relation(fields: [participantId], references: [id])
+}
+
+model ParticipantDissease {
+  id                    Int               @id @default(autoincrement())
+  disease               String
+  description           String?
+  ParticipantHealth   ParticipantHealth @relation(fields: [participantHealthId], references: [id])
+  participantHealthId Int
+}
+
+model ParticipantMedicine {
+  id                    Int               @id @default(autoincrement())
+  medicine              String
+  description           String?
+  ParticipantHealth   ParticipantHealth @relation(fields: [participantHealthId], references: [id])
+  participantHealthId Int
+}
+
+enum YesOrNo {
+  Yes
+  No
+}
+
+model Course {
+  id                    Int                   @id @default(autoincrement())
+  courseNumber          String                @unique
+  initialDate           String
+  finalDate             String
+  name                  String
+  location              String?
+  professor             String
+  quota                 Int
+  description           String?
+  state                 State                @default(Active)
+  needMedicalReport     YesOrNo
+  ParticipantsOnCourses ParticipantOnCourse[]
+}
