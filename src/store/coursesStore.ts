@@ -17,7 +17,9 @@ export const useCourseStore = create<CoursesState>((set) => ({
 
     getCourses: async () => {
         const courses = await getCourses();
+        if (!courses) return null
         set({ courses });
+        return courses
     },
 
     getCourseById: async (id: number) => {

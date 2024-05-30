@@ -1,6 +1,7 @@
 import Button from "@/components/Button/Button";
 import SearchBar from "@/components/SearchBar/SearchBar";
 import Table from "@/components/Table/Table";
+import { useUserStore } from "@/hooks/Stores/UserStore/useUserStore";
 import { useHandleSearch } from "@/hooks/Table/useHandleSearch";
 import { useUsersStore } from "@/store/usersStore";
 import { State, User } from "@/types/prisma";
@@ -10,17 +11,14 @@ import { useEffect, useState } from "react";
 const Users: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [randomNumber, setRandomNumber] = useState<number>(0);
-    const { getUsers, deleteUser, users, putUser } = useUsersStore()
+    const { users } = useUserStore()
+    const { deleteUser, putUser } = useUsersStore()
     const [filteredData, setFilteredData] = useState<User[]>([]);
     const { handleSearch } = useHandleSearch<User>({ setFilterData: setFilteredData, searchTerm, setRandomNumber })
     const router = useRouter();
     useEffect(() => {
-        getUsers()
-    }, [])
-    useEffect(() => {
         setFilteredData(users)
     }, [users])
-
     const desactivateRowFunction = async (id: number) => {
         const user = users.find((u) => u.id === id);
         user && await putUser(id, { ...user, state: user.state === "Inactive" as unknown as State ? "Active" as unknown as State : "Inactive" as unknown as State });

@@ -18,7 +18,9 @@ export const useUsersStore = create<UsersState>((set) => ({
 
   getUsers: async () => {
     const users = await getUsers();
+    if (!users) return null
     set({ users });
+    return users
   },
 
   getUserById: async (id: number): Promise<User | null> => {

@@ -4,7 +4,7 @@ import { Course, GeneralInformation, MedicalReport, Participant, ParticipantAtta
 export type UsersState = {
   users: User[];
   setUsers: (users: User[]) => void;
-  getUsers: () => void;
+  getUsers: () => Promise<User[] | null>;
   getUserById: (id: number) => Promise<User | null>;
   // getUserByFirstName: (firstname: string) => Promise<User | null>;
   postUser: (user: User) => Promise<User | null>;
@@ -129,7 +129,7 @@ export type GeneralInformationState = {
 export type CoursesState = {
   courses: Course[];
   setCourses: (courses: Course[]) => void;
-  getCourses: () => void;
+  getCourses: () => Promise<Course[] | null>;
   getCourseById: (id: number) => Promise<Course | null>;
   // getCourseByCourseNumber: (courseNumber: string) => void;
   // getCourseByName: (name: string) => void;
