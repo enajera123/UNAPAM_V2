@@ -5,7 +5,6 @@ export async function PUT(req: NextRequest, { params }: ParameterId) {
     try {
         const fetchedId = parseInt(params.id);
         const participant = await req.json();
-        console.log(participant)
         const participantUpdated = await prisma.participant.update({
             where: {
                 id: fetchedId,

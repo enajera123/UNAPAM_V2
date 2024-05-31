@@ -33,6 +33,7 @@ export type ParticipantState = {
   // getParticipantByEmail: (email: string) => void;
   // getParticipantByIdentification: (identification: string) => void;
   // getParticipantByFirstName: (firstName: string) => void;
+  getParticipantsByCourseId: (id: number) => Promise<Participant[] | null>;
   postParticipant: (participant: Participant) => Promise<Participant | null>;
   putParticipant: (id: number, participant: Participant) => Promise<Participant | null>;
   deleteParticipant: (id: number) => Promise<boolean>;
