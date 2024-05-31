@@ -2,7 +2,7 @@ import path from 'path'
 import fs from 'fs'
 import { glob } from 'glob'
 import sharp from 'sharp'
-import { series, src, dest, watch } from 'gulp'
+import { series, watch } from 'gulp'
 export async function images(done) {
     const srcDir = './src/resources';
     const buildDir = './build/resources';

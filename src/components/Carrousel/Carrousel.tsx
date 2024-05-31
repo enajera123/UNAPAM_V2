@@ -45,7 +45,7 @@ const images: Image[] = [
 ];
 
 const Carrousel: React.FC = () => {
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const [currentIndex, setCurrentIndex] = useState(2);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -85,8 +85,6 @@ const Carrousel: React.FC = () => {
         <div style={carouselStyle}>
             <div style={{ position: 'relative', width: '100%', height: 'auto' }}>
                 <img src={imagenFondo.src} alt="Imagen fija" style={{ width: '100%' }} />
-            </div>
-            <div className='w-full h-auto relative'>
             </div>
             <div style={carouselItemContainerStyle}>
                 {images.map((image, index) => (
