@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { MdArrowBackIosNew, MdArrowForwardIos } from "react-icons/md";
 import { TableProps } from "./type";
 import Button from "../Button/Button";
+import { confirmationAlert } from "@/utils/sweetAlert";
 type Item = {
   [key: string]: any;
 };
@@ -29,7 +30,6 @@ const Table = ({ keys, desactivateRowFunction, doubleClickRowFunction, data, hea
       setCurrentPage(currentPage - 1);
     }
   };
-
   const handleBtnNext = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -84,7 +84,7 @@ const Table = ({ keys, desactivateRowFunction, doubleClickRowFunction, data, hea
                     <td className="px-6 py-4">
                       <div className="flex gap-2">
                         {deleteRowFunction && <Button
-                          onClick={() => deleteRowFunction(item.id)}
+                          onClick={() => confirmationAlert(() => deleteRowFunction(item.id))}
                           format className="bg-white rounded-xl px-3 py-1 border border-gray-400 shadow-md hover:bg-gray-300 hover:text-gray-800">Eliminar</Button>}
                         {desactivateRowFunction && <Button
                           onClick={() => desactivateRowFunction(item.id)}
