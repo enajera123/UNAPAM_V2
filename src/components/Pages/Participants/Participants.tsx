@@ -26,9 +26,9 @@ function Participants({ participants }: { participants: Participant[] | null }) 
         setFilteredData(participants ?? participantStore)
     }, [participantStore])
 
-    const handleDeleteParticipant = (id: number){
-        // deleteParticipant(id)
-    }
+    // const handleDeleteParticipant = (id: number){
+    //     // deleteParticipant(id)
+    // }
 
     return (
         <div className="container mx-auto bg-gray-gradient flex flex-col justify-center items-center h-auto p-10 my-6 rounded-2xl max-w-6xl">
@@ -47,7 +47,7 @@ function Participants({ participants }: { participants: Participant[] | null }) 
             <div className="max-w-5xl">
                 {filteredData.length > 0 ? (
                     <Table
-                        deleteRowFunction={ }
+                        // deleteRowFunction={ }
                         doubleClickRowFunction={(id) => router.push(`/admin/participantRegister/${id}`)}
                         showEditColumn={true}
                         keys={['identification', 'firstName', 'firstSurname', 'secondSurname', 'expirationDateMedicalInsurance', 'expirationDateMedicalReport']}
