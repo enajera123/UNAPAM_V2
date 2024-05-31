@@ -2,9 +2,6 @@
 import Button from '@/components/Button/Button';
 import InputField from '@/components/InputField/InputField';
 import Select from '@/components/Select/Select';
-import TextArea from '@/components/TextArea/TextArea';
-import logoUNAPAM from '@/resources/LogoWhite.png';
-import Image from 'next/image';
 import { FaRegCalendarAlt } from 'react-icons/fa';
 import { HiOutlineIdentification } from 'react-icons/hi';
 import { LuUserCircle2 } from "react-icons/lu";
@@ -216,10 +213,10 @@ export default function ParticipantRegister({ participant }: { participant: Part
             </div>
 
             <div className='flex justify-between mt-5'>
-                <Link href="/admin/record/1/health">
+                <Link href="/admin/participantRegister/1/health">
                     <Button className="bg-red-gradient w-52">Salud</Button>
                 </Link>
-                <Link href="/admin/record/2/attachments">
+                <Link href="/admin/participantRegister/2/attachments">
                     <Button className="bg-red-gradient w-52">Documentos Adjuntos</Button>
                 </Link>
                 <Button onClick={handleSave} format className="bg-gradient-to-r from-green-500 to-green-600 rounded-md transition-all hover:from-green-600 hover:to-green-700 text-white w-52">Guardar</Button>
