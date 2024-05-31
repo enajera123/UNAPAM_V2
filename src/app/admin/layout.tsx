@@ -1,5 +1,5 @@
 import { Header } from '@/components/NavBar/Header';
-import logoUNAPAM from '@/resources/LogoWhite.png';
+import logoUNAPAM from '@/resources/LogoWhite.webp';
 import Image from 'next/image';
 
 export default function InformationLayout({

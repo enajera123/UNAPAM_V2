@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Button from "@/components/Button/Button";
-import logoUNAPAM from '@/resources/LogoColorful.png';
-import logoUNA from '@/resources/LogoUNA.png';
+import logoUNAPAM from '@/resources/LogoColorful.webp';
+import logoUNA from '@/resources/LogoUNA.webp';
 import Image from 'next/image';
 
 export const Header: React.FC = () => {

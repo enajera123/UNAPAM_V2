@@ -17,11 +17,8 @@ export async function images(done) {
 function processImages(file, outputSubDir) {
     if (!fs.existsSync(outputSubDir)) fs.mkdirSync(outputSubDir, { recursive: true })
     const baseName = path.basename(file, path.extname(file))
-    const extName = path.extname(file)
-    // const outputFile = path.join(outputSubDir, baseName + extName)
     const outputFileWebp = path.join(outputSubDir, baseName + '.webp')
     const options = { quality: 80 }
-    // sharp(file).jpeg(options).toFile(outputFile)
     sharp(file).webp(options).toFile(outputFileWebp)
 }
 export function dev() {

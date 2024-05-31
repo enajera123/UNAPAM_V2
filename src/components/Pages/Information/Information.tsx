@@ -1,7 +1,7 @@
 import Carrousel from '@/components/Carrousel/Carrousel'
 import Image from 'next/image'
 import React from 'react'
-import icon from "@/resources/LogoWhite.png"
+import icon from "@/resources/LogoWhite.webp"
 function Information() {
     return (
         <div className="flex flex-col h-screen items-center">

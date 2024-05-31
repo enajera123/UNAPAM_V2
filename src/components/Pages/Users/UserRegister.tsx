@@ -3,7 +3,7 @@ import InputField from "@/components/InputField/InputField";
 import Select from "@/components/Select/Select";
 import { BsDiagram3 } from "react-icons/bs";
 import { FaRegCalendarAlt } from "react-icons/fa";
-import logoUNAPAM from '@/resources/LogoColorful.png';
+import logoUNAPAM from '@/resources/LogoColorful.webp';
 import Image from 'next/image';
 import { HiOutlineIdentification } from "react-icons/hi";
 import { GoKey, GoPerson } from "react-icons/go";
