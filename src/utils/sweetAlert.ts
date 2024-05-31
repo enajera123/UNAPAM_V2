@@ -5,16 +5,12 @@ export const confirmationAlert = (confirmedFunction: Function) => Swal.fire({
     icon: 'warning',
     showCancelButton: true,
     confirmButtonText: 'Confirmar',
+    confirmButtonColor: 'green',
+    cancelButtonColor: 'red',
     cancelButtonText: 'Cancelar'
 }).then((result) => {
     if (result.isConfirmed) {
         confirmedFunction()
-    } else if (result.dismiss === Swal.DismissReason.cancel) {
-        Swal.fire(
-            'Cancelado',
-            'Tu información está segura',
-            'error'
-        )
     }
 })
 export const successAlert = (message: string) => Swal.mixin({
