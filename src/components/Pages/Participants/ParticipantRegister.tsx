@@ -34,7 +34,7 @@ export default function ParticipantRegister({ participant }: { participant: Part
     const [hasMedicalReport, setHasMedicalReport] = useState(false)
     const [identification, setIdentification] = useState('')
     const [birthDate, setBirthDate] = useState('')
-    const [scholarship, setScholarship] = useState('')
+    const [scholarship, setScholarship] = useState('Primaria_Completa')
     const [name, setName] = useState('')
     const [phone, setPhone] = useState('')
     const [firstLastName, setFirstLastName] = useState('')
