@@ -15,7 +15,7 @@ function Participants({ participants }: { participants: Participant[] | null }) 
     const [searchTerm, setSearchTerm] = useState("");
     const [filteredData, setFilteredData] = useState<Participant[]>([]);
     const [randomNumber, setRandomNumber] = useState<number>(0);
-    const { getParticipants, participants: participantStore } = useParticipantsStore()
+    const { getParticipants, deleteParticipant, participants: participantStore } = useParticipantsStore()
     const { handleSearch } = useHandleSearch({ setFilterData: setFilteredData, searchTerm, setRandomNumber })
     const router = useRouter()
     useEffect(() => {
@@ -25,10 +25,6 @@ function Participants({ participants }: { participants: Participant[] | null }) 
     useEffect(() => {
         setFilteredData(participants ?? participantStore)
     }, [participantStore])
-
-    // const handleDeleteParticipant = (id: number){
-    //     // deleteParticipant(id)
-    // }
 
     return (
         <div className="container mx-auto bg-gray-gradient flex flex-col justify-center items-center h-auto p-10 my-6 rounded-2xl max-w-6xl">
@@ -47,7 +43,7 @@ function Participants({ participants }: { participants: Participant[] | null }) 
             <div className="max-w-5xl">
                 {filteredData.length > 0 ? (
                     <Table
-                        // deleteRowFunction={ }
+                        deleteRowFunction={deleteParticipant}
                         doubleClickRowFunction={(id) => router.push(`/admin/participantRegister/${id}`)}
                         showEditColumn={true}
                         keys={['identification', 'firstName', 'firstSurname', 'secondSurname', 'expirationDateMedicalInsurance', 'expirationDateMedicalReport']}

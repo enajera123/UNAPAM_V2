@@ -85,7 +85,7 @@ const Table = ({ keys, desactivateRowFunction, doubleClickRowFunction, data, hea
                       <div className="flex gap-2">
                         {deleteRowFunction && <Button
                           onClick={() => confirmationAlert(() => deleteRowFunction(item.id))}
-                          format className="bg-white rounded-xl px-3 py-1 border border-gray-400 shadow-md hover:bg-gray-300 hover:text-gray-800">Eliminar</Button>}
+                          format className="bg-red-500 rounded-xl px-3 py-1 border border-red-400 shadow-md hover:bg-red-400 text-white">Eliminar</Button>}
                         {desactivateRowFunction && <Button
                           onClick={() => desactivateRowFunction(item.id)}
                           format className="bg-white rounded-xl px-3 py-1 border border-gray-400 shadow-md hover:bg-gray-300 hover:text-gray-800">{`${item.state === "Active" ? "Desactivar" : "Activar"}`}</Button>}

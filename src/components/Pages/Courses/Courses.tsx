@@ -10,6 +10,7 @@ import Button from '@/components/Button/Button';
 import { Course, State } from '@/types/prisma';
 import { useRouter } from 'next/navigation';
 import { useCourseStore as useCoursesStore } from '@/hooks/Stores/CourseStore/useCourseStore'
+import { deleteCourse } from '@/services/coursesService';
 
 
 function Courses() {
@@ -53,6 +54,7 @@ function Courses() {
                             onClick: seeParticipants
                         }
                     ]}
+                    deleteRowFunction={deleteCourse}
                     desactivateRowFunction={desactivateRowFunction}
                     doubleClickRowFunction={(id) => router.push('/admin/courseRegister/' + id)}
                     showEditColumn
