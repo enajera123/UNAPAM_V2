@@ -44,7 +44,7 @@ function Participants() {
                     <Table
                         doubleClickRowFunction={(id) => router.push(`/admin/participantRegister/${id}`)}
                         showEditColumn={true}
-                        keys={['identification', 'firstName', 'firstSurname', 'secondSurname', 'Policy.expirationDate', 'MedicalReport.expirationDate']}
+                        keys={['identification', 'firstName', 'firstSurname', 'secondSurname', 'expirationDateMedicalInsurance', 'expirationDateMedicalReport']}
                         data={filteredData}
                         headers={["Identificación", "Nombre", "Primer Apellido", "Segundo Apellido", "Vencimiento de Poliza", "Vencimiento de Dictamen"]}
                         itemsPerPage={6}
