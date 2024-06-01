@@ -8,17 +8,22 @@ import { GoKey } from 'react-icons/go';
 import useAuthState from '@/store/MainStore/userLoggedStore';
 import { useUsersStore } from '@/store/usersStore';
 import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useMainStore } from '@/store/MainStore/mainStore';
 import { errorAlert, successAlert } from '@/utils/sweetAlert';
 
 function ChangePassword() {
 
     const { user } = useAuthState();
-    const [currentPassword, setCurrentPassword] = useState<string>('');
     const [newPassword, setNewPassword] = useState<string>('');
     const { putUserPassword } = useUsersStore();
     const router = useRouter();
     const { setLoader } = useMainStore();
+    const [token, setToken] = useState<string | undefined>();
+    const searchParams = useSearchParams();
+    useEffect(() => {
+        setToken(searchParams.get('token') as string | undefined);
+    }, [searchParams]);
 
     const handleChangePassword = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
@@ -26,11 +31,11 @@ function ChangePassword() {
         const userId = user.id;
         if (userId === undefined) return;
         setLoader(true);
-        const response = await putUserPassword(userId, currentPassword, newPassword);
+        const response = await putUserPassword(userId, token ?? '', newPassword);
         setLoader(false);
         if (response) {
             successAlert('Nueva contraseña establecida correctamente');
-            router.push('/admin/information');
+            router.push('/');
             return;
         }
         errorAlert('Contraseña temporal digitada incorrecta, intente nuevamente');
@@ -47,18 +52,13 @@ function ChangePassword() {
                 </div>
                 <div className="col-span-2">
                     <div className="container bg-gray-gradient px-10 py-20 rounded-3xl">
-                        <InputField label='Ingrese la contraseña asignada por email'
-                            placeholder="Contraseña actual"
-                            iconStart={<GoKey color="white" />}
-                            onChange={(e) => { setCurrentPassword(e.target.value) }}
-                        />
                         <InputField label='Ingrese su nueva contraseña'
                             placeholder="Nueva contraseña"
                             iconStart={<GoKey color="white" />}
                             onChange={(e) => { setNewPassword(e.target.value) }}
                         />
                         <div className="flex justify-center mt-24">
-                            <Button onClick={(e)=>handleChangePassword(e)}   className="bg-dark-red w-full max-w-md">Guardar</Button> {/* onClick con nuevo metodo para cambio de contraseña */}
+                            <Button onClick={(e) => handleChangePassword(e)} className="bg-dark-red w-full max-w-md">Guardar</Button> {/* onClick con nuevo metodo para cambio de contraseña */}
                         </div>
                     </div>
                 </div>

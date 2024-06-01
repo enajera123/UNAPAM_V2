@@ -1,4 +1,8 @@
 export function getPasswordResetEmail(newPassword: string) {
+
+    // const resetLink = `http://localhost:3000/changePassword?token=${newPassword}` //Only for development
+    const resetLink = `https://unapam-v2.vercel.app/changePassword?token=${newPassword}` //Only for production
+
     return `<!DOCTYPE html>
 <!DOCTYPE html>
 <html>
@@ -24,12 +28,21 @@ export function getPasswordResetEmail(newPassword: string) {
         p {
             color: #FFF; 
         }
+        a {
+            display: inline-block;
+            background-color: #ABABAB;
+            color: #FFF;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Su contraseña fue modificada</h1>
-        <p>Su nueva contraseña temporal es: ${newPassword}</p>
+        <p>Para cambiar su contraseña, haz click en el siguiete enlace</p>
+        <a href="${resetLink}">Cambiar contraseña</a>
     </div>
 </body>
 </html>
