@@ -4,12 +4,12 @@ import bcrypt from 'bcrypt';
 
 export async function POST(req: NextRequest,res: NextResponse) {
     try {
-
-        const user = await req.json();
+                
+        const {identification, passwordFromLogin} = await req.json();
 
         const existingUser = await prisma.user.findFirst({
             where: {
-                email: user.email
+                identification: identification
             },
         });
 
@@ -17,7 +17,7 @@ export async function POST(req: NextRequest,res: NextResponse) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
 
-        const passwordMatch = await bcrypt.compare( user.password,existingUser.password);
+        const passwordMatch = await bcrypt.compare( passwordFromLogin,existingUser.password);
 
         if (!passwordMatch) {
             return NextResponse.json({ error: "Incorrect credentials" }, { status: 401 });

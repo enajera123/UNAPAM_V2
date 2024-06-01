@@ -51,9 +51,9 @@ export async function deleteUser(id: number) {
   }
 }
 
-export async function authenticateUser(user: User) {
+export async function authenticateUser(identification: string, passwordFromLogin: string) {
   try {
-    const response = await axios.post<User>("/api/users/byAuth", user);
+    const response = await axios.post<User>("/api/users/byAuth", { identification, passwordFromLogin });
     return response.data;
   } catch (error) {
     console.error(error);
@@ -71,9 +71,19 @@ export async function getUserByFirstName(firstName: string) {
   }
 }
 
-export async function updateUserPassword(id: number, user: User) {
+export async function updateUserPassword(id: number, currentPassword: string, newPassword: string) {
   try {
-    const response = await axios.put(`/api/users/byId/${id}`, user);
+    const response = await axios.put(`/api/users/byId/${id}`, { currentPassword, newPassword });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+export async function forgotPassword(identificacion: string) {
+  try {
+    const response = await axios.put(`/api/users/changePassword`, { identificacion });
     return response.data;
   } catch (error) {
     console.error(error);
