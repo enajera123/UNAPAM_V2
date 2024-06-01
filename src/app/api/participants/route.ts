@@ -21,10 +21,17 @@ export async function POST(req: NextRequest, res: NextResponse) {
         
         if(participant.photoFile && participant.photoExtension && participant.email){
             image_url = await upload_image(participant.photoFile, participant.photoExtension, `profile-photos/${participant.email}`)
-         }
+        }
+        const refactorData = {
+            ...participant,
+            photo: image_url
+        } 
+        delete refactorData.photoExtension
+        delete refactorData.photoFile
+
         const newParticipant = await prisma.participant.create({
             data: {
-                ...participant,
+                ...refactorData,
                 photo: image_url
             }
         });

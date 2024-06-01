@@ -47,7 +47,7 @@ export default function ParticipantRegister({ participant }: { participant: Part
     const [expirationDateMedicalReport, setExpirationDateMedicalReport] = useState('')
     const [typeIdentification, setTypeIdentification] = useState('Nacional')
     const { postParticipant, putParticipant } = useParticipantsStore()
-    const {image,onChangeImage} = useImageStore()
+    const {image,onChangeImage,setImage} = useImageStore()
     const [photo,setPhoto] = useState<string|undefined>("");
 
 
@@ -68,6 +68,7 @@ export default function ParticipantRegister({ participant }: { participant: Part
             setExpirationDateMedicalInsurance(participant.expirationDateMedicalInsurance || '')
             setExpirationDateMedicalReport(participant.expirationDateMedicalReport || '')
             setPhoto(participant.photo)
+            setImage(i=>({...i, image_url:participant.photo||i.image_url}))
         }
     }, [participant])
     const handleSave = async (e: React.MouseEvent<HTMLButtonElement>) => {

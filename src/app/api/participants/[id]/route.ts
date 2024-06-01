@@ -13,12 +13,19 @@ export async function PUT(req: NextRequest, { params }: ParameterId) {
             image_url = await upload_image(participant.photoFile, participant.photoExtension, `profile-photos/${participant.email}`)
         }
 
+        const refactorData = {
+            ...participant,
+            photo: image_url
+        } 
+        delete refactorData.photoExtension
+        delete refactorData.photoFile
+
         const participantUpdated = await prisma.participant.update({
             where: {
                 id: fetchedId,
             },
             data: {
-                ...participant,
+                ...refactorData,
                 photo: image_url
             },
             include: {
