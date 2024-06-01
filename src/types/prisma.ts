@@ -13,17 +13,17 @@ export enum State {
 }
 
 export interface User {
-  id?: number;
-  firstName: string;
-  firstSurname: string;
-  secondSurname: string;
-  phoneNumber: string;
-  birthDate: string;
-  identification: string;
-  state: State;
-  email: string;
-  password: string;
-  role: Role;
+    id?: number;
+    firstName: string;
+    firstSurname: string;
+    secondSurname: string;
+    phoneNumber: string;
+    birthDate: string;
+    identification: string;
+    state: State;
+    email: string;
+    password: string;
+    role: Role; 
 }
 
 export enum Role {
@@ -47,25 +47,27 @@ export enum Grade {
 }
 
 export interface Participant {
-  id?: number;
-  firstName: string;
-  firstSurname: string;
-  secondSurname: string;
-  email: string;
-  phoneNumber: string;
-  birthDate: string;
-  identification: string;
-  hasWhatsApp: YesOrNo;
-  photo?: string;
-  grade: Grade;
-  expirationDateMedicalReport?: string;
-  expirationDateMedicalInsurance?: string;
-  // medicalReport?: MedicalReport;
-  referenceContacts?: ReferenceContact[];
-  participantAttachments?: ParticipantAttachment[];
-  typeIdentification: TypeIdentification;
-  participantHealths?: ParticipantHealth;
-  participantsOnCourses?: ParticipantOnCourse[];
+    id?: number;
+    firstName: string;
+    firstSurname: string;
+    secondSurname: string;
+    email: string;
+    phoneNumber: string;
+    birthDate: string;
+    identification: string;
+    hasWhatsApp: YesOrNo;
+    photo?: string;
+    photoFile?: string;
+    photoExtension?: string;
+    grade: Grade;
+    expirationDateMedicalReport?: string
+    expirationDateMedicalInsurance?: string
+    // medicalReport?: MedicalReport;
+    referenceContacts?: ReferenceContact[];
+    participantAttachments?: ParticipantAttachment[];
+    typeIdentification: TypeIdentification;
+    participantHealths?: ParticipantHealth;
+    participantsOnCourses?: ParticipantOnCourse[];
 }
 
 // export interface MedicalReport {

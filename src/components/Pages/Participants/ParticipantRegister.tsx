@@ -4,25 +4,19 @@ import InputField from "@/components/InputField/InputField";
 import Select from "@/components/Select/Select";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { HiOutlineIdentification } from "react-icons/hi";
-import { LuUserCircle2 } from "react-icons/lu";
-import { GoPerson } from "react-icons/go";
-import { FiPhoneCall } from "react-icons/fi";
-import { RiGraduationCapLine, RiWhatsappLine } from "react-icons/ri";
-import { MdOutlineEmail } from "react-icons/md";
-import Checkbox from "@/components/Checkbox/Checkbox";
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
-import {
-  Grade,
-  Participant,
-  YesOrNo,
-  TypeIdentification,
-} from "@/types/prisma";
-import { useParticipantsStore } from "@/store/participantsStore";
-import { useRouter } from "next/navigation";
+import { GoPerson } from 'react-icons/go';
+import { FiPhoneCall } from 'react-icons/fi';
+import { RiGraduationCapLine, RiWhatsappLine } from 'react-icons/ri';
+import { MdOutlineEmail } from 'react-icons/md';
+import Checkbox from '@/components/Checkbox/Checkbox';
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { Grade, Participant, YesOrNo, TypeIdentification } from '@/types/prisma';
+import { useParticipantsStore } from '@/store/participantsStore';
+import { useRouter } from 'next/navigation';
+import { errorAlert, successAlert } from '@/utils/sweetAlert';
 import ProfileImage from "./ProfileImage/ProfileImage";
-import useImagesStore from "@/hooks/Stores/ImageStore/useImageStore";
-
+import useImageStore from "@/hooks/Stores/ImageStore/useImageStore";
 const optionsScholarship = [
   { value: "Sin_Estudio", label: "Sin estudio" },
   { value: "Primaria_Completa", label: "Primaria completa" },
@@ -36,86 +30,69 @@ const optionsTypeIdentification = [
   { value: "Nacional", label: "Nacional" },
   { value: "DIMEX", label: "DIMEX" },
 ];
-export default function ParticipantRegister({
-  participant,
-}: {
-  participant: Participant | null;
-}) {
-  const router = useRouter();
-  const [hasMedicalInsurance, setHasMedicalInsurance] = useState(false);
-  const [hasMedicalReport, setHasMedicalReport] = useState(false);
-  const [identification, setIdentification] = useState("");
-  const [birthDate, setBirthDate] = useState("");
-  const [scholarship, setScholarship] = useState("");
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [firstLastName, setFirstLastName] = useState("");
-  const [secondLastName, setSecondLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [hasWhatsApp, setHasWhatsApp] = useState(false);
-  const [expirationDateMedicalInsurance, setExpirationDateMedicalInsurance] =
-    useState("");
-  const [expirationDateMedicalReport, setExpirationDateMedicalReport] =
-    useState("");
-  const [typeIdentification, setTypeIdentification] = useState("Nacional");
-  const { postParticipant, putParticipant } = useParticipantsStore();
+export default function ParticipantRegister({ participant }: { participant: Participant | null }) {
+    const router = useRouter()
+    const [hasMedicalInsurance, setHasMedicalInsurance] = useState(false)
+    const [hasMedicalReport, setHasMedicalReport] = useState(false)
+    const [identification, setIdentification] = useState('')
+    const [birthDate, setBirthDate] = useState('')
+    const [scholarship, setScholarship] = useState('Primaria_Completa')
+    const [name, setName] = useState('')
+    const [phone, setPhone] = useState('')
+    const [firstLastName, setFirstLastName] = useState('')
+    const [secondLastName, setSecondLastName] = useState('')
+    const [email, setEmail] = useState('')
+    const [hasWhatsApp, setHasWhatsApp] = useState(false)
+    const [expirationDateMedicalInsurance, setExpirationDateMedicalInsurance] = useState('')
+    const [expirationDateMedicalReport, setExpirationDateMedicalReport] = useState('')
+    const [typeIdentification, setTypeIdentification] = useState('Nacional')
+    const { postParticipant, putParticipant } = useParticipantsStore()
+    const {image,onChangeImage} = useImageStore()
 
-  const { image, onChangeImage, setImage } = useImagesStore();
 
-  useEffect(() => {
-    if (participant) {
-      setIdentification(participant.identification);
-      setBirthDate(participant.birthDate);
-      setScholarship(participant.grade.toString());
-      setName(participant.firstName);
-      setPhone(participant.phoneNumber);
-      setFirstLastName(participant.firstName);
-      setSecondLastName(participant.secondSurname);
-      setEmail(participant.email);
-      setHasWhatsApp(participant.hasWhatsApp === ("Yes" as unknown as YesOrNo));
-      setHasMedicalInsurance(
-        participant.expirationDateMedicalInsurance !== null
-      );
-      setHasMedicalReport(participant.expirationDateMedicalReport !== null);
-      setTypeIdentification(participant.typeIdentification.toString());
-      setExpirationDateMedicalInsurance(
-        participant.expirationDateMedicalInsurance || ""
-      );
-      setExpirationDateMedicalReport(
-        participant.expirationDateMedicalReport || ""
-      );
+    useEffect(() => {
+        if (participant) {
+            setIdentification(participant.identification)
+            setBirthDate(participant.birthDate)
+            setScholarship(participant.grade.toString())
+            setName(participant.firstName)
+            setPhone(participant.phoneNumber)
+            setFirstLastName(participant.firstName)
+            setSecondLastName(participant.secondSurname)
+            setEmail(participant.email)
+            setHasWhatsApp(participant.hasWhatsApp === "Yes" as unknown as YesOrNo)
+            setHasMedicalInsurance(participant.expirationDateMedicalInsurance !== null)
+            setHasMedicalReport(participant.expirationDateMedicalReport !== null)
+            setTypeIdentification(participant.typeIdentification.toString())
+            setExpirationDateMedicalInsurance(participant.expirationDateMedicalInsurance || '')
+            setExpirationDateMedicalReport(participant.expirationDateMedicalReport || '')
+        }
+    }, [participant])
+    const handleSave = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+        const newParticipant: Participant = {
+            identification,
+            hasWhatsApp: hasWhatsApp ? "Yes" as unknown as YesOrNo : "No" as unknown as YesOrNo,
+            birthDate,
+            grade: scholarship as unknown as Grade,
+            firstName: name,
+            phoneNumber: phone,
+            firstSurname: firstLastName,
+            secondSurname: secondLastName,
+            email,
+            typeIdentification: typeIdentification as unknown as TypeIdentification,
+            expirationDateMedicalInsurance: hasMedicalInsurance ? expirationDateMedicalInsurance : null as unknown as undefined,
+            expirationDateMedicalReport: hasMedicalReport ? expirationDateMedicalReport : null as unknown as undefined
+        }
+        const response = participant !== null ? await putParticipant(participant?.id ?? 0, newParticipant) : await postParticipant(newParticipant)
+        if (response) {
+            successAlert("Participante guardado exitosamente")
+        }else{
+            errorAlert("Error al guardar el participante")
+        
+        }
     }
-  }, [participant]);
-  const handleSave = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    const newParticipant: Participant = {
-      identification,
-      hasWhatsApp: hasWhatsApp
-        ? ("Yes" as unknown as YesOrNo)
-        : ("No" as unknown as YesOrNo),
-      birthDate,
-      grade: scholarship as unknown as Grade,
-      firstName: name,
-      phoneNumber: phone,
-      firstSurname: firstLastName,
-      secondSurname: secondLastName,
-      email,
-      typeIdentification: typeIdentification as unknown as TypeIdentification,
-      expirationDateMedicalInsurance: hasMedicalInsurance
-        ? expirationDateMedicalInsurance
-        : (null as unknown as undefined),
-      expirationDateMedicalReport: hasMedicalReport
-        ? expirationDateMedicalReport
-        : (null as unknown as undefined),
-    };
-    const response =
-      participant !== null
-        ? await putParticipant(participant?.id ?? 0, newParticipant)
-        : await postParticipant(newParticipant);
-    if (response) {
-      router.push("/admin/participants");
-    }
-  };
+  
   return (
     <div className="container mx-auto bg-gray-gradient p-10 h-auto max-w-4xl my-4 rounded-md gap-4">
       <div>
