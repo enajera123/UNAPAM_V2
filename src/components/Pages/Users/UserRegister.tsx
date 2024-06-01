@@ -42,6 +42,7 @@ function UserRegister({ user }: { user: User | null }) {
             phoneNumber: phone,
             email,
             password,
+            isPasswordChanged: "n",
             birthDate: date,
             state: "Active" as unknown as State
         }
