@@ -9,9 +9,10 @@ export type UsersState = {
   // getUserByFirstName: (firstname: string) => Promise<User | null>;
   postUser: (user: User) => Promise<User | null>;
   putUser: (id: number, user: User) => Promise<User | null>;
-  // putUserPassword: (id: number, user: User) => void;
+  putUserPassword: (id: number, currentPassword: string, newPassword: string) => Promise<boolean>;
   deleteUser: (id: number) => Promise<boolean>;
-  authenticateUser: (user: User) => Promise<User | null>;
+  forgotPassword: (identificacion: string) => Promise<boolean>;
+  authenticateUser: (identification: string, passwordFromLogin: string) => Promise<User | null>;
 };
 
 export type ReferenceContactState = {

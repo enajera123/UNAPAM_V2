@@ -1,4 +1,5 @@
-import React from 'react'
+'use client'
+import React, { useEffect, useState } from 'react'
 import Button from '@/components/Button/Button';
 import InputField from '@/components/InputField/InputField';
 import logoUNAPAM from '@/resources/LogoColorful.webp';
@@ -6,7 +7,37 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { GoKey } from 'react-icons/go';
 import { HiOutlineIdentification } from 'react-icons/hi';
+import { useUsersStore } from '@/store/usersStore'
+import { useRouter } from 'next/navigation';
+import { User } from '@/types/prisma';
+import useAuthState from '@/store/MainStore/userLoggedStore';
+import { errorAlert } from '@/utils/sweetAlert';
+
 function Login() {
+
+    const [identificacion, setIdentificacion] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const { authenticateUser } = useUsersStore();
+    const { setUser, setUserLoggued } = useAuthState();
+    const router = useRouter();
+
+    const handleSave = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        const authenticatedUser:User|null = await authenticateUser(identificacion, password);
+        if (authenticatedUser) {
+            setUser(authenticatedUser);
+            setUserLoggued(true);
+            if(authenticatedUser.isPasswordChanged === 's') {
+                router.push('/changePassword');
+                return;
+            }
+            router.push('/admin/information');
+        }
+        else {
+            errorAlert('Identificación o contraseña incorrecta, intente nuevamente');
+        }
+    };
+
     return (
         <div className="bg-light-gray h-screen flex items-center">
             <div className="container grid grid-cols-3 items-center mx-auto max-w-3xl">
@@ -21,18 +52,22 @@ function Login() {
                         <InputField
                             label="Identificación"
                             placeholder="Identificación"
-                            iconStart={<HiOutlineIdentification color="white" />} />
+                            iconStart={<HiOutlineIdentification color="white" />} 
+                            onChange={(e) => {setIdentificacion(e.target.value)}}
+                            />
                         <InputField
                             label="Contraseña"
                             placeholder="Contraseña"
                             type="password"
-                            iconStart={<GoKey color="white" />} />
-                        <Link href="/health">
+                            iconStart={<GoKey color="white" />} 
+                            onChange={(e) => {setPassword(e.target.value)}}
+                            />
+                        <Link href="/forgotPassword">
                             <div className="text-white text-lg text-right">¿Recuperar contraseña?</div>
                         </Link>
                         <Link href="/admin/information" >
                             <div className="flex justify-center mt-24">
-                                <Button className="bg-dark-red w-full max-w-md">Ingresar</Button>
+                                <Button onClick={handleSave} className="bg-dark-red w-full max-w-md">Ingresar</Button>
                             </div>
                         </Link>
                     </div>

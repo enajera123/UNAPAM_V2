@@ -23,7 +23,9 @@ export interface User {
     state: State;
     email: string;
     password: string;
-    role: Role; 
+    isPasswordChanged: string;
+    role: Role;
+    
 }
 
 export enum Role {
