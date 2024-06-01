@@ -64,7 +64,7 @@ function ChangePassword() {
                         <div className="flex justify-center mt-24">
                             <Button onClick={isMobileDevice() ? undefined : (e) => handleChangePassword(e)}
                                 onTouchEnd={isMobileDevice() ? (e) => handleChangePassword(e) : undefined}
-                                className="bg-dark-red w-full max-w-md">Guardar</Button> {/* onClick con nuevo metodo para cambio de contraseña */}
+                                className="bg-dark-red w-full max-w-md">Guardar</Button>
                         </div>
                     </div>
                 </div>
