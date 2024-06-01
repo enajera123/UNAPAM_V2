@@ -4,10 +4,12 @@ import React, { useEffect, useState } from "react";
 import { MdArrowBackIosNew, MdArrowForwardIos } from "react-icons/md";
 import { TableProps } from "./type";
 import Button from "../Button/Button";
+import { confirmationAlert } from "@/utils/sweetAlert";
 type Item = {
   [key: string]: any;
 };
-const Table = ({ keys, desactivateRowFunction, doubleClickRowFunction, data, headers, itemsPerPage, resetPagination, showEditColumn = false, deleteRowFunction }: TableProps) => {
+
+const Table = ({ keys, desactivateRowFunction, doubleClickRowFunction, data, headers, itemsPerPage, resetPagination, customActions, showEditColumn = false, deleteRowFunction }: TableProps) => {
 
   const currentPageClass = 'flex items-center justify-center px-3 h-8 leading-tight text-medium-red bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-white dark:border-gray-700 dark:text-medium-red dark:hover:bg-gray-700 dark:hover:text-white cursor-pointer'
 
@@ -28,7 +30,6 @@ const Table = ({ keys, desactivateRowFunction, doubleClickRowFunction, data, hea
       setCurrentPage(currentPage - 1);
     }
   };
-
   const handleBtnNext = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -78,16 +79,23 @@ const Table = ({ keys, desactivateRowFunction, doubleClickRowFunction, data, hea
                   key={index}
                   className={`odd:bg-white odd:dark:bg-medium-gray even:hover:bg-gray-500 odd:hover:bg-gray-500 cursor-pointer even:bg-gray-50 even:dark:bg-white border-b dark:border-gray-700 text-black`}
                 >
-                {keys.map((key) => renderTableCell(item, key))}
+                  {keys.map((key) => renderTableCell(item, key))}
                   {showEditColumn && (
                     <td className="px-6 py-4">
                       <div className="flex gap-2">
-                        <Button
-                          onClick={() => deleteRowFunction && deleteRowFunction(item.id)}
-                          format className="bg-white rounded-xl px-3 py-1 border border-gray-400 shadow-md hover:bg-gray-300 hover:text-gray-800">Eliminar</Button>
-                        <Button
-                          onClick={() => desactivateRowFunction && desactivateRowFunction(item.id)}
-                          format className="bg-white rounded-xl px-3 py-1 border border-gray-400 shadow-md hover:bg-gray-300 hover:text-gray-800">Desactivar</Button>
+                        {deleteRowFunction && <Button
+                          onClick={() => confirmationAlert(() => deleteRowFunction(item.id))}
+                          format className="bg-red-500 rounded-xl px-3 py-1 border border-red-400 shadow-md hover:bg-red-400 text-white">Eliminar</Button>}
+                        {desactivateRowFunction && <Button
+                          onClick={() => desactivateRowFunction(item.id)}
+                          format className="bg-white rounded-xl px-3 py-1 border border-gray-400 shadow-md hover:bg-gray-300 hover:text-gray-800">{`${item.state === "Active" ? "Desactivar" : "Activar"}`}</Button>}
+                        {customActions?.map((action, index) => (
+                          <Button
+                            key={index}
+                            onClick={() => action.onClick(item.id)}
+                            format className="bg-white rounded-xl px-3 py-1 border border-gray-400 shadow-md hover:bg-gray-300 hover:text-gray-800">{action.children}</Button>
+                        ))
+                        }
                       </div>
                     </td>
                   )}
@@ -134,7 +142,7 @@ const Table = ({ keys, desactivateRowFunction, doubleClickRowFunction, data, hea
             </li>
           </ul>
         </nav>
-      </div>
+      </div >
     </>
   );
 };

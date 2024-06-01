@@ -8,8 +8,8 @@ export async function PUT(req: NextRequest, { params }: ParameterId) {
         const fetchedId = parseInt(params.id);
         const participant = await req.json();
         let image_url = participant.photo
-        if(participant?.photoFile && participant?.photoExtension && participant?.email){
-            if(image_url)await delete_image_firebase(`profile-photos/${participant.email}`)
+        if (participant?.photoFile && participant?.photoExtension && participant?.email) {
+            if (image_url) await delete_image_firebase(`profile-photos/${participant.email}`)
             image_url = await upload_image(participant.photoFile, participant.photoExtension, `profile-photos/${participant.email}`)
         }
 

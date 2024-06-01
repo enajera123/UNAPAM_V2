@@ -1,3 +1,5 @@
+import { MouseEventHandler } from "react";
+
 export type TableProps = {
     headers: Array<string>,
     data: Array<any>,
@@ -5,7 +7,12 @@ export type TableProps = {
     resetPagination?: number,
     showEditColumn?: boolean,
     keys: Array<string>,
+    customActions?: CustomActions[],
     deleteRowFunction?: (id: number) => void
     desactivateRowFunction?: (id: number) => void
     doubleClickRowFunction?: (id: number) => void
+}
+interface CustomActions {
+    children: React.ReactNode;
+    onClick: (id: number) => void
 }

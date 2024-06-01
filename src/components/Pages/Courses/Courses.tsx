@@ -10,6 +10,7 @@ import Button from '@/components/Button/Button';
 import { Course, State } from '@/types/prisma';
 import { useRouter } from 'next/navigation';
 import { useCourseStore as useCoursesStore } from '@/hooks/Stores/CourseStore/useCourseStore'
+import { deleteCourse } from '@/services/coursesService';
 
 
 function Courses() {
@@ -26,7 +27,10 @@ function Courses() {
     }, [courses])
     const desactivateRowFunction = async (id: number) => {
         const course = courses.find((u) => u.id === id);
-        course && await putCourse(id, { ...course, state: course.state === State.Inactive ? "Active" as unknown as State : "Inactive" as unknown as State });
+        course && await putCourse(id, { ...course, state: course.state === "Inactive" as unknown as State ? "Active" as unknown as State : "Inactive" as unknown as State });
+    }
+    const seeParticipants = (courseId: number) => {
+        router.push(`/admin/participants/${courseId}`)
     }
     return (
         <div className="mx-4 bg-gray-gradient flex flex-col justify-center items-center h-auto py-10 px-20 my-6 rounded-2xl">
@@ -44,12 +48,19 @@ function Courses() {
             </div>
             {filteredData.length > 0 ? (
                 <Table
+                    customActions={[
+                        {
+                            children: <p>Ver Participantes</p>,
+                            onClick: seeParticipants
+                        }
+                    ]}
+                    deleteRowFunction={deleteCourse}
                     desactivateRowFunction={desactivateRowFunction}
                     doubleClickRowFunction={(id) => router.push('/admin/courseRegister/' + id)}
                     showEditColumn
-                    keys={['name', 'courseNumber', 'professor', 'quota', 'initialDate', 'finalDate', 'location', 'description', 'needMedicalReport', 'state']}
+                    keys={['name', 'courseNumber', 'professor', 'quota', 'initialDate', 'finalDate', 'location', 'needMedicalReport', 'state']}
                     data={filteredData}
-                    headers={["Nombre", "Código", 'Profesor', 'Cupos', 'Fecha de inicio', 'Fecha de finalización', 'Ubicación', 'Descripción', 'Requiere reporte médico', 'Estado']}
+                    headers={["Nombre", "Código", 'Profesor', 'Cupos', 'Fecha de inicio', 'Fecha de finalización', 'Ubicación', 'Requiere reporte médico', 'Estado']}
                     itemsPerPage={6}
                     resetPagination={randomNumber}
                 />

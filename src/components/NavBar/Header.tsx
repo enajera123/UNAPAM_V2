@@ -1,11 +1,11 @@
 import Link from "next/link";
 import Button from "@/components/Button/Button";
-import logoUNAPAM from '@/resources/LogoColorful.png';
-import logoUNA from '@/resources/LogoUNA.png';
+import logoUNAPAM from '@/resources/LogoColorful.webp';
+import logoUNA from '@/resources/LogoUNA.webp';
 import Image from 'next/image';
 
 export const Header: React.FC = () => {
-    return <header className="bg-light-gray px-5 flex justify-between items-center">
+    return <header className="bg-light-gray px-5 flex sticky z-10 top-0 justify-between items-center">
         <div className="flex gap-1 items-center">
             <div className="bg-medium-gray rounded-bl-3xl rounded-br-3xl p-2">
                 <Image src={logoUNA} alt="logoUNA" className="w-20" />
