@@ -3,7 +3,7 @@ export function getPasswordResetEmail(newPassword: string) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Password Reset</title>
+    <title>Modificación de contraseña</title>
     <style>
     .container {
         max-width: 600px;
@@ -28,8 +28,8 @@ export function getPasswordResetEmail(newPassword: string) {
 </head>
 <body>
     <div class="container">
-        <h1>Your password has been changed</h1>
-        <p>Your new password is: ${newPassword}</p>
+        <h1>Su contraseña fue modificada</h1>
+        <p>Su nueva contraseña temporal es: ${newPassword}</p>
     </div>
 </body>
 </html>

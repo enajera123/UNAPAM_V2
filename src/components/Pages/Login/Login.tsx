@@ -11,6 +11,7 @@ import { useUsersStore } from '@/store/usersStore'
 import { useRouter } from 'next/navigation';
 import { User } from '@/types/prisma';
 import useAuthState from '@/store/MainStore/userLoggedStore';
+import { errorAlert } from '@/utils/sweetAlert';
 
 function Login() {
 
@@ -27,13 +28,13 @@ function Login() {
             setUser(authenticatedUser);
             setUserLoggued(true);
             if(authenticatedUser.isPasswordChanged === 's') {
-                router.push('/admin/changePassword');
+                router.push('/changePassword');
                 return;
             }
             router.push('/admin/information');
         }
         else {
-            alert('Credenciales incorrectas');
+            errorAlert('Identificación o contraseña incorrecta, intente nuevamente');
         }
     };
 

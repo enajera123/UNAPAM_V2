@@ -8,6 +8,7 @@ import { HiOutlineIdentification } from 'react-icons/hi';
 import { useUsersStore } from '@/store/usersStore'
 import { useMainStore } from "@/store/MainStore/mainStore";
 import { useRouter } from 'next/navigation';
+import { errorAlert, successAlert } from '@/utils/sweetAlert';	
 
 function ForgotPassword() {
 
@@ -21,13 +22,11 @@ function ForgotPassword() {
         const response = await forgotPassword(identificacion);
         setLoader(false);
         if (response) {
-            //ALERTA EXITO
-            alert('Correo enviado correctamente');
+            successAlert('Correo con su contraseña temporal, enviado correctamente');
             router.push('/');
             return;
         }
-        //ALERTA ERROR
-        alert('Error al enviar el correo');
+        errorAlert('Identificación no encontrada, intente nuevamente');
     }
 
     return (

@@ -9,6 +9,7 @@ import useAuthState from '@/store/MainStore/userLoggedStore';
 import { useUsersStore } from '@/store/usersStore';
 import { useRouter } from 'next/navigation';
 import { useMainStore } from '@/store/MainStore/mainStore';
+import { errorAlert, successAlert } from '@/utils/sweetAlert';
 
 function ChangePassword() {
 
@@ -28,12 +29,11 @@ function ChangePassword() {
         const response = await putUserPassword(userId, currentPassword, newPassword);
         setLoader(false);
         if (response) {
-            alert('Contraseña cambiada correctamente');
+            successAlert('Nueva contraseña establecida correctamente');
             router.push('/admin/information');
             return;
         }
-        alert('Error al cambiar la contraseña');
-        router.push('/');
+        errorAlert('Contraseña temporal digitada incorrecta, intente nuevamente');
     }
 
     return (
