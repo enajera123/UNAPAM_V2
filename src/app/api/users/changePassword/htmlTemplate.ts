@@ -40,8 +40,8 @@ export function getPasswordResetEmail(newPassword: string) {
 </head>
 <body>
     <div class="container">
-        <h1>Su contraseña fue modificada</h1>
-        <p>Para cambiar su contraseña, haz click en el siguiete enlace</p>
+        <h1>Reestablecimiento de contraseña</h1>
+        <p>Para cambiar su contraseña, haz click en el siguiente enlace: </p>
         <a href="${resetLink}">Cambiar contraseña</a>
     </div>
 </body>
