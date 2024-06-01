@@ -58,7 +58,7 @@ export default function ParticipantRegister({ participant }: { participant: Part
             setScholarship(participant.grade.toString())
             setName(participant.firstName)
             setPhone(participant.phoneNumber)
-            setFirstLastName(participant.firstName)
+            setFirstLastName(participant.firstSurname)
             setSecondLastName(participant.secondSurname)
             setEmail(participant.email)
             setHasWhatsApp(participant.hasWhatsApp === "Yes" as unknown as YesOrNo)

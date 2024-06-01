@@ -41,7 +41,7 @@ function Participants({ participants }: { participants: Participant[] | null }) 
                 <Link href={'/admin/participantRegister'}><Button className="bg-red-gradient">Crear Participante</Button></Link>
             </div>
             <div className="max-w-5xl">
-                {filteredData.length > 0 ? (
+                {filteredData?.length > 0 ? (
                     <Table
                         deleteRowFunction={deleteParticipant}
                         doubleClickRowFunction={(id) => router.push(`/admin/participantRegister/${id}`)}

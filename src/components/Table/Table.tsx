@@ -55,6 +55,7 @@ const Table = ({ keys, desactivateRowFunction, doubleClickRowFunction, data, hea
     if (resetPagination) {
       setCurrentPage(1);
     }
+    console.log(data)
   }, [resetPagination, setCurrentPage]);
 
   return (
