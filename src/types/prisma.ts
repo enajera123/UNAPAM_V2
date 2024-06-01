@@ -23,6 +23,7 @@ export interface User {
     state: State;
     email: string;
     password: string;
+    isPasswordChanged: string;
     role: Role;
 }
 
