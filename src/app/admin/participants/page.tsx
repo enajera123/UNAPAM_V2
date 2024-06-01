@@ -5,7 +5,7 @@ import React from 'react'
 import ParticipantsComponent from '@/components/Pages/Participants/Participants'
 function Participants() {
     return (
-        <ParticipantsComponent />
+        <ParticipantsComponent participants={null}/>
     )
 }
 

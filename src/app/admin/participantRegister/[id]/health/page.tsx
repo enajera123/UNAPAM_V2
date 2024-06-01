@@ -6,7 +6,7 @@ import { AiOutlineMedicineBox } from "react-icons/ai";
 import { BsHeartPulse } from "react-icons/bs";
 import { GoPerson, GoPersonAdd } from "react-icons/go";
 import { FiPhoneCall } from "react-icons/fi";
-import logoUNAPAM from '@/resources/LogoWhite.png';
+import logoUNAPAM from '@/resources/LogoWhite.webp';
 import Image from 'next/image';
 import { BiInjection } from "react-icons/bi";
 

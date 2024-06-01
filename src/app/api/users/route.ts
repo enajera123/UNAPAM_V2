@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from 'bcrypt';
+import { upload_image } from "@/firebase/fileMethod";
 export async function GET(req: NextRequest, res: NextResponse) {
     try {
         const users = await prisma.user.findMany({});
@@ -28,7 +29,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
         }
 
         const hashedPassword = await bcrypt.hash(user.password, 10); 
-        console.log(user)
+
+        
+         
         const newUser = await prisma.user.create({
             data: {
                 ...user,

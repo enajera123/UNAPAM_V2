@@ -25,6 +25,7 @@ export interface User {
     password: string;
     isPasswordChanged: string;
     role: Role;
+    
 }
 
 export enum Role {
@@ -58,6 +59,8 @@ export interface Participant {
     identification: string;
     hasWhatsApp: YesOrNo;
     photo?: string;
+    photoFile?: string;
+    photoExtension?: string;
     grade: Grade;
     expirationDateMedicalReport?: string
     expirationDateMedicalInsurance?: string

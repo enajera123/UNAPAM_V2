@@ -11,19 +11,20 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 
-function Participants() {
+function Participants({ participants }: { participants: Participant[] | null }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [filteredData, setFilteredData] = useState<Participant[]>([]);
     const [randomNumber, setRandomNumber] = useState<number>(0);
-    const { getParticipants, participants } = useParticipantsStore()
+    const { getParticipants, deleteParticipant, participants: participantStore } = useParticipantsStore()
     const { handleSearch } = useHandleSearch({ setFilterData: setFilteredData, searchTerm, setRandomNumber })
     const router = useRouter()
     useEffect(() => {
-        getParticipants()
+        if (!participants)
+            getParticipants()
     }, [])
     useEffect(() => {
-        setFilteredData(participants)
-    }, [participants])
+        setFilteredData(participants ?? participantStore)
+    }, [participantStore])
 
     return (
         <div className="container mx-auto bg-gray-gradient flex flex-col justify-center items-center h-auto p-10 my-6 rounded-2xl max-w-6xl">
@@ -34,7 +35,7 @@ function Participants() {
                 <SearchBar
                     searchTerm={searchTerm}
                     setSearchTerm={setSearchTerm}
-                    handleSearch={() => handleSearch(participants)}
+                    handleSearch={() => handleSearch(participants || participantStore)}
                     showSelect={false}
                 />
                 <Link href={'/admin/participantRegister'}><Button className="bg-red-gradient">Crear Participante</Button></Link>
@@ -42,6 +43,7 @@ function Participants() {
             <div className="max-w-5xl">
                 {filteredData.length > 0 ? (
                     <Table
+                        deleteRowFunction={deleteParticipant}
                         doubleClickRowFunction={(id) => router.push(`/admin/participantRegister/${id}`)}
                         showEditColumn={true}
                         keys={['identification', 'firstName', 'firstSurname', 'secondSurname', 'expirationDateMedicalInsurance', 'expirationDateMedicalReport']}

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import Button from '@/components/Button/Button';
 import InputField from '@/components/InputField/InputField';
-import logoUNAPAM from '@/resources/LogoColorful.png';
+import logoUNAPAM from '@/resources/LogoColorful.webp';
 import Image from 'next/image';
 import Link from 'next/link';
 import { GoKey } from 'react-icons/go';

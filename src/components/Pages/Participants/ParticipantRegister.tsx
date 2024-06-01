@@ -15,6 +15,7 @@ import Link from 'next/link';
 import { Grade, Participant, YesOrNo, TypeIdentification } from '@/types/prisma';
 import { useParticipantsStore } from '@/store/participantsStore';
 import { useRouter } from 'next/navigation';
+import { errorAlert, successAlert } from '@/utils/sweetAlert';
 const optionsScholarship = [
     { value: "Sin_Estudio", label: "Sin estudio" },
     { value: "Primaria_Completa", label: "Primaria completa" },
@@ -34,7 +35,7 @@ export default function ParticipantRegister({ participant }: { participant: Part
     const [hasMedicalReport, setHasMedicalReport] = useState(false)
     const [identification, setIdentification] = useState('')
     const [birthDate, setBirthDate] = useState('')
-    const [scholarship, setScholarship] = useState('')
+    const [scholarship, setScholarship] = useState('Primaria_Completa')
     const [name, setName] = useState('')
     const [phone, setPhone] = useState('')
     const [firstLastName, setFirstLastName] = useState('')
@@ -81,7 +82,10 @@ export default function ParticipantRegister({ participant }: { participant: Part
         }
         const response = participant !== null ? await putParticipant(participant?.id ?? 0, newParticipant) : await postParticipant(newParticipant)
         if (response) {
-            router.push('/admin/participants')
+            successAlert("Participante guardado exitosamente")
+        }else{
+            errorAlert("Error al guardar el participante")
+        
         }
     }
     return (

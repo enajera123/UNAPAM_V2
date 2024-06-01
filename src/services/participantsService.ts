@@ -54,6 +54,14 @@ export async function deleteParticipant(id: number) {
   }
 }
 
+export async function getParticipantsByCourseId(courseId: number) {
+  try {
+    const response = await axios.get(`/api/participants/byCourse/${courseId}`)
+    return response.data
+  } catch (error) {
+    return null
+  }
+}
 export async function getParticipantByEmail(email: string) {
   try {
     const response = await axios.get(`/api/participants/byEmail/${email}`);
