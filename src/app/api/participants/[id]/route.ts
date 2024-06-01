@@ -2,6 +2,7 @@ import { delete_image_firebase, upload_image } from "@/firebase/fileMethod";
 import prisma from "@/lib/prisma";
 import { ParameterId } from "@/types/api";
 import { NextRequest, NextResponse } from "next/server";
+
 export async function PUT(req: NextRequest, { params }: ParameterId) {
     try {
         const fetchedId = parseInt(params.id);
@@ -29,7 +30,6 @@ export async function PUT(req: NextRequest, { params }: ParameterId) {
         });
         return NextResponse.json(participantUpdated, { status: 200 });
     } catch (error) {
-        console.log(error)
         return NextResponse.json(
             { error: "Internal Server Error" },
             { status: 500 }
