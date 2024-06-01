@@ -17,17 +17,18 @@ model GeneralInformation {
 }
 
 model User {
-  id             Int    @id @default(autoincrement())
-  firstName      String
-  firstSurname   String
-  secondSurname  String
-  phoneNumber    String
-  birthDate      String
-  identification String
-  state          State
-  email          String
-  password       String
-  role           Role
+  id                Int    @id @default(autoincrement())
+  firstName         String
+  firstSurname      String
+  secondSurname     String
+  phoneNumber       String
+  birthDate         String
+  identification    String
+  state             State
+  email             String
+  password          String
+  isPasswordChanged String
+  role              Role
 }
 
 model Participant {
