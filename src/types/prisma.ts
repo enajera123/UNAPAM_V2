@@ -178,3 +178,12 @@ export const defaultImage: image_format = {
   image_name: "",
   image_path: null,
 };
+
+export interface file_format {
+  file_name?: string;
+  file_file?: string;
+  file_extension?: string;
+  file_path?: string | null;
+  file_url?: string;
+  file_type?: string;
+}

@@ -1,32 +1,83 @@
 'use client'
 import Button from "@/components/Button/Button";
 import Table from "@/components/Table/Table";
+import { file_format } from "@/types/prisma";
+import { useState } from "react";
 export default function Attachments() {
-  const headersFiles = ['Nombre', "Enlace"];
-  const headers = ['Nombre', 'Tipo', 'Fecha de Creación', 'Acciones'];
-  return (
+  const headersFiles = ['Nombre','Tipo', "Enlace"];
+  //const headers = ['Nombre', 'Tipo', 'Fecha de Creación', 'Acciones'];
+
+  const [files,setFiles] = useState<file_format[]>([])
+
+    const handleSetFiles = (event:React.ChangeEvent<HTMLInputElement>) =>{
+      let file = null
+      console.log("first")
+      if(event.target && event.target.files){
+        file = event.target.files[0]
+      }
+      console.log(file)
+      if(file!=null){
+        const reader = new FileReader();
+        console.log(reader)
+        reader.onload = (item) => {
+          console.log(item.target)
+          if (item.target && item.target.result) {
+            const base64String = item.target.result
+              .toString()
+              .replace("data:", "")
+              .replace(/^.+,/, "");
+              const f = [
+                ...files,
+                {
+                  file_name: file.name.split(".")[0],
+                  file_extension: file.name.split(".").pop()!,
+                  file_file: base64String,
+                }
+              ]
+              setFiles((i) => (f));
+          };
+        }
+        reader.readAsArrayBuffer(file);
+        console.log(files)
+      }
+    }
+
+    const deleteFile = (id:number) =>{ 
+      console.log(id)
+    }
+
+  return ( 
     <div className="container mx-auto bg-gray-gradient p-10 h-auto max-w-4xl my-4 rounded-md gap-4">
       <div className='container bg-white mt-6 p-4 rounded-xl'>
         <p className="text-3xl font-bold text-dark-gray flex justify-center">Documentos Adjuntos</p>
         <div className='mt-6'>
-          <Table keys={[]} data={[]} headers={headersFiles} itemsPerPage={3} />
+          <Table keys={['file_name','file_extension','file_file']} data={files!} headers={headersFiles} itemsPerPage={3} showEditColumn={true} deleteRowFunction={deleteFile}/>
         </div>
-        <div className='flex justify-center mt-6'>
-          <label htmlFor={`image`} className={`flex flex-col items-center justify-end z-30 ml-24 size-16 cursor-pointer`} onClick={(e)=>e.stopPropagation()}>
-              <svg className='size-16' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 16C13.6569 16 15 14.6569 15 13C15 11.3431 13.6569 10 12 10C10.3431 10 9 11.3431 9 13C9 14.6569 10.3431 16 12 16Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M3 16.8V9.2C3 8.0799 3 7.51984 3.21799 7.09202C3.40973 6.71569 3.71569 6.40973 4.09202 6.21799C4.51984 6 5.0799 6 6.2 6H7.25464C7.37758 6 7.43905 6 7.49576 5.9935C7.79166 5.95961 8.05705 5.79559 8.21969 5.54609C8.25086 5.49827 8.27836 5.44328 8.33333 5.33333C8.44329 5.11342 8.49827 5.00346 8.56062 4.90782C8.8859 4.40882 9.41668 4.08078 10.0085 4.01299C10.1219 4 10.2448 4 10.4907 4H13.5093C13.7552 4 13.8781 4 13.9915 4.01299C14.5833 4.08078 15.1141 4.40882 15.4394 4.90782C15.5017 5.00345 15.5567 5.11345 15.6667 5.33333C15.7216 5.44329 15.7491 5.49827 15.7803 5.54609C15.943 5.79559 16.2083 5.95961 16.5042 5.9935C16.561 6 16.6224 6 16.7454 6H17.8C18.9201 6 19.4802 6 19.908 6.21799C20.2843 6.40973 20.5903 6.71569 20.782 7.09202C21 7.51984 21 8.0799 21 9.2V16.8C21 17.9201 21 18.4802 20.782 18.908C20.5903 19.2843 20.2843 19.5903 19.908 19.782C19.4802 20 18.9201 20 17.8 20H6.2C5.0799 20 4.51984 20 4.09202 19.782C3.71569 19.5903 3.40973 19.2843 3.21799 18.908C3 18.4802 3 17.9201 3 16.8Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-          </label>
-          <input id={`image`} type="file"  name="Photo" className="hidden" onChange={()=>{}} onClick={(e)=>e.stopPropagation()} />
+        <div className='flex justify-center'>
+          <div className="flex justify-center items-center gap-3 mt-3 bg-red-gradient w-1/4 rounded-xl">
+            <span className="font-bold text-white text-sm">Agregar</span> 
+            <label htmlFor={`image`} className={`flex items-center justify-center z-30 size-10 cursor-pointer`} onClick={(e)=>e.stopPropagation()}>
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                  <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+                  <g id="SVGRepo_iconCarrier"> 
+                  <path fillRule="evenodd" clipRule="evenodd" d="M8 10C8 7.79086 9.79086 6 12 6C14.2091 6 16 7.79086 16 10V11H17C18.933 11 20.5 12.567 20.5 14.5C20.5 16.433 18.933 18 17 18H16C15.4477 18 15 18.4477 15 19C15 19.5523 15.4477 20 16 20H17C20.0376 20 22.5 17.5376 22.5 14.5C22.5 11.7793 20.5245 9.51997 17.9296 9.07824C17.4862 6.20213 15.0003 4 12 4C8.99974 4 6.51381 6.20213 6.07036 9.07824C3.47551 9.51997 1.5 11.7793 1.5 14.5C1.5 17.5376 3.96243 20 7 20H8C8.55228 20 9 19.5523 9 19C9 18.4477 8.55228 18 8 18H7C5.067 18 3.5 16.433 3.5 14.5C3.5 12.567 5.067 11 7 11H8V10ZM15.7071 13.2929L12.7071 10.2929C12.3166 9.90237 11.6834 9.90237 11.2929 10.2929L8.29289 13.2929C7.90237 13.6834 7.90237 14.3166 8.29289 14.7071C8.68342 15.0976 9.31658 15.0976 9.70711 14.7071L11 13.4142V19C11 19.5523 11.4477 20 12 20C12.5523 20 13 19.5523 13 19V13.4142L14.2929 14.7071C14.6834 15.0976 15.3166 15.0976 15.7071 14.7071C16.0976 14.3166 16.0976 13.6834 15.7071 13.2929Z" fill="#ffff"></path> 
+                </g>
+              </svg>
+            </label>
+            <input id={`image`} type="file"  name="File" className="hidden" onChange={handleSetFiles} onClick={(e)=>e.stopPropagation()} />
+          </div>
         </div>
       </div>
-      <div className='container bg-white mt-6 p-4 rounded-xl'>
+      {/*<div className='container bg-white mt-6 p-4 rounded-xl'>
         <p className="text-3xl font-bold text-dark-gray flex justify-center">Cursos</p>
         <div className='mt-6'>
-          <Table keys={[]} data={[]} headers={headers} itemsPerPage={3} />
+          <Table keys={[]} data={files!} headers={headers} itemsPerPage={3} /> 
         </div>
         <div className='flex justify-center mt-6'>
           <Button className="bg-red-gradient w-1/3">Agregar</Button>
         </div>
-      </div>
+      </div>*/}
     </div>
 
   );
