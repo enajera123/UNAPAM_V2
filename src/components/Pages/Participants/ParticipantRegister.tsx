@@ -48,6 +48,7 @@ export default function ParticipantRegister({ participant }: { participant: Part
     const [typeIdentification, setTypeIdentification] = useState('Nacional')
     const { postParticipant, putParticipant } = useParticipantsStore()
     const {image,onChangeImage} = useImageStore()
+    const [photo,setPhoto] = useState<string|undefined>("");
 
 
     useEffect(() => {
@@ -66,6 +67,7 @@ export default function ParticipantRegister({ participant }: { participant: Part
             setTypeIdentification(participant.typeIdentification.toString())
             setExpirationDateMedicalInsurance(participant.expirationDateMedicalInsurance || '')
             setExpirationDateMedicalReport(participant.expirationDateMedicalReport || '')
+            setPhoto(participant.photo)
         }
     }, [participant])
     const handleSave = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -82,7 +84,9 @@ export default function ParticipantRegister({ participant }: { participant: Part
             email,
             typeIdentification: typeIdentification as unknown as TypeIdentification,
             expirationDateMedicalInsurance: hasMedicalInsurance ? expirationDateMedicalInsurance : null as unknown as undefined,
-            expirationDateMedicalReport: hasMedicalReport ? expirationDateMedicalReport : null as unknown as undefined
+            expirationDateMedicalReport: hasMedicalReport ? expirationDateMedicalReport : null as unknown as undefined,
+            photoExtension:image.image_extension,
+            photoFile:image.image_file
         }
         const response = participant !== null ? await putParticipant(participant?.id ?? 0, newParticipant) : await postParticipant(newParticipant)
         if (response) {

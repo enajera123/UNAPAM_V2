@@ -17,17 +17,18 @@ model GeneralInformation {
 }
 
 model User {
-  id             Int    @id @default(autoincrement())
-  firstName      String
-  firstSurname   String
-  secondSurname  String
-  phoneNumber    String
-  birthDate      String
-  identification String
-  state          State
-  email          String
-  password       String
-  role           Role
+  id                Int    @id @default(autoincrement())
+  firstName         String
+  firstSurname      String
+  secondSurname     String
+  phoneNumber       String
+  birthDate         String
+  identification    String
+  state             State
+  email             String
+  password          String
+  isPasswordChanged String
+  role              Role
 }
 
 model Participant {
@@ -40,7 +41,7 @@ model Participant {
   birthDate                      String
   identification                 String
   hasWhatsApp                    YesOrNo
-  photo                          String?
+  photo                          String?                 @db.VarChar(255)
   grade                          Grade
   typeIdentification             TypeIdentification
   expirationDateMedicalInsurance String?
@@ -56,7 +57,7 @@ model ParticipantAttachment {
   name           String
   attachmentFile Bytes
   participantId  Int
-  participant    Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  participant    Participant @relation(fields: [participantId], references: [id])
 
   @@index([participantId], map: "ParticipantAttachment_participantId_fkey")
 }
@@ -65,8 +66,8 @@ model ParticipantOnCourse {
   participantId Int
   courseId      Int
   state         StateParticipantOnCourse
-  courses       Course                   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  participants  Participant              @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  courses       Course                   @relation(fields: [courseId], references: [id])
+  participants  Participant              @relation(fields: [participantId], references: [id])
 
   @@id([participantId, courseId])
   @@index([courseId], map: "ParticipantOnCourse_courseId_fkey")
@@ -90,7 +91,7 @@ model ParticipantHealth {
   bloodType            String
   participantId        Int                   @unique
   participantDisseases ParticipantDissease[]
-  participant          Participant           @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  participant          Participant           @relation(fields: [participantId], references: [id])
   participantMedicines ParticipantMedicine[]
 }
 
@@ -99,7 +100,7 @@ model ParticipantDissease {
   disease             String
   description         String?
   participantHealthId Int
-  participantHealth   ParticipantHealth @relation(fields: [participantHealthId], references: [id], onDelete: Cascade)
+  participantHealth   ParticipantHealth @relation(fields: [participantHealthId], references: [id])
 
   @@index([participantHealthId], map: "ParticipantDissease_participantHealthId_fkey")
 }
@@ -109,7 +110,7 @@ model ParticipantMedicine {
   medicine            String
   description         String?
   participantHealthId Int
-  participantHealth   ParticipantHealth @relation(fields: [participantHealthId], references: [id], onDelete: Cascade)
+  participantHealth   ParticipantHealth @relation(fields: [participantHealthId], references: [id])
 
   @@index([participantHealthId], map: "ParticipantMedicine_participantHealthId_fkey")
 }

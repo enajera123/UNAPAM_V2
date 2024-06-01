@@ -1,4 +1,4 @@
-import { upload_image } from "@/firebase/fileMethod";
+import { delete_image_firebase, upload_image } from "@/firebase/fileMethod";
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -15,9 +15,10 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
 
 export async function POST(req: NextRequest, res: NextResponse) {
+    let image_url = null
     try {
         const participant = await req.json();
-        let image_url = null
+        
         if(participant.photoFile && participant.photoExtension && participant.email){
             image_url = await upload_image(participant.photoFile, participant.photoExtension, `profile-photos/${participant.email}`)
          }
@@ -29,6 +30,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
         });
         return NextResponse.json(newParticipant, { status: 201 })
     } catch (error) {
+        if(image_url){
+            delete_image_firebase(image_url)
+        }
         return NextResponse.json(error, { status: 500 });
     }
 }
