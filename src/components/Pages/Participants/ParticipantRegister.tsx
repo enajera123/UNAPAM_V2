@@ -262,34 +262,6 @@ export default function ParticipantRegister({ participant }: { participant: Part
           Guardar
         </Button>
       </div>
-      {/* <div className='flex justify-between mt-4'>
-                    <Link href="/health">
-                        <Button className="bg-red-gradient w-52">Salud</Button>
-                    </Link>
-                    <Button className="bg-red-gradient w-52">Desactivar</Button>
-                    <Button className="bg-red-gradient w-52">Eliminar</Button>
-                </div>
-                <div className='flex justify-center mt-6'>
-                    <Button className="bg-red-gradient w-1/3">Registrar</Button>
-                </div>
-                <div className='container bg-white mt-6 p-4 rounded-xl'>
-                    <p className="text-3xl font-bold text-dark-gray flex justify-center">Documentos Adjuntos</p>
-                    <div className='mt-6'>
-                        <Table keys={[]} data={[]} headers={headersFiles} itemsPerPage={3} />
-                    </div>
-                    <div className='flex justify-center mt-6'>
-                        <Button className="bg-red-gradient w-1/3">Agregar</Button>
-                    </div>
-                </div>
-                <div className='container bg-white mt-6 p-4 rounded-xl'>
-                    <p className="text-3xl font-bold text-dark-gray flex justify-center">Cursos</p>
-                    <div className='mt-6'>
-                        <Table keys={[]} data={[]} headers={headers} itemsPerPage={3} />
-                    </div>
-                    <div className='flex justify-center mt-6'>
-                        <Button className="bg-red-gradient w-1/3">Agregar</Button>
-                    </div>
-                </div> */}
     </div>
   );
 }
