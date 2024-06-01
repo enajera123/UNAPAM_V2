@@ -25,7 +25,7 @@ function ChangePassword() {
         setToken(searchParams.get('token') as string | undefined);
     }, [searchParams]);
 
-    const handleChangePassword = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleChangePassword = async (e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
         e.preventDefault()
         if (user === null) return;
         const userId = user.id;
@@ -40,6 +40,10 @@ function ChangePassword() {
         }
         errorAlert('Contraseña temporal digitada incorrecta, intente nuevamente');
     }
+
+    function isMobileDevice() {
+        return (typeof window !== "undefined") && (window.innerWidth <= 768);
+    };
 
     return (
         <div className="bg-light-gray h-screen flex items-center">
@@ -58,7 +62,9 @@ function ChangePassword() {
                             onChange={(e) => { setNewPassword(e.target.value) }}
                         />
                         <div className="flex justify-center mt-24">
-                            <Button onClick={(e) => handleChangePassword(e)} className="bg-dark-red w-full max-w-md">Guardar</Button> {/* onClick con nuevo metodo para cambio de contraseña */}
+                            <Button onClick={isMobileDevice() ? undefined : (e) => handleChangePassword(e)}
+                                onTouchEnd={isMobileDevice() ? (e) => handleChangePassword(e) : undefined}
+                                className="bg-dark-red w-full max-w-md">Guardar</Button> {/* onClick con nuevo metodo para cambio de contraseña */}
                         </div>
                     </div>
                 </div>
