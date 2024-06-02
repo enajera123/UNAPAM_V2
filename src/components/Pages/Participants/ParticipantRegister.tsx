@@ -50,10 +50,10 @@ export default function ParticipantRegister({ participant }: { participant: Part
   const { postParticipant, putParticipant } = useParticipantsStore()
   const { image, onChangeImage, setImage } = useImageStore()
   const [photo, setPhoto] = useState<string | undefined>("");
-  const [participantOnCourses, setParticipantOnCourses] = useState<ParticipantOnCourse[]>([])
+  const [participantOnCourses, setParticipantOnCourses] = useState<ParticipantOnCourse[]>(participant?.participantsOnCourses as ParticipantOnCourse[])
 
   const updateParticipantCourses = ({ participantId, courseId, state }: ParticipantOnCourse) => {
-    const updatedList = participantOnCourses?.filter((i) => i.participantId !== participantId && i.courseId !== courseId) as ParticipantOnCourse[]
+    const updatedList = participantOnCourses?.filter((i) => (i.courseId !== courseId)) as ParticipantOnCourse[]
     setParticipantOnCourses([...updatedList, { participantId, courseId, state }])
   }
 
