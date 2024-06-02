@@ -55,8 +55,9 @@ model Participant {
 model ParticipantAttachment {
   id             Int         @id @default(autoincrement())
   name           String
-  attachmentFile Bytes
+  attachmentFile String      @db.VarChar(255)
   participantId  Int
+  type           String?     @db.VarChar(5)
   participant    Participant @relation(fields: [participantId], references: [id])
 
   @@index([participantId], map: "ParticipantAttachment_participantId_fkey")

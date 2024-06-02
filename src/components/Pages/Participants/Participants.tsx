@@ -1,5 +1,4 @@
 "use client"
-
 import Button from "@/components/Button/Button";
 import SearchBar from "@/components/SearchBar/SearchBar";
 import Table from "@/components/Table/Table";

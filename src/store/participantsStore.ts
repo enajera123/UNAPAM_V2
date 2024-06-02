@@ -11,12 +11,11 @@ import {
   getParticipantByIdentification,
   getParticipantsByCourseId
 } from "@/services/participantsService";
-import { Participant } from "@/types/prisma";
+import { Participant, ParticipantAttachment } from "@/types/prisma";
 
 export const useParticipantsStore = create<ParticipantState>((set) => ({
   participants: [] as Participant[],
   setParticipants: (participants) => set({ participants }),
-
   getParticipantsByCourseId: async (id: number) => {
     const participants = await getParticipantsByCourseId(id);
     if (!participants) return null

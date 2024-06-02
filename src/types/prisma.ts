@@ -87,7 +87,8 @@ export interface Participant {
 export interface ParticipantAttachment {
   id?: number;
   name: string;
-  attachmentFile: Uint8Array;
+  type?:string;
+  attachmentFile: file_format;
   participantId: number;
   participant?: Participant;
 }
