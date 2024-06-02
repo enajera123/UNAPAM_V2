@@ -11,7 +11,7 @@ function Participants({ params }: { params: { courseId: string } }) {
         getParticipantsByCourseId(parseInt(params.courseId))
     }, [])
     return (
-        <ParticipantsComponent participants={participants} />
+        <ParticipantsComponent participants={participants} courseId={parseInt(params.courseId)} />
     )
 }
 

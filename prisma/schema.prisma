@@ -58,7 +58,7 @@ model ParticipantAttachment {
   attachmentFile String      @db.VarChar(255)
   participantId  Int
   type           String?     @db.VarChar(100)
-  participant    Participant @relation(fields: [participantId], references: [id])
+  participant    Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
 
   @@index([participantId], map: "ParticipantAttachment_participantId_fkey")
 }
@@ -82,7 +82,7 @@ model ReferenceContact {
   phoneNumber   String
   relationship  String
   participantId Int
-  participant   Participant @relation(fields: [participantId], references: [id])
+  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
 
   @@index([participantId], map: "ReferenceContact_participantId_fkey")
 }

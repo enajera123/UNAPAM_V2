@@ -32,9 +32,9 @@ function Courses() {
         router.push(`/admin/participants/${courseId}`)
     }
     return (
-        <div className="mx-4 bg-gray-gradient flex flex-col justify-center items-center h-auto py-10 px-20 my-6 rounded-2xl">
+        <div className="mx-5 bg-gray-gradient flex flex-col justify-center items-center h-auto p-10 my-6 rounded-2xl">
             <h1 className="text-white font-bold text-2xl mb-4 mt-0">
-                Búsqueda de cursos
+                Cursos
             </h1>
             <div className="w-full gap-3 mb-3 flex justify-between items-center">
                 <SearchBar
@@ -46,23 +46,25 @@ function Courses() {
                 <Link href={'/admin/courseRegister'}><Button className="bg-red-gradient">Crear Curso</Button></Link>
             </div>
             {filteredData.length > 0 ? (
-                <Table
-                    customActions={[
-                        {
-                            children: <p>Ver Participantes</p>,
-                            onClick: seeParticipants
-                        }
-                    ]}
-                    deleteRowFunction={deleteCourse}
-                    desactivateRowFunction={desactivateRowFunction}
-                    doubleClickRowFunction={(id) => router.push('/admin/courseRegister/' + id)}
-                    showEditColumn
-                    keys={['name', 'courseNumber', 'professor', 'quota', 'initialDate', 'finalDate', 'location', 'needMedicalReport', 'state']}
-                    data={filteredData}
-                    headers={["Nombre", "Código", 'Profesor', 'Cupos', 'Fecha de inicio', 'Fecha de finalización', 'Ubicación', 'Requiere reporte médico', 'Estado']}
-                    itemsPerPage={6}
-                    resetPagination={randomNumber}
-                />
+                <div>
+                    <Table
+                        customActions={[
+                            {
+                                children: <p>Ver Participantes</p>,
+                                onClick: seeParticipants
+                            }
+                        ]}
+                        deleteRowFunction={deleteCourse}
+                        desactivateRowFunction={desactivateRowFunction}
+                        doubleClickRowFunction={(id) => router.push('/admin/courseRegister/' + id)}
+                        showEditColumn
+                        keys={['name', 'courseNumber', 'professor', 'quota', 'initialDate', 'finalDate', 'location', 'needMedicalReport', 'state']}
+                        data={filteredData}
+                        headers={["Nombre", "Código", 'Profesor', 'Cupos', 'Fecha de inicio', 'Fecha de finalización', 'Ubicación', 'Requiere reporte médico', 'Estado']}
+                        itemsPerPage={6}
+                        resetPagination={randomNumber}
+                    />
+                </div>
             ) : (
                 <p>No se encontraron resultados</p>
             )}

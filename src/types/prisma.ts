@@ -132,7 +132,7 @@ export interface ParticipantHealth {
 export function crearParticipantHealth(): ParticipantHealth {
   return {
     id: undefined,
-    bloodType: 'A+',
+    bloodType: 'NA',
     participantDisseases: [] as ParticipantDissease[],
     participantMedicines: [] as ParticipantMedicine[],
     contactOne: {
