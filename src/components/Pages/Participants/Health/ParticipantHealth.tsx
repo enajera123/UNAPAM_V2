@@ -57,17 +57,17 @@ export default function Health({ participant }: { participant: Participant | nul
                   <Image
                     src={logoUNAPAM}
                     alt="logoUNAPAM"
-                    className="w-64 h-auto" />
+                    className="w-32 h-auto" />
                 </div>
               </div>
             </div>
-            <div className='space-y-6'>
+            <div className='space-y-6 mt-5'>
               <FieldArray name="participantDisseases">
                 {({ push, remove }) => (
-                  <div className='bg-gray-dark' >
-                    <div className='overflow-y-auto max-h-80 '>
-                      <table className="w-full">
-                        <thead className='bg-red-gradient sticky top-0'>
+                  <div className='bg-gray-dark rounded-lg' >
+                    <div className='overflow-y-auto rounded-lg max-h-80'>
+                      <table className="w-full ">
+                        <thead className='bg-red-700' >
                           <tr className='flex justify-around text-center mx-10 items-center text-white h-12'>
                             <th className='w-full'>Enfermedad</th>
                             <th className='w-full'>Descripcion</th>
@@ -112,10 +112,10 @@ export default function Health({ participant }: { participant: Participant | nul
               </FieldArray>
               <FieldArray name="participantMedicines">
                 {({ push, remove }) => (
-                  <div className='bg-gray-dark' >
-                    <div className='overflow-y-auto max-h-80'>
+                  <div className='bg-gray-dark rounded-lg' >
+                    <div className='overflow-y-auto rounded-lg max-h-80'>
                       <table className="w-full">
-                        <thead className='bg-red-gradient sticky top-0'>
+                        <thead className='bg-red-700 rounded-lg sticky top-0'>
                           <tr className='flex justify-around text-center mx-10 items-center text-white h-12'>
                             <th className='w-full'>Medicina</th>
                             <th className='w-full'>Descripcion</th>
