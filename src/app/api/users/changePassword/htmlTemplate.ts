@@ -1,7 +1,7 @@
-export function getPasswordResetEmail(newPassword: string) {
+export function getPasswordResetEmail(newPassword: string, id: number) {
 
-    // const resetLink = `http://localhost:3000/changePassword?token=${newPassword}` //Only for development
-    const resetLink = `https://unapam-v2.vercel.app/changePassword?token=${newPassword}` //Only for production
+    // const resetLink = `http://localhost:3000/changePassword?token=${newPassword}&id=${id}` //Only for development
+    const resetLink = `https://unapam-v2.vercel.app/changePassword?token=${newPassword}&id=${id}` //Only for production
 
     return `<!DOCTYPE html>
 <!DOCTYPE html>

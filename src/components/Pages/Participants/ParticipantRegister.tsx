@@ -159,7 +159,7 @@ export default function ParticipantRegister({ participant }: { participant: Part
             />
             <InputField
               value={identification}
-              onChange={(e) => setIdentification(e.target.value)}
+              onChange={(e) => setIdentification(e.target.value)} 
               label="Identificación"
               type="text"
               placeholder="Identificación"

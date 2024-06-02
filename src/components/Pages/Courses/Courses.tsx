@@ -12,7 +12,6 @@ import { useRouter } from 'next/navigation';
 import { useCourseStore as useCoursesStore } from '@/hooks/Stores/CourseStore/useCourseStore'
 import { deleteCourse } from '@/services/coursesService';
 
-
 function Courses() {
     const [searchTerm, setSearchTerm] = useState("");
     const { putCourse } = useCourseStore()
