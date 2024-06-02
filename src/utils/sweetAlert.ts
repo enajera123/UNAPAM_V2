@@ -41,3 +41,18 @@ export const errorAlert = (message: string) => Swal.mixin({
         toast.addEventListener('mouseleave', Swal.resumeTimer)
     }
 }).fire()
+
+export const enrollCoursesConfirmationAlert = (confirmedFunction: Function,option:string) => Swal.fire({
+    title: `¿Desea ${option} este curso?`,
+    text: '',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Confirmar',
+    confirmButtonColor: 'green',
+    cancelButtonColor: 'red',
+    cancelButtonText: 'Cancelar'
+}).then((result) => {
+    if (result.isConfirmed) {
+        confirmedFunction()
+    }
+})
