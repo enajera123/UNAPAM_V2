@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { Formik, Field, Form, FormikHelpers, FieldArray } from 'formik';
+import { Formik, Field, Form, FieldArray } from 'formik';
 import logoUNAPAM from '@/resources/LogoWhite.webp';
 import Image from 'next/image';
 import { Participant, ParticipantHealth, crearParticipantHealth } from '@/types/prisma';
 import { useParticipantHealthStore } from '@/store/participantHealthStore';
-import { confirmationAlert, confirmationAlertPromise, errorAlert, successAlert } from '@/utils/sweetAlert';
+import { confirmationAlertPromise, errorAlert, successAlert } from '@/utils/sweetAlert';
 import { useParticipantDisseaseStore } from '@/store/participantDisseaseStore';
 import { useParticipantMedicineStore } from '@/store/participantMedicineStore';
-import { DeleteIcon, PlusIcon } from '@/components/Icons/Icons';
+import { DeleteIcon } from '@/components/Icons/Icons';
 
 
 
@@ -32,11 +32,11 @@ const optionsKinship = [
 ];
 
 export default function Health({ participant }: { participant: Participant | null }) {
-  const {postParticipantHealth,putParticipantHealth} =  useParticipantHealthStore()
-  const {deleteParticipantDisease} = useParticipantDisseaseStore()
-  const {deleteParticipantMedicine} = useParticipantMedicineStore()
-  
-  const [initialValues,setInitialValues] = React.useState<ParticipantHealth>(crearParticipantHealth());
+  const { postParticipantHealth, putParticipantHealth } = useParticipantHealthStore()
+  const { deleteParticipantDisease } = useParticipantDisseaseStore()
+  const { deleteParticipantMedicine } = useParticipantMedicineStore()
+
+  const [initialValues, setInitialValues] = React.useState<ParticipantHealth>(crearParticipantHealth());
 
   React.useEffect(() => {
     if (participant?.participantHealths) {
@@ -53,20 +53,18 @@ export default function Health({ participant }: { participant: Participant | nul
   }, [participant]);
 
 
-  const onSubmit =async (values: ParticipantHealth) => {
+  const onSubmit = async (values: ParticipantHealth) => {
     try {
-      if(!participant?.id) return errorAlert("No se ha seleccionado un participante")
-      if(!values.id){
-        const data = await postParticipantHealth({...values,participantId:participant?.id!})
-        if(data){
-          console.log(data)
+      if (!participant?.id) return errorAlert("No se ha seleccionado un participante")
+      if (!values.id) {
+        const data = await postParticipantHealth({ ...values, participantId: participant?.id! })
+        if (data) {
           setInitialValues(data)
           return successAlert("Información de salud guardada correctamente")
         }
-      }else{
-        const data = await putParticipantHealth(values.id,{...values,participantId:participant?.id!})
-        if(data){
-          console.log(data)
+      } else {
+        const data = await putParticipantHealth(values.id, { ...values, participantId: participant?.id! })
+        if (data) {
           setInitialValues(data)
           return successAlert("Información de salud guardada correctamente")
         }
@@ -79,11 +77,11 @@ export default function Health({ participant }: { participant: Participant | nul
   }
 
 
-  const deleteDisease = async (id:number, remove:(i:number)=>void,diseaseId:number|undefined) => {
-    if(!diseaseId) return remove(id)
+  const deleteDisease = async (id: number, remove: (i: number) => void, diseaseId: number | undefined) => {
+    if (!diseaseId) return remove(id)
     try {
       const data = await deleteParticipantDisease(diseaseId)
-      if(data){
+      if (data) {
         setInitialValues((i) => ({
           ...i,
           participantDisseases: i.participantDisseases?.filter((disease) => disease.id !== diseaseId),
@@ -98,11 +96,11 @@ export default function Health({ participant }: { participant: Participant | nul
     }
   }
 
-  const deleteMedicine = async (id:number, remove:(i:number)=>void,medicineId:number|undefined) => {
-    if(!medicineId) return remove(id)
+  const deleteMedicine = async (id: number, remove: (i: number) => void, medicineId: number | undefined) => {
+    if (!medicineId) return remove(id)
     try {
       const data = await deleteParticipantMedicine(medicineId)
-      if(data){
+      if (data) {
         setInitialValues((i) => ({
           ...i,
           participantMedicines: i.participantMedicines?.filter((medicine) => medicine.id !== medicineId),
@@ -112,16 +110,9 @@ export default function Health({ participant }: { participant: Participant | nul
       }
       errorAlert("Error al eliminar la medicina")
     } catch (error) {
-      console.log(error)
       errorAlert("Error al eliminar la medicina")
     }
   }
-
-
-  React.useEffect(() => {
-    console.log(participant)
-  }, [participant]);
-
   return (
     <Formik initialValues={initialValues} onSubmit={onSubmit} enableReinitialize>
       {({ values }) => (
@@ -149,94 +140,103 @@ export default function Health({ participant }: { participant: Participant | nul
                 </div>
               </div>
             </div>
-            <FieldArray name="participantDisseases">
-              {({ push, remove }) => (
-                <div className='bg-gray-dark overflow-y-auto max-h-80 '>
-                  <table className="min-w-full">
-                    <thead className='bg-red-gradient sticky top-0'>
-                      <tr className=' text-white h-12'>
-                        <th>Enfermedad</th>
-                        <th>Descripcion</th>
-                        <th>Acciones</th>
-                      </tr>
-                    </thead>
-                    <tbody className=''>
-                      {values.participantDisseases && values.participantDisseases.length > 0 &&
-                        values.participantDisseases.map((participantDissease, index) => (
-                          <tr key={index}>
-                            <td>
-                              <Field
-                                name={`participantDisseases.${index}.disease`}
-                                placeholder="Enfermedad"
-                                className="bg-dark-gray my-3 border placeholder:text-white/35 border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 mr-10 ml-5"
-                              />
-                            </td>
-                            <td>
-                              <Field
-                                name={`participantDisseases.${index}.description`}
-                                placeholder="Descripción"
-                                className="bg-dark-gray border border-gray-300 placeholder:text-white/35 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 ml-10 mr-5 my-3"
-                              />
-                            </td>
-                            <td className=' flex justify-center'>
-                              <button
-                                type="button"
-                                className="bg-red-500 text-white p-1 rounded my-3 flex justify-center items-center"
-                                onClick={() => confirmationAlertPromise(deleteDisease(index,remove,participantDissease.id))}>Eliminar <DeleteIcon size='size-8' /> </button>
-                            </td>
+            <div className='space-y-6 my-5'>
+              <FieldArray name="participantDisseases">
+                {({ push, remove }) => (
+                  <div className='bg-gray-dark rounded-lg' >
+                    <div className='overflow-y-auto rounded-lg max-h-80'>
+                      <table className="w-full ">
+                        <thead className='bg-red-700' >
+                          <tr className='flex justify-around text-center mx-10 items-center text-white h-12'>
+                            <th className='w-full'>Enfermedad</th>
+                            <th className='w-full'>Descripcion</th>
+                            <th>Acciones</th>
                           </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                  <button
-                    type="button"
-                    className="mt-4 w-52 bg-green-600 text-white placeholder:text-white/35 p-2 rounded-lg m-5 flex justify-center items-center gap-1 "
-                    onClick={() => push({ disease: '', description: '', participantHealth: {}, participantHealthId: 0 })}>Agregar Enfermedad <PlusIcon size='size-7'/></button>
-                </div>
-              )}
-            </FieldArray>
-            <FieldArray name="participantMedicines">
-              {({ push, remove }) => (
-                <div className='bg-gray-dark overflow-y-auto max-h-80 mt-5 '>
-                  <table className="min-w-full  ">
-                    <thead className='bg-red-gradient sticky top-0'>
-                      <tr className=' text-white h-12'>
-                        <th>Medicina</th>
-                        <th>Descripcion</th>
-                        <th>Acciones</th>
-                      </tr>
-                    </thead>
-                    <tbody >
-                      {values.participantMedicines && values.participantMedicines.length > 0 &&
-                        values.participantMedicines.map((participantMedicines, index) => (
-                          <tr key={index}>
-                            <td>
-                              <Field
-                                name={`participantMedicines.${index}.medicine`} placeholder="Medicina"
-                                className="bg-dark-gray border placeholder:text-white/35 border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 mr-10 ml-5 my-3"
-                              />
-                            </td>
-                            <td>
-                              <Field
-                                name={`participantMedicines.${index}.description`} placeholder="Descripción"
-                                className="bg-dark-gray border placeholder:text-white/35 border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 ml-10 mr-5 my-3"
-                              />
-                            </td>
-                            <td className=' flex justify-center'>
-                              <button
-                                type="button" className="bg-red-500 text-white p-1 rounded my-3 flex justify-center items-center"
-                                onClick={() => confirmationAlertPromise(deleteMedicine(index,remove,participantMedicines.id))}>Eliminar <DeleteIcon size='size-8' /></button>
-                            </td>
+                        </thead>
+                        <tbody >
+                          {values.participantDisseases && values.participantDisseases.length > 0 &&
+                            values.participantDisseases.map((participantDissease, index) => (
+                              <tr className='flex justify-between space-x-5 mx-10 items-center text-white h-12' key={index}>
+                                <td className='w-full'>
+                                  <Field
+                                    name={`participantDisseases.${index}.disease`}
+                                    placeholder="Enfermedad"
+                                    className="bg-dark-gray my-3 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 "
+                                  />
+                                </td>
+                                <td className='w-full'>
+                                  <Field
+                                    name={`participantDisseases.${index}.description`}
+                                    placeholder="Descripción"
+                                    className="bg-dark-gray my-3 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 "
+                                  />
+                                </td>
+                                <td className=' text-center'>
+                                  <button
+                                    type="button"
+                                    className="bg-red-500 text-white p-1 rounded my-3 flex justify-center items-center"
+                                    onClick={() => confirmationAlertPromise(() => deleteDisease(index, remove, participantDissease.id))}>Eliminar <DeleteIcon size='size-8' /> </button>
+                                </td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    <button
+                      type="button"
+                      className="m-4 w-44 bg-green-600 text-white p-2 rounded-lg"
+                      onClick={() => push({ disease: '', description: '', participantHealth: {}, participantHealthId: 0 })}>Agregar Enfermedad</button>
+                  </div>
+                )}
+              </FieldArray>
+              <FieldArray name="participantMedicines">
+                {({ push, remove }) => (
+                  <div className='bg-gray-dark rounded-lg' >
+                    <div className='overflow-y-auto rounded-lg max-h-80'>
+                      <table className="w-full">
+                        <thead className='bg-red-700 rounded-lg sticky top-0'>
+                          <tr className='flex justify-around text-center mx-10 items-center text-white h-12'>
+                            <th className='w-full'>Medicina</th>
+                            <th className='w-full'>Descripcion</th>
+                            <th >Acciones</th>
                           </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                  <button
-                    type="button" className="my-4 bg-green-600 text-white p-2 rounded-lg w-52 m-5 flex justify-center items-center gap-1"
-                    onClick={() => push({ medicine: '', description: '', participantHealth: {}, participantHealthId: 0 })}>Agregar Medicina <PlusIcon size='size-7'/></button>
-                </div>
-              )}
-            </FieldArray>
+                        </thead>
+                        <tbody>
+                          {values.participantMedicines && values.participantMedicines.length > 0 &&
+                            values.participantMedicines.map((participantMedicines, index) => (
+                              <tr className='flex justify-between space-x-5 mx-10 items-center text-white h-12' key={index}>
+                                <td className='w-full'>
+                                  <Field
+                                    name={`participantMedicines.${index}.medicine`}
+                                    placeholder="Enfermedad"
+                                    className="bg-dark-gray my-3 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 "
+                                  />
+                                </td>
+                                <td className='w-full'>
+                                  <Field
+                                    name={`participantMedicines.${index}.description`}
+                                    placeholder="Descripción"
+                                    className="bg-dark-gray my-3 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 "
+                                  />
+                                </td>
+                                <td className=' flex justify-center'>
+                                  <button
+                                    type="button" className="bg-red-500 text-white p-1 rounded my-3 flex justify-center items-center"
+                                    onClick={() => confirmationAlertPromise(() => deleteMedicine(index, remove, participantMedicines.id))}>Eliminar <DeleteIcon size='size-8' /></button>
+                                </td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    <button
+                      type="button"
+                      className="m-4 w-44 bg-green-600 text-white p-2 rounded-lg"
+                      onClick={() => push({ medicine: '', description: '', participantHealth: {}, participantHealthId: 0 })}>Agregar Medicina</button>
+                  </div>
+                )}
+              </FieldArray>
+            </div>
             <div className="flex-initial w-1/4 text-white">
               <p className="text-xl font-bold text-light-gray">Personas de Contacto</p>
               <p className="text-lg my-5 font-bold text-light-gray">Persona #1</p>
@@ -286,7 +286,7 @@ export default function Health({ participant }: { participant: Participant | nul
               <div className="flex-initial w-1/3 pl-5 text-white">
                 <label htmlFor="primerApellido">Primer Apellido</label>
                 <Field
-                  name="contactTwo.firstSurname"placeholder="Apellido"
+                  name="contactTwo.firstSurname" placeholder="Apellido"
                   className="bg-dark-gray placeholder:text-white/35 border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 pl-10 pr-10" />
               </div>
               <div className="flex-initial w-1/3 pl-5 text-white">
@@ -300,9 +300,6 @@ export default function Health({ participant }: { participant: Participant | nul
               <div className=' w-60 flex justify-end gap-5'>
                 <div className="flex-initial w-full ">
                   <button className='text-white bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 bg-red-gradient hover:bg-hover-red-gradient' type="submit" >Guardar</button>
-                </div>
-                <div className="flex-initial w-full">
-                  <button className='text-white bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 bg-red-gradient hover:bg-hover-red-gradient'>Eliminar</button>
                 </div>
               </div>
             </div>

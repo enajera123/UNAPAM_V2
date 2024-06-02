@@ -8,13 +8,13 @@ export const confirmationAlert = async (confirmedFunction: Function) => Swal.fir
     confirmButtonColor: 'green',
     cancelButtonColor: 'red',
     cancelButtonText: 'Cancelar'
-}).then( (result) => {
+}).then((result) => {
     if (result.isConfirmed) {
-         confirmedFunction()
+        confirmedFunction()
     }
 })
 
-export const confirmationAlertPromise = async (confirmedFunction: Promise<void>) => Swal.fire({
+export const confirmationAlertPromise = (confirmedFunction: () => Promise<void>) => Swal.fire({
     title: '¿Estas seguro?',
     text: 'Este cambio no se puede revertir',
     icon: 'warning',
@@ -25,7 +25,8 @@ export const confirmationAlertPromise = async (confirmedFunction: Promise<void>)
     cancelButtonText: 'Cancelar'
 }).then(async (result) => {
     if (result.isConfirmed) {
-        await confirmedFunction;
+        console.log("e")
+        await confirmedFunction();
     }
 })
 export const successAlert = (message: string) => Swal.mixin({
@@ -57,7 +58,7 @@ export const errorAlert = (message: string) => Swal.mixin({
     }
 }).fire()
 
-export const enrollCoursesConfirmationAlert = (confirmedFunction: Function,option:string) => Swal.fire({
+export const enrollCoursesConfirmationAlert = (confirmedFunction: Function, option: string) => Swal.fire({
     title: `¿Desea ${option} este curso?`,
     text: '',
     icon: 'warning',
