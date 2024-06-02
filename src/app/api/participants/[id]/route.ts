@@ -12,14 +12,13 @@ export async function PUT(req: NextRequest, { params }: ParameterId) {
             if (image_url) await delete_image_firebase(`profile-photos/${participant.email}`)
             image_url = await upload_image(participant.photoFile, participant.photoExtension, `profile-photos/${participant.email}`)
         }
-
         const refactorData = {
             ...participant,
             photo: image_url
         } 
         delete refactorData.photoExtension
         delete refactorData.photoFile
-
+      
         const participantUpdated = await prisma.participant.update({
             where: {
                 id: fetchedId,
@@ -74,7 +73,6 @@ export async function GET(req: NextRequest, { params }: ParameterId) {
                 referenceContacts: true,
             }
         });
-
         return NextResponse.json(participant, { status: 200 });
     } catch (error) {
         return NextResponse.json(

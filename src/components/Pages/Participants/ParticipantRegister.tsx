@@ -55,49 +55,61 @@ export default function ParticipantRegister({ participant }: { participant: Part
         if (participant) {
             setIdentification(participant.identification)
             setBirthDate(participant.birthDate)
-            setScholarship(participant.grade.toString())
+            setScholarship(participant.grade?.toString())
             setName(participant.firstName)
             setPhone(participant.phoneNumber)
             setFirstLastName(participant.firstSurname)
             setSecondLastName(participant.secondSurname)
             setEmail(participant.email)
             setHasWhatsApp(participant.hasWhatsApp === "Yes" as unknown as YesOrNo)
-            setHasMedicalInsurance(participant.expirationDateMedicalInsurance !== null)
-            setHasMedicalReport(participant.expirationDateMedicalReport !== null)
-            setTypeIdentification(participant.typeIdentification.toString())
+            setHasMedicalInsurance(participant.expirationDateMedicalInsurance !== null && participant.expirationDateMedicalReport !== undefined)
+            setHasMedicalReport(participant.expirationDateMedicalReport !== null && participant.expirationDateMedicalReport !== undefined)
+            setTypeIdentification(participant.typeIdentification?.toString())
             setExpirationDateMedicalInsurance(participant.expirationDateMedicalInsurance || '')
             setExpirationDateMedicalReport(participant.expirationDateMedicalReport || '')
             setPhoto(participant.photo)
             setImage(i=>({...i, image_url:participant.photo||i.image_url}))
         }
     }, [participant])
+
+    const createParticipantToSave = () => {
+        return {
+          identification,
+          hasWhatsApp: hasWhatsApp ? "Yes" as unknown as YesOrNo : "No" as unknown as YesOrNo,
+          birthDate,
+          grade: scholarship as unknown as Grade,
+          firstName: name,
+          phoneNumber: phone,
+          firstSurname: firstLastName,
+          secondSurname: secondLastName,
+          email,
+          typeIdentification: typeIdentification as unknown as TypeIdentification,
+          expirationDateMedicalInsurance: hasMedicalInsurance ? expirationDateMedicalInsurance : null as unknown as undefined,
+          expirationDateMedicalReport: hasMedicalReport ? expirationDateMedicalReport : null as unknown as undefined,
+          photoExtension:image.image_extension,
+          photoFile:image.image_file,
+        } as Participant
+    }
+
     const handleSave = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
-        const newParticipant: Participant = {
-            identification,
-            hasWhatsApp: hasWhatsApp ? "Yes" as unknown as YesOrNo : "No" as unknown as YesOrNo,
-            birthDate,
-            grade: scholarship as unknown as Grade,
-            firstName: name,
-            phoneNumber: phone,
-            firstSurname: firstLastName,
-            secondSurname: secondLastName,
-            email,
-            typeIdentification: typeIdentification as unknown as TypeIdentification,
-            expirationDateMedicalInsurance: hasMedicalInsurance ? expirationDateMedicalInsurance : null as unknown as undefined,
-            expirationDateMedicalReport: hasMedicalReport ? expirationDateMedicalReport : null as unknown as undefined,
-            photoExtension:image.image_extension,
-            photoFile:image.image_file
-        }
+        const newParticipant = createParticipantToSave()
         const response = participant !== null ? await putParticipant(participant?.id ?? 0, newParticipant) : await postParticipant(newParticipant)
         if (response) {
-            successAlert("Participante guardado exitosamente")
+          successAlert("Participante guardado exitosamente")
         }else{
-            errorAlert("Error al guardar el participante")
-        
+          errorAlert("Error al guardar el participante")
         }
     }
-  
+    const onLoadFiles = (e: React.MouseEvent<HTMLButtonElement>) =>{
+      e.preventDefault()
+      if(participant?.id){
+        const id = participant?.id
+        router.push(`/admin/participantRegister/attachments/${id}`)
+      }else{
+        errorAlert("Primero debe guardar el participante para agregarle documentos")
+      }
+    }
   return (
     <div className="container mx-auto bg-gray-gradient p-10 h-auto max-w-4xl my-4 rounded-md gap-4">
       <div>
@@ -251,10 +263,11 @@ export default function ParticipantRegister({ participant }: { participant: Part
         <Link href="/admin/participantRegister/1/health">
           <Button className="bg-red-gradient w-52">Salud</Button>
         </Link>
-        <Link href="/admin/participantRegister/2/attachments">
-          <Button className="bg-red-gradient w-52">Documentos Adjuntos</Button>
-        </Link>
+        
+        <Button onClick={onLoadFiles} className="bg-red-gradient w-52">Documentos Adjuntos</Button>
+       
         <Button
+          disabled={participant?.id?true:false}
           onClick={handleSave}
           format
           className="bg-gradient-to-r from-green-500 to-green-600 rounded-md transition-all hover:from-green-600 hover:to-green-700 text-white w-52"
