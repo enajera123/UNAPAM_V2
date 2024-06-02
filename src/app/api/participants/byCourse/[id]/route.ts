@@ -13,12 +13,9 @@ export async function GET(req: NextRequest, { params }: ParameterId) {
                     }
                 }
             },
-            // include: {
-            //     participantAttachments: true,
-            //     participantHealths: true,
-            //     participantsOnCourses: true,
-            //     referenceContacts: true,
-            // }
+            include: {
+                participantsOnCourses: true
+            }
         });
 
         return NextResponse.json(participant, { status: 200 });

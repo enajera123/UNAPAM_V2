@@ -69,7 +69,13 @@ export async function GET(req: NextRequest, { params }: ParameterId) {
             },
             include: {
                 participantAttachments: true,
-                participantHealths: true,
+                participantHealths: {
+                    include: {
+                        participantDisseases: true,
+                        participantMedicines: true,
+                    }
+                
+                },
                 participantsOnCourses: true,
                 referenceContacts: true,
             }

@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2'
-export const confirmationAlert = (confirmedFunction: Function) => Swal.fire({
+export const confirmationAlert = async (confirmedFunction: Function) => Swal.fire({
     title: '¿Estas seguro?',
     text: 'Este cambio no se puede revertir',
     icon: 'warning',
@@ -11,6 +11,22 @@ export const confirmationAlert = (confirmedFunction: Function) => Swal.fire({
 }).then((result) => {
     if (result.isConfirmed) {
         confirmedFunction()
+    }
+})
+
+export const confirmationAlertPromise = (confirmedFunction: () => Promise<void>) => Swal.fire({
+    title: '¿Estas seguro?',
+    text: 'Este cambio no se puede revertir',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Confirmar',
+    confirmButtonColor: 'green',
+    cancelButtonColor: 'red',
+    cancelButtonText: 'Cancelar'
+}).then(async (result) => {
+    if (result.isConfirmed) {
+        console.log("e")
+        await confirmedFunction();
     }
 })
 export const successAlert = (message: string) => Swal.mixin({
@@ -42,7 +58,7 @@ export const errorAlert = (message: string) => Swal.mixin({
     }
 }).fire()
 
-export const enrollCoursesConfirmationAlert = (confirmedFunction: Function,option:string) => Swal.fire({
+export const enrollCoursesConfirmationAlert = (confirmedFunction: Function, option: string) => Swal.fire({
     title: `¿Desea ${option} este curso?`,
     text: '',
     icon: 'warning',

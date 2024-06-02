@@ -1,8 +1,8 @@
 export const DefaultExtension = ({size="size-10"}:{size?:string})=>(
     <svg className={`${size}`} height="200px" width="200px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" 
      viewBox="0 0 512 512" fill="#000000">
-        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+        <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
         <g id="SVGRepo_iconCarrier"> 
         <path style={{fill:"#E2E5E7"}} d="M128,0c-17.6,0-32,14.4-32,32v448c0,17.6,14.4,32,32,32h320c17.6,0,32-14.4,32-32V128L352,0H128z"></path> 
         <path style={{fill:"#B0B7BD"}} d="M384,128h96L352,0v96C352,113.6,366.4,128,384,128z"></path> 
@@ -16,8 +16,8 @@ export const DefaultExtension = ({size="size-10"}:{size?:string})=>(
 
 export const PdfExtension = ({size="size-10"}:{size?:string})=>(
     <svg className={size} height="200px" width="200px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-     viewBox="0 0 512 512"  fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+     viewBox="0 0 512 512"  fill="#000000"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+     <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
      <g id="SVGRepo_iconCarrier"> 
      <path style={{fill:"#E2E5E7"}} d="M128,0c-17.6,0-32,14.4-32,32v448c0,17.6,14.4,32,32,32h320c17.6,0,32-14.4,32-32V128L352,0H128z"></path> 
      <path style={{fill:"#B0B7BD"}} d="M384,128h96L352,0v96C352,113.6,366.4,128,384,128z"></path> 
@@ -31,8 +31,8 @@ export const PdfExtension = ({size="size-10"}:{size?:string})=>(
 
 export const ImageExtension = ({size="size-10"}:{size?:string})=>(
     <svg className={size} height="200px" width="200px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 512 512" fill="#000000">
-    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> 
+    <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+    <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> 
     <path style={{fill:"#E2E5E7"}} d="M128,0c-17.6,0-32,14.4-32,32v448c0,17.6,14.4,32,32,32h320c17.6,0,32-14.4,32-32V128L352,0H128z"></path> 
     <path style={{fill:"#B0B7BD"}} d="M384,128h96L352,0v96C352,113.6,366.4,128,384,128z"></path>
     <polygon style={{fill:"#CAD1D8"}} points="480,224 384,128 480,128 "></polygon>
@@ -41,4 +41,25 @@ export const ImageExtension = ({size="size-10"}:{size?:string})=>(
     <path style={{fill:"#FFFFFF"}} d="M178.976,304.432c0-4.624,1.024-9.088,7.68-9.088c4.592,0,5.632,1.152,9.072,4.464l42.336,52.976 v-49.632c0-4.224,3.696-8.848,8.064-8.848c4.608,0,9.072,4.624,9.072,8.848v72.016c0,5.648-3.456,7.792-6.784,8.832 c-4.464,0-6.656-1.024-10.352-4.464l-42.336-53.744v49.392c0,5.648-3.456,8.832-8.064,8.832s-8.704-3.184-8.704-8.832v-70.752 H178.976z"></path> 
     <path style={{fill:"#FFFFFF"}} d="M351.44,374.16c-9.088,7.536-20.224,10.752-31.472,10.752c-26.88,0-45.936-15.36-45.936-45.808 c0-25.84,20.096-45.92,47.072-45.92c10.112,0,21.232,3.456,29.168,11.264c7.808,7.664-3.456,19.056-11.12,12.288 c-4.736-4.624-11.392-8.064-18.048-8.064c-15.472,0-30.432,12.4-30.432,30.432c0,18.944,12.528,30.448,29.296,30.448 c7.792,0,14.448-2.304,19.184-5.76V348.08h-19.184c-11.392,0-10.24-15.632,0-15.632h25.584c4.736,0,9.072,3.6,9.072,7.568v27.248 C354.624,369.552,353.616,371.712,351.44,374.16z"></path> </g>
      <path style={{fill:"#CAD1D8"}} d="M400,432H96v16h304c8.8,0,16-7.2,16-16v-16C416,424.8,408.8,432,400,432z"></path> </g></svg>
+)
+
+export const PlusIcon = ({size="size-10"}:{size?:string})=>(
+    <svg viewBox="0 -0.5 21 21" className={size} version="1.1" xmlns="http://www.w3.org/2000/svg"  fill="currentColor">
+    <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+    <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+    <g id="SVGRepo_iconCarrier"> 
+    <title>plus_circle [#1427]</title> 
+    <desc>Created with Sketch.</desc> <defs> </defs> 
+    <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fill-rule="evenodd"> 
+    <g id="Dribbble-Light-Preview" transform="translate(-179.000000, -600.000000)" fill="currentColor"> 
+    <g id="icons" transform="translate(56.000000, 160.000000)"> 
+    <path d="M137.7,450 C137.7,450.552 137.2296,451 136.65,451 L134.55,451 L134.55,453 C134.55,453.552 134.0796,454 133.5,454 C132.9204,454 132.45,453.552 132.45,453 L132.45,451 L130.35,451 C129.7704,451 129.3,450.552 129.3,450 C129.3,449.448 129.7704,449 130.35,449 L132.45,449 L132.45,447 C132.45,446.448 132.9204,446 133.5,446 C134.0796,446 134.55,446.448 134.55,447 L134.55,449 L136.65,449 C137.2296,449 137.7,449.448 137.7,450 M133.5,458 C128.86845,458 125.1,454.411 125.1,450 C125.1,445.589 128.86845,442 133.5,442 C138.13155,442 141.9,445.589 141.9,450 C141.9,454.411 138.13155,458 133.5,458 M133.5,440 C127.70085,440 123,444.477 123,450 C123,455.523 127.70085,460 133.5,460 C139.29915,460 144,455.523 144,450 C144,444.477 139.29915,440 133.5,440" id="plus_circle-[#1427]"> </path>
+    </g> </g> </g> </g></svg>
+)
+
+export const DeleteIcon  = ({size="size-10"}:{size?:string})=>(
+    <svg viewBox="0 0 24 24" fill="none" className={size}><g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+    <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+    <g id="SVGRepo_iconCarrier"> 
+    <path d="M6 7V18C6 19.1046 6.89543 20 8 20H16C17.1046 20 18 19.1046 18 18V7M6 7H5M6 7H8M18 7H19M18 7H16M10 11V16M14 11V16M8 7V5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5V7M8 7H16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg> 
 )
