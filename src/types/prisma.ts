@@ -187,4 +187,6 @@ export interface file_format {
   file_path?: string | null;
   file_url?: string;
   file_type?: string;
+  file_icon?: JSX.Element;
+  file_anchor?: JSX.Element;
 }

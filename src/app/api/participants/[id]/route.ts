@@ -1,4 +1,4 @@
-import { delete_image_firebase, upload_image } from "@/firebase/fileMethod";
+import { delete_file_firebase, upload_image } from "@/firebase/fileMethod";
 import prisma from "@/lib/prisma";
 import { ParameterId } from "@/types/api";
 import { NextRequest, NextResponse } from "next/server";
@@ -9,7 +9,7 @@ export async function PUT(req: NextRequest, { params }: ParameterId) {
         const participant = await req.json();
         let image_url = participant.photo
         if (participant?.photoFile && participant?.photoExtension && participant?.id) {
-            if (image_url) await delete_image_firebase(`profile-photos/${participant.id}`)
+            if (image_url) await delete_file_firebase(`profile-photos/${participant.id}`)
             image_url = await upload_image(participant.photoFile, participant.photoExtension, `profile-photos/${participant.id}`)
         }
         const refactorData = {

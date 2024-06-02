@@ -1,4 +1,4 @@
-import { delete_image_firebase, upload_image } from "@/firebase/fileMethod";
+import { delete_file_firebase, upload_image } from "@/firebase/fileMethod";
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         return NextResponse.json({...newParticipant,photo:image_url}, { status: 201 })
     } catch (error) {
         if(image_url){
-            delete_image_firebase(image_url)
+            delete_file_firebase(image_url)
         }
         return NextResponse.json(error, { status: 500 });
     }
