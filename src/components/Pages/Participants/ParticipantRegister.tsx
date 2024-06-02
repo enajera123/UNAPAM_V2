@@ -33,116 +33,117 @@ const optionsTypeIdentification = [
   { value: "DIMEX", label: "DIMEX" },
 ];
 export default function ParticipantRegister({ participant }: { participant: Participant | null }) {
-    const router = useRouter()
-    const [hasMedicalInsurance, setHasMedicalInsurance] = useState(false)
-    const [hasMedicalReport, setHasMedicalReport] = useState(false)
-    const [identification, setIdentification] = useState('')
-    const [birthDate, setBirthDate] = useState('')
-    const [scholarship, setScholarship] = useState('Primaria_Completa')
-    const [name, setName] = useState('')
-    const [phone, setPhone] = useState('')
-    const [firstLastName, setFirstLastName] = useState('')
-    const [secondLastName, setSecondLastName] = useState('')
-    const [email, setEmail] = useState('')
-    const [hasWhatsApp, setHasWhatsApp] = useState(false)
-    const [expirationDateMedicalInsurance, setExpirationDateMedicalInsurance] = useState('')
-    const [expirationDateMedicalReport, setExpirationDateMedicalReport] = useState('')
-    const [typeIdentification, setTypeIdentification] = useState('Nacional')
-    const { postParticipant, putParticipant } = useParticipantsStore()
-    const {image,onChangeImage,setImage} = useImageStore()
-    const [photo,setPhoto] = useState<string|undefined>("");
-    const [participantOnCourses,setParticipantOnCourses] = useState<ParticipantOnCourse[]>([])
+  const router = useRouter()
+  const [hasMedicalInsurance, setHasMedicalInsurance] = useState(false)
+  const [hasMedicalReport, setHasMedicalReport] = useState(false)
+  const [identification, setIdentification] = useState('')
+  const [birthDate, setBirthDate] = useState('')
+  const [scholarship, setScholarship] = useState('Primaria_Completa')
+  const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
+  const [firstLastName, setFirstLastName] = useState('')
+  const [secondLastName, setSecondLastName] = useState('')
+  const [email, setEmail] = useState('')
+  const [hasWhatsApp, setHasWhatsApp] = useState(false)
+  const [expirationDateMedicalInsurance, setExpirationDateMedicalInsurance] = useState('')
+  const [expirationDateMedicalReport, setExpirationDateMedicalReport] = useState('')
+  const [typeIdentification, setTypeIdentification] = useState('Nacional')
+  const { postParticipant, putParticipant } = useParticipantsStore()
+  const { image, onChangeImage, setImage } = useImageStore()
+  const [photo, setPhoto] = useState<string | undefined>("");
+  const [participantOnCourses, setParticipantOnCourses] = useState<ParticipantOnCourse[]>([])
 
-    const updateParticipantCourses = ({participantId,courseId,state}:ParticipantOnCourse) => {
-        const updatedList = participantOnCourses?.filter((i)=>i.participantId!==participantId && i.courseId !== courseId) as ParticipantOnCourse[]
-        setParticipantOnCourses([...updatedList,{participantId,courseId,state}]) 
+  const updateParticipantCourses = ({ participantId, courseId, state }: ParticipantOnCourse) => {
+    const updatedList = participantOnCourses?.filter((i) => i.participantId !== participantId && i.courseId !== courseId) as ParticipantOnCourse[]
+    setParticipantOnCourses([...updatedList, { participantId, courseId, state }])
+  }
+
+  useEffect(() => {
+    if (participant) {
+      setIdentification(participant.identification)
+      setBirthDate(participant.birthDate)
+      setScholarship(participant.grade?.toString())
+      setName(participant.firstName)
+      setPhone(participant.phoneNumber)
+      setFirstLastName(participant.firstSurname)
+      setSecondLastName(participant.secondSurname)
+      setEmail(participant.email)
+      setHasWhatsApp(participant.hasWhatsApp === "Yes" as unknown as YesOrNo)
+      setHasMedicalInsurance(participant.expirationDateMedicalInsurance !== null && participant.expirationDateMedicalReport !== undefined)
+      setHasMedicalReport(participant.expirationDateMedicalReport !== null && participant.expirationDateMedicalReport !== undefined)
+      setTypeIdentification(participant.typeIdentification?.toString())
+      setExpirationDateMedicalInsurance(participant.expirationDateMedicalInsurance || '')
+      setExpirationDateMedicalReport(participant.expirationDateMedicalReport || '')
+      setPhoto(participant.photo)
+      setImage(i => ({ ...i, image_url: participant.photo || i.image_url }))
+      setParticipantOnCourses(participant.participantsOnCourses || [])
     }
+  }, [participant])
 
-    useEffect(() => {
-        if (participant) {
-            setIdentification(participant.identification)
-            setBirthDate(participant.birthDate)
-            setScholarship(participant.grade?.toString())
-            setName(participant.firstName)
-            setPhone(participant.phoneNumber)
-            setFirstLastName(participant.firstSurname)
-            setSecondLastName(participant.secondSurname)
-            setEmail(participant.email)
-            setHasWhatsApp(participant.hasWhatsApp === "Yes" as unknown as YesOrNo)
-            setHasMedicalInsurance(participant.expirationDateMedicalInsurance !== null && participant.expirationDateMedicalReport !== undefined)
-            setHasMedicalReport(participant.expirationDateMedicalReport !== null && participant.expirationDateMedicalReport !== undefined)
-            setTypeIdentification(participant.typeIdentification?.toString())
-            setExpirationDateMedicalInsurance(participant.expirationDateMedicalInsurance || '')
-            setExpirationDateMedicalReport(participant.expirationDateMedicalReport || '')
-            setPhoto(participant.photo)
-            setImage(i=>({...i, image_url:participant.photo||i.image_url}))
-            setParticipantOnCourses(participant.participantsOnCourses || [])
-        }
-    }, [participant])
+  const createParticipantToSave = () => {
+    return {
+      identification,
+      hasWhatsApp: hasWhatsApp ? "Yes" as unknown as YesOrNo : "No" as unknown as YesOrNo,
+      birthDate,
+      grade: scholarship as unknown as Grade,
+      firstName: name,
+      phoneNumber: phone,
+      firstSurname: firstLastName,
+      secondSurname: secondLastName,
+      email,
+      typeIdentification: typeIdentification as unknown as TypeIdentification,
+      expirationDateMedicalInsurance: hasMedicalInsurance ? expirationDateMedicalInsurance : null as unknown as undefined,
+      expirationDateMedicalReport: hasMedicalReport ? expirationDateMedicalReport : null as unknown as undefined,
+      photoExtension: image.image_extension,
+      photoFile: image.image_file,
+    } as Participant
+  }
 
-    const createParticipantToSave = () => {
-        return {
-          identification,
-          hasWhatsApp: hasWhatsApp ? "Yes" as unknown as YesOrNo : "No" as unknown as YesOrNo,
-          birthDate,
-          grade: scholarship as unknown as Grade,
-          firstName: name,
-          phoneNumber: phone,
-          firstSurname: firstLastName,
-          secondSurname: secondLastName,
-          email,
-          typeIdentification: typeIdentification as unknown as TypeIdentification,
-          expirationDateMedicalInsurance: hasMedicalInsurance ? expirationDateMedicalInsurance : null as unknown as undefined,
-          expirationDateMedicalReport: hasMedicalReport ? expirationDateMedicalReport : null as unknown as undefined,
-          photoExtension:image.image_extension,
-          photoFile:image.image_file,
-        } as Participant
+  const validarCamposMinimos = (participant: Participant) => {
+    if (participant.identification && participant.identification !== "" &&
+      participant.firstName && participant.firstName !== "" &&
+      participant.firstSurname && participant.firstSurname !== "" &&
+      participant.email && participant.email !== ""
+    ) {
+      return true
     }
+    return false
+  }
 
-    const validarCamposMinimos = (participant:Participant) =>{
-      if(participant.identification && participant.identification!=="" && 
-         participant.firstName && participant.firstName !== "" &&
-         participant.firstSurname && participant.firstSurname !=="" &&
-         participant.email && participant.email !== "" 
-      ){
-        return true
+  const handleSave = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    const newParticipant = createParticipantToSave()
+    if (validarCamposMinimos(newParticipant)) {
+      const response = participant !== null ? await putParticipant(participant?.id ?? 0, newParticipant) : await postParticipant(newParticipant)
+      if (response) {
+        successAlert("Participante guardado exitosamente")
+        router.push(`/admin/participantRegister/${response.id}`)
+      } else {
+        errorAlert("Error al guardar el participante")
       }
-      return false
+    } else {
+      errorAlert("Hay campos requeridos sin completar")
     }
 
-    const handleSave = async (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault()
-        const newParticipant = createParticipantToSave()
-        if(validarCamposMinimos(newParticipant)){
-          const response = participant !== null ? await putParticipant(participant?.id ?? 0, newParticipant) : await postParticipant(newParticipant)
-          if (response) {
-            successAlert("Participante guardado exitosamente")
-          }else{
-            errorAlert("Error al guardar el participante")
-          }
-        }else{
-          errorAlert("Hay campos requeridos sin completar")
-        }
-        
+  }
+  const onLoadFiles = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    if (participant?.id) {
+      const id = participant?.id
+      router.push(`/admin/participantRegister/attachments/${id}`)
+    } else {
+      errorAlert("Primero debe guardar el participante para agregarle documentos")
     }
-    const onLoadFiles = (e: React.MouseEvent<HTMLButtonElement>) =>{
-      e.preventDefault()
-      if(participant?.id){
-        const id = participant?.id
-        router.push(`/admin/participantRegister/attachments/${id}`)
-      }else{
-        errorAlert("Primero debe guardar el participante para agregarle documentos")
-      }
+  }
+  const onLoadHealth = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    if (participant?.id) {
+      const id = participant?.id
+      router.push(`/admin/participantRegister/health/${id}`)
+    } else {
+      errorAlert("Primero debe guardar el participante para agregarle registro de salud")
     }
-    const onLoadHealth = (e: React.MouseEvent<HTMLButtonElement>) =>{
-      e.preventDefault()
-      if(participant?.id){
-        const id = participant?.id
-        router.push(`/admin/participantRegister/health/${id}`)
-      }else{
-        errorAlert("Primero debe guardar el participante para agregarle registro de salud")
-      }
-    }
+  }
   return (
     <>
       <div className="container mx-auto bg-gray-gradient p-10 h-auto max-w-4xl my-4 rounded-md gap-4">
@@ -226,7 +227,7 @@ export default function ParticipantRegister({ participant }: { participant: Part
             placeholder="Nombre"
             iconStart={<GoPerson color="white" />}
           />
-          <InputField 
+          <InputField
             value={firstLastName}
             onChange={(e) => setFirstLastName(e.target.value)}
             label="Primer Apellido"
@@ -294,12 +295,12 @@ export default function ParticipantRegister({ participant }: { participant: Part
         </div>
 
         <div className="flex justify-between mt-5">
-          
+
           <Button onClick={onLoadHealth} className="bg-red-gradient w-52">Salud</Button>
           <Button onClick={onLoadFiles} className="bg-red-gradient w-52">Documentos Adjuntos</Button>
-        
+
           <Button
-            disabled={participant?.id?true:false}
+            disabled={participant?.id ? true : false}
             onClick={handleSave}
             format
             className="bg-gradient-to-r from-green-500 to-green-600 rounded-md transition-all hover:from-green-600 hover:to-green-700 text-white w-52"
@@ -307,10 +308,10 @@ export default function ParticipantRegister({ participant }: { participant: Part
             Guardar
           </Button>
         </div>
-        
+
       </div>
       {participant?.id && <EnrollCourses participantId={participant?.id!} participantCourses={participantOnCourses} updateParticipantCourses={updateParticipantCourses} />}
     </>
-    
+
   );
 }
