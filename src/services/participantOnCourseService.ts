@@ -38,6 +38,21 @@ export async function createParticipantOnCourse(
   }
 }
 
+export async function updateParticipantOnCourse(
+  participant: ParticipantOnCourse
+) {
+  try {
+    const response = await axios.put<ParticipantOnCourse>(
+      "/api/participantOnCourse",
+      participant
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
 export async function getParticipantOnCourseByParticipantId(participantId: number) {
   try {
     const response = await axios.get(

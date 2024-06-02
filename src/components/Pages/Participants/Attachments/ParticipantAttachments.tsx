@@ -9,7 +9,6 @@ export default function Attachments({ participant }: { participant: Participant 
 
   const router = useRouter()
   const headersFiles = ['Nombre','Tipo', "Enlace"];
-  const headers = ['Nombre', 'Tipo', 'Fecha de Creación', 'Acciones'];
 
   const [files,setFiles] = useState<ParticipantAttachment[]>([])
   const {postParticipantAttachment,deleteParticipantAttachment} = useParticipantAttachmentStore()
@@ -140,15 +139,7 @@ export default function Attachments({ participant }: { participant: Participant 
           </div>
         </div>
       </div>
-      <div className='container bg-white mt-6 p-4 rounded-xl'>
-        <p className="text-3xl font-bold text-dark-gray flex justify-center">Cursos</p>
-        <div className='mt-6'>
-          <Table keys={[]} data={files!} headers={headers} itemsPerPage={3} /> 
-        </div>
-        <div className='flex justify-center mt-6'>
-          <Button className="bg-red-gradient w-1/3">Agregar</Button>
-        </div>
-      </div>
+      
     </div>
 
   );

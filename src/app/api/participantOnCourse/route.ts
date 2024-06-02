@@ -10,16 +10,32 @@ export async function GET(req: NextRequest, res: NextResponse) {
     }
 }
 
-
-
 export async function POST(req: NextRequest, res: NextResponse){
     try {
-
-       const participantOnCourse = await req.json();
+        const participantOnCourse = await req.json();
 
         const newParticipantOnCourse = await prisma.participantOnCourse.create({
             data:{
                 ...participantOnCourse
+            }
+        });
+       return NextResponse.json(newParticipantOnCourse, {status: 201})
+    } catch (error) {
+        return NextResponse.json(error, { status: 500 });
+    }
+}
+
+export async function PUT(req: NextRequest){
+    try {
+        const {participantId,courseId,state} = await req.json();
+        const newParticipantOnCourse = await prisma.participantOnCourse.update({
+            where:{
+                participantId_courseId:{
+                    participantId,courseId
+                }
+            },
+            data:{
+                state:state
             }
         });
        return NextResponse.json(newParticipantOnCourse, {status: 201})

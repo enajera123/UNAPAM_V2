@@ -8,8 +8,8 @@ export interface GeneralInformation {
 }
 
 export enum State {
-  Active,
-  Inactive,
+  Active="Active",
+  Inactive="Inactive",
 }
 
 export interface User {
@@ -94,9 +94,9 @@ export interface ParticipantAttachment {
 }
 
 export enum StateParticipantOnCourse {
-  Retired,
-  Registered,
-  Finished,
+  Retired="Retired",
+  Registered="Registered",
+  Finished="Finished",
 }
 
 export interface ParticipantOnCourse {

@@ -8,6 +8,7 @@ import { Participant } from "@/types/prisma";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import EnrollCourses from "./EnrollCourses/EnrollCourses";
 
 
 function Participants({ participants }: { participants: Participant[] | null }) {

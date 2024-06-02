@@ -47,6 +47,7 @@ export type ParticipantOnCourseState = {
   // getParticipantOnCourseByCourseId: (id: number) => void;
   // getParticipantOnCourseByParticipantId: (participantId: number) => void;
   postParticipantOnCourse: (participantOnCourse: ParticipantOnCourse) => Promise<ParticipantOnCourse | null>;
+  putParticipantOnCourse: (participantOnCourse: ParticipantOnCourse) => Promise<ParticipantOnCourse | null>;
 };
 
 export type ParticipantMedicineState = {

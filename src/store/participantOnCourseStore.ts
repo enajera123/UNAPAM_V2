@@ -4,6 +4,7 @@ import {
   getParticipantsOnCourse,
   getParticipantOnCourseByCourseId,
   createParticipantOnCourse,
+  updateParticipantOnCourse,
   getParticipantOnCourseByParticipantId,
 } from "@/services/participantOnCourseService";
 import { ParticipantOnCourse } from "@/types/prisma";
@@ -40,6 +41,17 @@ export const useParticipantOnCourseStore = create<ParticipantOnCourseState>(
         }));
       }
       return newParticipantOnCourse;
+    },
+
+    putParticipantOnCourse: async (participantOnCourse: ParticipantOnCourse) => {
+      const updatedParticipantOnCourse = await updateParticipantOnCourse(participantOnCourse);
+      if (!updatedParticipantOnCourse) return null;
+      set((state) => ({
+        participantsOnCourse: state.participantsOnCourse.map((p) =>
+          (p.participantId === updatedParticipantOnCourse.participantId && p.courseId === updatedParticipantOnCourse.courseId ) ? updatedParticipantOnCourse : p
+        ),
+      }));
+      return updatedParticipantOnCourse;
     },
 
     getParticipantOnCourseByParticipantId: async (participantId: number) => {
