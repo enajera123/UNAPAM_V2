@@ -1,9 +1,8 @@
-'use client'
 import * as React from 'react';
 import { Formik, Field, Form, FormikHelpers, FieldArray } from 'formik';
 import logoUNAPAM from '@/resources/LogoWhite.webp';
 import Image from 'next/image';
-import { ParticipantHealth, crearParticipantHealth } from '@/types/prisma';
+import { Participant, ParticipantHealth, crearParticipantHealth } from '@/types/prisma';
 
 
 const initialValues: ParticipantHealth = crearParticipantHealth();
@@ -27,7 +26,7 @@ const optionsKinship = [
   { value: "B-", label: "Otro" },
 ];
 
-export default function Health() {
+export default function Health({ participant }: { participant: Participant | null }) {
   const onSubmit = (values: ParticipantHealth) => {
     console.log(values)
   }

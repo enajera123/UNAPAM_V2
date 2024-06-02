@@ -99,15 +99,31 @@ export default function ParticipantRegister({ participant }: { participant: Part
         } as Participant
     }
 
+    const validarCamposMinimos = (participant:Participant) =>{
+      if(participant.identification && participant.identification!=="" && 
+         participant.firstName && participant.firstName !== "" &&
+         participant.firstSurname && participant.firstSurname !=="" &&
+         participant.email && participant.email !== "" 
+      ){
+        return true
+      }
+      return false
+    }
+
     const handleSave = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         const newParticipant = createParticipantToSave()
-        const response = participant !== null ? await putParticipant(participant?.id ?? 0, newParticipant) : await postParticipant(newParticipant)
-        if (response) {
-          successAlert("Participante guardado exitosamente")
+        if(validarCamposMinimos(newParticipant)){
+          const response = participant !== null ? await putParticipant(participant?.id ?? 0, newParticipant) : await postParticipant(newParticipant)
+          if (response) {
+            successAlert("Participante guardado exitosamente")
+          }else{
+            errorAlert("Error al guardar el participante")
+          }
         }else{
-          errorAlert("Error al guardar el participante")
+          errorAlert("Hay campos requeridos sin completar")
         }
+        
     }
     const onLoadFiles = (e: React.MouseEvent<HTMLButtonElement>) =>{
       e.preventDefault()
@@ -116,6 +132,15 @@ export default function ParticipantRegister({ participant }: { participant: Part
         router.push(`/admin/participantRegister/attachments/${id}`)
       }else{
         errorAlert("Primero debe guardar el participante para agregarle documentos")
+      }
+    }
+    const onLoadHealth = (e: React.MouseEvent<HTMLButtonElement>) =>{
+      e.preventDefault()
+      if(participant?.id){
+        const id = participant?.id
+        router.push(`/admin/participantRegister/health/${id}`)
+      }else{
+        errorAlert("Primero debe guardar el participante para agregarle registro de salud")
       }
     }
   return (
@@ -201,7 +226,7 @@ export default function ParticipantRegister({ participant }: { participant: Part
             placeholder="Nombre"
             iconStart={<GoPerson color="white" />}
           />
-          <InputField
+          <InputField 
             value={firstLastName}
             onChange={(e) => setFirstLastName(e.target.value)}
             label="Primer Apellido"
@@ -269,10 +294,8 @@ export default function ParticipantRegister({ participant }: { participant: Part
         </div>
 
         <div className="flex justify-between mt-5">
-          <Link href="/admin/participantRegister/1/health">
-            <Button className="bg-red-gradient w-52">Salud</Button>
-          </Link>
           
+          <Button onClick={onLoadHealth} className="bg-red-gradient w-52">Salud</Button>
           <Button onClick={onLoadFiles} className="bg-red-gradient w-52">Documentos Adjuntos</Button>
         
           <Button

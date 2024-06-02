@@ -1,7 +1,7 @@
 import { ReactNode } from "react"
 
 export type InputFieldProps = {
-    id: string,
+    id?: string,
     label: string,
     placeholder: string,
     type?: string,
