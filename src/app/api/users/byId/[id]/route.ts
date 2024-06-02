@@ -6,7 +6,7 @@ import { ParameterId } from "@/types/api";
 export async function PUT(req: NextRequest, { params }: ParameterId) {
     try {
         const fetchedId = parseInt(params.id);
-        const userData = await req.json();
+        const {currentPassword, newPassword} = await req.json();
 
         const user = await prisma.user.findUnique({
             where: {
@@ -18,20 +18,20 @@ export async function PUT(req: NextRequest, { params }: ParameterId) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
 
-
-        const passwordMatch = await bcrypt.compare(userData.currentPassword, user.password);
+        const passwordMatch = await bcrypt.compare(currentPassword, user.password);
 
         if (!passwordMatch) {
             return NextResponse.json({ error: "Incorrect current password" }, { status: 401 });
         }
-        const newPasswordHash = await bcrypt.hash(userData.newPassword, 10); 
+        const newPasswordHash = await bcrypt.hash(newPassword, 10); 
 
         const updatedUser = await prisma.user.update({
             where: {
                 id:fetchedId 
             },
             data: {
-                password: newPasswordHash
+                password: newPasswordHash,
+                isPasswordChanged: 'n'
             }
         });
         const { password, ...userDatas } =  updatedUser as {

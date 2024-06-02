@@ -23,7 +23,9 @@ export interface User {
     state: State;
     email: string;
     password: string;
-    role: Role; 
+    isPasswordChanged: string;
+    role: Role;
+    
 }
 
 export enum Role {
@@ -85,7 +87,8 @@ export interface Participant {
 export interface ParticipantAttachment {
   id?: number;
   name: string;
-  attachmentFile: Uint8Array;
+  type?:string;
+  attachmentFile: file_format;
   participantId: number;
   participant?: Participant;
 }
@@ -176,3 +179,12 @@ export const defaultImage: image_format = {
   image_name: "",
   image_path: null,
 };
+
+export interface file_format {
+  file_name?: string;
+  file_file?: string;
+  file_extension?: string;
+  file_path?: string | null;
+  file_url?: string;
+  file_type?: string;
+}

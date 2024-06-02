@@ -9,6 +9,7 @@ import {
   createUser,
   updateUser,
   deleteUser,
+  forgotPassword,
 } from "@/services/usersService";
 import { User } from "@/types/prisma";
 
@@ -67,8 +68,8 @@ export const useUsersStore = create<UsersState>((set) => ({
     set((state) => ({ users: state.users.filter((user) => user.id !== id) }));
     return true;
   },
-  authenticateUser: async (user: User) => {
-    const authenticatedUser = await authenticateUser(user);
+  authenticateUser: async (identification: string, passwordFromLogin: string) => {
+    const authenticatedUser = await authenticateUser(identification, passwordFromLogin);
     if (authenticatedUser) {
       set((state) => ({
         users: state.users.map((u) =>
@@ -80,10 +81,19 @@ export const useUsersStore = create<UsersState>((set) => ({
     return null
   },
 
-  putUserPassword: async (id: number, user: User) => {
-    const updatedUser = await updateUserPassword(id, user);
+  putUserPassword: async (id: number, currentPassword: string, newPassword: string) => {
+    const updatedUser = await updateUserPassword(id, currentPassword, newPassword);
     set((state) => ({
       users: state.users.map((u) => (u.id === id ? updatedUser : u)),
     }));
+    if (!updatedUser) return false;
+    return true;
   },
+
+  forgotPassword: async (identification: string) => {
+    const response = await forgotPassword(identification);
+    if (!response) return false;
+    return true;
+  }
+
 }));
