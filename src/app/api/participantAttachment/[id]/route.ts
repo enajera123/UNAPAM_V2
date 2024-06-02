@@ -34,7 +34,6 @@ export async function DELETE(req: NextRequest, { params }: ParameterId) {
         await delete_file_firebase(`attachments/user_${response.participantId}/${response.name}`)
         return NextResponse.json(response, { status: 200 });
     } catch (error) {
-        console.log(error)
         return NextResponse.json(
             { error: "Internal Server Error" },
             { status: 500 }

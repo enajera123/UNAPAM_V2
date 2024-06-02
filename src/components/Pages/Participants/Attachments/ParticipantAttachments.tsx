@@ -78,12 +78,9 @@ export default function Attachments({ participant }: { participant: Participant 
 
     const saveFile = async (index:number) =>{
       const itemToSave = files[index]
-      console.log(itemToSave)
       delete itemToSave.attachmentFile.file_icon
       delete itemToSave.attachmentFile.file_anchor
-      console.log(itemToSave)
       const result = refactorAttachmentFile(await postParticipantAttachment(itemToSave))
-      console.log(result)
       if(result){
         const updatedList = files.filter(i=>i.name!==itemToSave?.name)
         setFiles([...updatedList,{...result,
@@ -120,7 +117,6 @@ export default function Attachments({ participant }: { participant: Participant 
 
     useEffect(()=>{
       if(participant?.participantAttachments){
-        console.log(participant?.participantAttachments)
         const refactorAttachments = participant?.participantAttachments.map((attachment)=>({
              ...refactorAttachmentFile(attachment),
              attachmentFile:{

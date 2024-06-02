@@ -7,7 +7,6 @@ const ImagePreview = ({link,show,setShow}:{link:string,show:boolean,setShow:()=>
     if(e.key==='Escape'){
       setShow()
     }
-    console.log(e.key)
   }
   return !show ? null : (
     <div onKeyDown={handleKeyDown} className='flex flex-col items-center justify-center h-screen absolute w-full bg-black/50 top-0 left-0 z-50 backdrop-blur-xl' onClick={setShow}>
