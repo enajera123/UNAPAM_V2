@@ -7,6 +7,7 @@ import { useParticipantHealthStore } from '@/store/participantHealthStore';
 import { confirmationAlert, confirmationAlertPromise, errorAlert, successAlert } from '@/utils/sweetAlert';
 import { useParticipantDisseaseStore } from '@/store/participantDisseaseStore';
 import { useParticipantMedicineStore } from '@/store/participantMedicineStore';
+import { DeleteIcon, PlusIcon } from '@/components/Icons/Icons';
 
 
 
@@ -128,7 +129,7 @@ export default function Health({ participant }: { participant: Participant | nul
           <div className="container mx-auto bg-gray-gradient p-10 my-4 rounded-3xl ">
             <div className="flex flex-row items-center">
               <div className="flex-initial w-2/6 text-white">
-                <label htmlFor="bloodType">Blood Type</label>
+                <label htmlFor="bloodType">Tipo de Sangre</label>
                 <Field
                   name="bloodType"
                   id="bloodType"
@@ -144,25 +145,22 @@ export default function Health({ participant }: { participant: Participant | nul
               </div>
               <div className="w-2/3 flex justify-end">
                 <div className="ml-auto">
-                  <Image
-                    src={logoUNAPAM}
-                    alt="logoUNAPAM"
-                    className="size-32 " />
+                  <Image src={logoUNAPAM} alt="logoUNAPAM" className="size-32 " />
                 </div>
               </div>
             </div>
             <FieldArray name="participantDisseases">
               {({ push, remove }) => (
-                <div>
-                  <table className="min-w-full border-2 border-x-8 mt-5">
-                    <thead>
+                <div className='bg-gray-dark overflow-y-auto max-h-80 '>
+                  <table className="min-w-full">
+                    <thead className='bg-red-gradient sticky top-0'>
                       <tr className=' text-white h-12'>
                         <th>Enfermedad</th>
                         <th>Descripcion</th>
                         <th>Acciones</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody className=''>
                       {values.participantDisseases && values.participantDisseases.length > 0 &&
                         values.participantDisseases.map((participantDissease, index) => (
                           <tr key={index}>
@@ -183,8 +181,8 @@ export default function Health({ participant }: { participant: Participant | nul
                             <td className=' flex justify-center'>
                               <button
                                 type="button"
-                                className="bg-red-500 text-white p-1 rounded my-3"
-                                onClick={() => confirmationAlertPromise(deleteDisease(index,remove,participantDissease.id))}>Eliminar</button>
+                                className="bg-red-500 text-white p-1 rounded my-3 flex justify-center items-center"
+                                onClick={() => confirmationAlertPromise(deleteDisease(index,remove,participantDissease.id))}>Eliminar <DeleteIcon size='size-8' /> </button>
                             </td>
                           </tr>
                         ))}
@@ -192,23 +190,23 @@ export default function Health({ participant }: { participant: Participant | nul
                   </table>
                   <button
                     type="button"
-                    className="mt-4 w-44 bg-green-600 text-white p-2 rounded-lg"
-                    onClick={() => push({ disease: '', description: '', participantHealth: {}, participantHealthId: 0 })}>Agregar Enfermedad</button>
+                    className="mt-4 w-52 bg-green-600 text-white p-2 rounded-lg m-5 flex justify-center items-center gap-1 "
+                    onClick={() => push({ disease: '', description: '', participantHealth: {}, participantHealthId: 0 })}>Agregar Enfermedad <PlusIcon size='size-7'/></button>
                 </div>
               )}
             </FieldArray>
             <FieldArray name="participantMedicines">
               {({ push, remove }) => (
-                <div>
-                  <table className="min-w-full border-2 border-x-8 mt-5">
-                    <thead>
+                <div className='bg-gray-dark overflow-y-auto max-h-80 mt-5 '>
+                  <table className="min-w-full  ">
+                    <thead className='bg-red-gradient sticky top-0'>
                       <tr className=' text-white h-12'>
                         <th>Medicina</th>
                         <th>Descripcion</th>
                         <th>Acciones</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody >
                       {values.participantMedicines && values.participantMedicines.length > 0 &&
                         values.participantMedicines.map((participantMedicines, index) => (
                           <tr key={index}>
@@ -226,16 +224,16 @@ export default function Health({ participant }: { participant: Participant | nul
                             </td>
                             <td className=' flex justify-center'>
                               <button
-                                type="button" className="bg-red-500 text-white p-1 rounded my-3"
-                                onClick={() => confirmationAlertPromise(deleteMedicine(index,remove,participantMedicines.id))}>Eliminar</button>
+                                type="button" className="bg-red-500 text-white p-1 rounded my-3 flex justify-center items-center"
+                                onClick={() => confirmationAlertPromise(deleteMedicine(index,remove,participantMedicines.id))}>Eliminar <DeleteIcon size='size-8' /></button>
                             </td>
                           </tr>
                         ))}
                     </tbody>
                   </table>
                   <button
-                    type="button" className="my-4 bg-green-600 text-white p-2 rounded-lg w-44"
-                    onClick={() => push({ medicine: '', description: '', participantHealth: {}, participantHealthId: 0 })}>Agregar Medicina</button>
+                    type="button" className="my-4 bg-green-600 text-white p-2 rounded-lg w-52 m-5 flex justify-center items-center gap-1"
+                    onClick={() => push({ medicine: '', description: '', participantHealth: {}, participantHealthId: 0 })}>Agregar Medicina <PlusIcon size='size-7'/></button>
                 </div>
               )}
             </FieldArray>
