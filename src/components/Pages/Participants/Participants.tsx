@@ -23,7 +23,7 @@ function Participants({ participants, courseId }: { participants: Participant[] 
             getParticipants()
     }, [])
     useEffect(() => {
-        setFilteredData(participants === null ? participantWithCourse : participantStore)
+        setFilteredData(participants !== null ? participantWithCourse : participantStore)
     }, [participantStore, participants])
 
     return (
