@@ -61,98 +61,104 @@ export default function Health({ participant }: { participant: Participant | nul
                 </div>
               </div>
             </div>
-            <FieldArray name="participantDisseases">
-              {({ push, remove }) => (
-                <div>
-                  <table className="min-w-full border-2 border-x-8 mt-5">
-                    <thead>
-                      <tr className=' text-white h-12'>
-                        <th>Enfermedad</th>
-                        <th>Descripcion</th>
-                        <th>Acciones</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {values.participantDisseases && values.participantDisseases.length > 0 &&
-                        values.participantDisseases.map((participantDissease, index) => (
-                          <tr key={index}>
-                            <td>
-                              <Field
-                                name={`participantDisseases.${index}.disease`}
-                                placeholder="Enfermedad"
-                                className="bg-dark-gray my-3 border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 mr-10 ml-5"
-                              />
-                            </td>
-                            <td>
-                              <Field
-                                name={`participantDisseases.${index}.description`}
-                                placeholder="Descripción"
-                                className="bg-dark-gray border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 ml-10 mr-5 my-3"
-                              />
-                            </td>
-                            <td className=' flex justify-center'>
-                              <button
-                                type="button"
-                                className="bg-red-500 text-white p-1 rounded my-3"
-                                onClick={() => remove(index)}>Eliminar</button>
-                            </td>
+            <div className='space-y-6'>
+              <FieldArray name="participantDisseases">
+                {({ push, remove }) => (
+                  <div className='bg-gray-dark' >
+                    <div className='overflow-y-auto max-h-80 '>
+                      <table className="w-full">
+                        <thead className='bg-red-gradient sticky top-0'>
+                          <tr className='flex justify-around text-center mx-10 items-center text-white h-12'>
+                            <th className='w-full'>Enfermedad</th>
+                            <th className='w-full'>Descripcion</th>
+                            <th>Acciones</th>
                           </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                  <button
-                    type="button"
-                    className="mt-4 w-44 bg-green-600 text-white p-2 rounded-lg"
-                    onClick={() => push({ disease: '', description: '', participantHealth: {}, participantHealthId: 0 })}>Agregar Enfermedad</button>
-                </div>
-              )}
-            </FieldArray>
-            <FieldArray name="participantMedicines">
-              {({ push, remove }) => (
-                <div>
-                  <table className="min-w-full border-2 border-x-8 mt-5">
-                    <thead>
-                      <tr className=' text-white h-12'>
-                        <th>Medicina</th>
-                        <th>Descripcion</th>
-                        <th>Acciones</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {values.participantMedicines && values.participantMedicines.length > 0 &&
-                        values.participantMedicines.map((participantMedicines, index) => (
-                          <tr key={index}>
-                            <td>
-                              <Field
-                                name={`participantMedicines.${index}.medicine`}
-                                placeholder="Enfermedad"
-                                className="bg-dark-gray border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 mr-10 ml-5 my-3"
-                              />
-                            </td>
-                            <td>
-                              <Field
-                                name={`participantMedicines.${index}.description`}
-                                placeholder="Descripción"
-                                className="bg-dark-gray border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 ml-10 mr-5 my-3"
-                              />
-                            </td>
-                            <td className=' flex justify-center'>
-                              <button
-                                type="button"
-                                className="bg-red-500 text-white p-1 rounded my-3"
-                                onClick={() => remove(index)}>Eliminar</button>
-                            </td>
+                        </thead>
+                        <tbody >
+                          {values.participantDisseases && values.participantDisseases.length > 0 &&
+                            values.participantDisseases.map((participantDissease, index) => (
+                              <tr className='flex justify-between space-x-5 mx-10 items-center text-white h-12' key={index}>
+                                <td className='w-full'>
+                                  <Field
+                                    name={`participantDisseases.${index}.disease`}
+                                    placeholder="Enfermedad"
+                                    className="bg-dark-gray my-3 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 "
+                                  />
+                                </td>
+                                <td className='w-full'>
+                                  <Field
+                                    name={`participantDisseases.${index}.description`}
+                                    placeholder="Descripción"
+                                    className="bg-dark-gray my-3 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 "
+                                  />
+                                </td>
+                                <td className=' text-center'>
+                                  <button
+                                    type="button"
+                                    className="bg-red-500 text-white p-1 rounded my-3"
+                                    onClick={() => remove(index)}>Eliminar</button>
+                                </td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    <button
+                      type="button"
+                      className="m-4 w-44 bg-green-600 text-white p-2 rounded-lg"
+                      onClick={() => push({ disease: '', description: '', participantHealth: {}, participantHealthId: 0 })}>Agregar Enfermedad</button>
+                  </div>
+                )}
+              </FieldArray>
+              <FieldArray name="participantMedicines">
+                {({ push, remove }) => (
+                  <div className='bg-gray-dark' >
+                    <div className='overflow-y-auto max-h-80'>
+                      <table className="w-full">
+                        <thead className='bg-red-gradient sticky top-0'>
+                          <tr className='flex justify-around text-center mx-10 items-center text-white h-12'>
+                            <th className='w-full'>Medicina</th>
+                            <th className='w-full'>Descripcion</th>
+                            <th >Acciones</th>
                           </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                  <button
-                    type="button"
-                    className="my-4 bg-green-600 text-white p-2 rounded-lg w-44"
-                    onClick={() => push({ medicine: '', description: '', participantHealth: {}, participantHealthId: 0 })}>Agregar Medicina</button>
-                </div>
-              )}
-            </FieldArray>
+                        </thead>
+                        <tbody>
+                          {values.participantMedicines && values.participantMedicines.length > 0 &&
+                            values.participantMedicines.map((participantMedicines, index) => (
+                              <tr className='flex justify-between space-x-5 mx-10 items-center text-white h-12' key={index}>
+                                <td className='w-full'>
+                                  <Field
+                                    name={`participantMedicines.${index}.medicine`}
+                                    placeholder="Enfermedad"
+                                    className="bg-dark-gray my-3 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 "
+                                  />
+                                </td>
+                                <td className='w-full'>
+                                  <Field
+                                    name={`participantMedicines.${index}.description`}
+                                    placeholder="Descripción"
+                                    className="bg-dark-gray my-3 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 "
+                                  />
+                                </td>
+                                <td className=' flex justify-center'>
+                                  <button
+                                    type="button"
+                                    className="bg-red-500 text-white p-1 rounded my-3"
+                                    onClick={() => remove(index)}>Eliminar</button>
+                                </td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    <button
+                      type="button"
+                      className="m-4 w-44 bg-green-600 text-white p-2 rounded-lg"
+                      onClick={() => push({ medicine: '', description: '', participantHealth: {}, participantHealthId: 0 })}>Agregar Medicina</button>
+                  </div>
+                )}
+              </FieldArray>
+            </div>
             <div className="flex-initial w-1/4">
               <p className="text-xl font-bold text-light-gray">Personas de Contacto</p>
               <p className="text-lg my-5 font-bold text-light-gray">Persona #1</p>

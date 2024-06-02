@@ -10,7 +10,6 @@ import { RiGraduationCapLine, RiWhatsappLine } from 'react-icons/ri';
 import { MdOutlineEmail } from 'react-icons/md';
 import Checkbox from '@/components/Checkbox/Checkbox';
 import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { Grade, Participant, YesOrNo, TypeIdentification } from '@/types/prisma';
 import { useParticipantsStore } from '@/store/participantsStore';
 import { useRouter } from 'next/navigation';
@@ -82,6 +81,7 @@ export default function ParticipantRegister({ participant }: { participant: Part
 
   const createParticipantToSave = () => {
     return {
+      id: participant?.id,
       identification,
       hasWhatsApp: hasWhatsApp ? "Yes" as unknown as YesOrNo : "No" as unknown as YesOrNo,
       birthDate,
@@ -300,7 +300,6 @@ export default function ParticipantRegister({ participant }: { participant: Part
           <Button onClick={onLoadFiles} className="bg-red-gradient w-52">Documentos Adjuntos</Button>
 
           <Button
-            disabled={participant?.id ? true : false}
             onClick={handleSave}
             format
             className="bg-gradient-to-r from-green-500 to-green-600 rounded-md transition-all hover:from-green-600 hover:to-green-700 text-white w-52"

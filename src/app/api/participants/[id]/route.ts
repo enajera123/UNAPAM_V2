@@ -15,11 +15,11 @@ export async function PUT(req: NextRequest, { params }: ParameterId) {
         const refactorData = {
             ...participant,
             photo: image_url
-        } 
+        }
 
         delete refactorData.photoExtension
         delete refactorData.photoFile
-      
+
         const participantUpdated = await prisma.participant.update({
             where: {
                 id: fetchedId,

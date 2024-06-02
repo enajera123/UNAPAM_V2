@@ -97,7 +97,7 @@ export default function Attachments({ participant }: { participant: Participant 
     }
 
     const goParticipantRegister = () => {
-      router.push("/admin/participantRegister")
+      router.push(`/admin/participantRegister/${participant?.id}`)
     }
 
     const refactorAttachmentFile = (attachment:ParticipantAttachment|null) => {
