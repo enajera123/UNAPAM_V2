@@ -145,7 +145,7 @@ export default function Health({ participant }: { participant: Participant | nul
               </div>
               <div className="w-2/3 flex justify-end">
                 <div className="ml-auto">
-                  <Image src={logoUNAPAM} alt="logoUNAPAM" className="size-32 " />
+                  <Image src={logoUNAPAM} alt="logoUNAPAM" className="size-32 mb-1 " />
                 </div>
               </div>
             </div>
@@ -168,14 +168,14 @@ export default function Health({ participant }: { participant: Participant | nul
                               <Field
                                 name={`participantDisseases.${index}.disease`}
                                 placeholder="Enfermedad"
-                                className="bg-dark-gray my-3 border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 mr-10 ml-5"
+                                className="bg-dark-gray my-3 border placeholder:text-white/35 border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 mr-10 ml-5"
                               />
                             </td>
                             <td>
                               <Field
                                 name={`participantDisseases.${index}.description`}
                                 placeholder="Descripción"
-                                className="bg-dark-gray border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 ml-10 mr-5 my-3"
+                                className="bg-dark-gray border border-gray-300 placeholder:text-white/35 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 ml-10 mr-5 my-3"
                               />
                             </td>
                             <td className=' flex justify-center'>
@@ -190,7 +190,7 @@ export default function Health({ participant }: { participant: Participant | nul
                   </table>
                   <button
                     type="button"
-                    className="mt-4 w-52 bg-green-600 text-white p-2 rounded-lg m-5 flex justify-center items-center gap-1 "
+                    className="mt-4 w-52 bg-green-600 text-white placeholder:text-white/35 p-2 rounded-lg m-5 flex justify-center items-center gap-1 "
                     onClick={() => push({ disease: '', description: '', participantHealth: {}, participantHealthId: 0 })}>Agregar Enfermedad <PlusIcon size='size-7'/></button>
                 </div>
               )}
@@ -213,13 +213,13 @@ export default function Health({ participant }: { participant: Participant | nul
                             <td>
                               <Field
                                 name={`participantMedicines.${index}.medicine`} placeholder="Medicina"
-                                className="bg-dark-gray border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 mr-10 ml-5 my-3"
+                                className="bg-dark-gray border placeholder:text-white/35 border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 mr-10 ml-5 my-3"
                               />
                             </td>
                             <td>
                               <Field
                                 name={`participantMedicines.${index}.description`} placeholder="Descripción"
-                                className="bg-dark-gray border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 ml-10 mr-5 my-3"
+                                className="bg-dark-gray border placeholder:text-white/35 border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 ml-10 mr-5 my-3"
                               />
                             </td>
                             <td className=' flex justify-center'>
@@ -252,19 +252,19 @@ export default function Health({ participant }: { participant: Participant | nul
                 <label htmlFor="contactOne.firstName">Nombre</label>
                 <Field
                   name="contactOne.firstName" placeholder="Nombre"
-                  className="bg-dark-gray border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 pl-10 pr-10" />
+                  className="bg-dark-gray placeholder:text-white/35 border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 pl-10 pr-10" />
               </div>
               <div className="flex-initial w-1/3 pl-5 text-white">
                 <label htmlFor="primerApellido">Primer Apellido</label>
                 <Field
                   name="contactOne.firstSurname" placeholder="Apellido"
-                  className="bg-dark-gray border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 pl-10 pr-10" />
+                  className="bg-dark-gray placeholder:text-white/35 border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 pl-10 pr-10" />
               </div>
               <div className="flex-initial w-1/3 pl-5 text-white">
                 <label htmlFor="telefono">Teléfono</label>
                 <Field
                   name="contactOne.phoneNumber" placeholder="xxxx-xxxx"
-                  className="bg-dark-gray border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 pl-10 pr-10" />
+                  className="bg-dark-gray placeholder:text-white/35 border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 pl-10 pr-10" />
               </div>
             </div>
             <div className="flex-initial w-1/4 text-white">
@@ -281,19 +281,19 @@ export default function Health({ participant }: { participant: Participant | nul
                 <label htmlFor="nombre">Nombre</label>
                 <Field
                   name="contactTwo.firstName" placeholder="Nombre"
-                  className="bg-dark-gray border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 pl-10 pr-10" />
+                  className="bg-dark-gray border placeholder:text-white/35 border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 pl-10 pr-10" />
               </div>
               <div className="flex-initial w-1/3 pl-5 text-white">
                 <label htmlFor="primerApellido">Primer Apellido</label>
                 <Field
                   name="contactTwo.firstSurname"placeholder="Apellido"
-                  className="bg-dark-gray border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 pl-10 pr-10" />
+                  className="bg-dark-gray placeholder:text-white/35 border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 pl-10 pr-10" />
               </div>
               <div className="flex-initial w-1/3 pl-5 text-white">
                 <label htmlFor="telefono">Teléfono</label>
                 <Field
                   name="contactTwo.phoneNumber" placeholder="xxxx-xxxx"
-                  className="bg-dark-gray border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 pl-10 pr-10" />
+                  className="bg-dark-gray placeholder:text-white/35 border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 pl-10 pr-10" />
               </div>
             </div>
             <div className="flex mt-10 justify-end items-end gap-5">
