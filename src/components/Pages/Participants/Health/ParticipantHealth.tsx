@@ -184,7 +184,7 @@ export default function Health({ participant }: { participant: Participant | nul
                     </div>
                     <button
                       type="button"
-                      className="m-4 w-44 bg-green-600 text-white p-2 rounded-lg"
+                      className="m-4 w-44 bg-green-600 text-white flex gap-3 p-2 rounded-lg"
                       onClick={() => push({ disease: '', description: '', participantHealth: {}, participantHealthId: 0 })}>Agregar Enfermedad<PlusIcon /></button>
                   </div>
                 )}
@@ -231,7 +231,7 @@ export default function Health({ participant }: { participant: Participant | nul
                     </div>
                     <button
                       type="button"
-                      className="m-4 w-44 bg-green-600 text-white p-2 rounded-lg"
+                      className="m-4 w-44 bg-green-600 text-white p-2 flex gap-3 rounded-lg"
                       onClick={() => push({ medicine: '', description: '', participantHealth: {}, participantHealthId: 0 })}>Agregar Medicina<PlusIcon /></button>
                   </div>
                 )}
