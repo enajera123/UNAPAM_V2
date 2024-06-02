@@ -52,8 +52,6 @@ const EnrollCourses = ({participantId,participantCourses,updateParticipantCourse
 
     const updateCourses = (list:Course[]) =>{
         if(list){
-            console.log(list)
-            console.log(participantCourses)
             setButtonCursos(list.filter((i)=>i.state!=State.Inactive).map((course)=>({
                 ...course,
                 accion:participantCourses.find((i)=>i.courseId===course.id) ?
