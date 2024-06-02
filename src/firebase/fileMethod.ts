@@ -16,16 +16,17 @@ export const upload_image=async(file:string,image_extension:string,path:string)=
     }
 }
 
-export const delete_image_firebase = async(path:string)=>{
+export const delete_file_firebase = async(path:string)=>{
     const storageRef = ref(storage, path)
     await deleteObject(storageRef)
 }
 
-export const upload_file= async (file:Uint8Array,file_type:string,path:string)=>{
+export const upload_file= async (file:string,file_type:string,path:string)=>{
     const storageRef= ref(storage, path)
+    const file_buffer= Buffer.from(file, 'base64')
     const metadata = {
       contentType: file_type
     };
-    await uploadBytes(storageRef, file, metadata)
+    await uploadBytes(storageRef, file_buffer, metadata)
     return await getDownloadURL(storageRef)
 }

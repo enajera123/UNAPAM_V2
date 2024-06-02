@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { ParameterId } from "@/types/api";
+import { delete_file_firebase } from "@/firebase/fileMethod";
 export async function PUT(req: NextRequest, { params }: ParameterId) {
     try {
         const fetchedId = parseInt(params.id);
@@ -30,9 +31,10 @@ export async function DELETE(req: NextRequest, { params }: ParameterId) {
                 id: fetchedId,
             },
         });
-
+        await delete_file_firebase(`attachments/user_${response.participantId}/${response.name}`)
         return NextResponse.json(response, { status: 200 });
     } catch (error) {
+        console.log(error)
         return NextResponse.json(
             { error: "Internal Server Error" },
             { status: 500 }

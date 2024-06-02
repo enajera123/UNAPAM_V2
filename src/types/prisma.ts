@@ -13,19 +13,19 @@ export enum State {
 }
 
 export interface User {
-    id?: number;
-    firstName: string;
-    firstSurname: string;
-    secondSurname: string;
-    phoneNumber: string;
-    birthDate: string;
-    identification: string;
-    state: State;
-    email: string;
-    password: string;
-    isPasswordChanged: string;
-    role: Role;
-    
+  id?: number;
+  firstName: string;
+  firstSurname: string;
+  secondSurname: string;
+  phoneNumber: string;
+  birthDate: string;
+  identification: string;
+  state: State;
+  email: string;
+  password: string;
+  isPasswordChanged: string;
+  role: Role;
+
 }
 
 export enum Role {
@@ -49,27 +49,27 @@ export enum Grade {
 }
 
 export interface Participant {
-    id?: number;
-    firstName: string;
-    firstSurname: string;
-    secondSurname: string;
-    email: string;
-    phoneNumber: string;
-    birthDate: string;
-    identification: string;
-    hasWhatsApp: YesOrNo;
-    photo?: string;
-    photoFile?: string;
-    photoExtension?: string;
-    grade: Grade;
-    expirationDateMedicalReport?: string
-    expirationDateMedicalInsurance?: string
-    // medicalReport?: MedicalReport;
-    referenceContacts?: ReferenceContact[];
-    participantAttachments?: ParticipantAttachment[];
-    typeIdentification: TypeIdentification;
-    participantHealths?: ParticipantHealth;
-    participantsOnCourses?: ParticipantOnCourse[];
+  id?: number;
+  firstName: string;
+  firstSurname: string;
+  secondSurname: string;
+  email: string;
+  phoneNumber: string;
+  birthDate: string;
+  identification: string;
+  hasWhatsApp: YesOrNo;
+  photo?: string;
+  photoFile?: string;
+  photoExtension?: string;
+  grade: Grade;
+  expirationDateMedicalReport?: string
+  expirationDateMedicalInsurance?: string
+  // medicalReport?: MedicalReport;
+  referenceContacts?: ReferenceContact[];
+  participantAttachments?: ParticipantAttachment[];
+  typeIdentification: TypeIdentification;
+  participantHealths?: ParticipantHealth;
+  participantsOnCourses?: ParticipantOnCourse[];
 }
 
 // export interface MedicalReport {
@@ -114,25 +114,60 @@ export interface ReferenceContact {
   secondSurname: string;
   phoneNumber: string;
   relationship: string;
-  participantId: number;
+  participantId: number | undefined;
   participant?: Participant;
 }
 
 export interface ParticipantHealth {
-  id?: number;
+  id?: number | undefined;
   bloodType: string;
   participantDisseases?: ParticipantDissease[];
   participantMedicines?: ParticipantMedicine[];
-  participantId: number;
+  contactOne: ReferenceContact,
+  contactTwo: ReferenceContact,
+  participantId: number | undefined;
   participant?: Participant;
 }
+
+export function crearParticipantHealth(): ParticipantHealth {
+  return {
+    id: undefined,
+    bloodType: '',
+    participantDisseases: [] as ParticipantDissease[],
+    participantMedicines: [] as ParticipantMedicine[],
+    contactOne: {
+      id: undefined,
+      firstName: '',
+      firstSurname: '',
+      secondSurname: '',
+      phoneNumber: '',
+      relationship: '',
+      participantId: undefined,
+      participant: {} as Participant,
+    } as ReferenceContact,
+    contactTwo: {
+      id: undefined,
+      firstName: '',
+      firstSurname: '',
+      secondSurname: '',
+      phoneNumber: '',
+      relationship: '',
+      participantId: undefined,
+      participant: {} as Participant,
+    } as ReferenceContact,
+    participantId: undefined,
+    participant: {} as Participant,
+  };
+}
+
+
 
 export interface ParticipantDissease {
   id?: number;
   disease: string;
   description?: string;
   participantHealth?: ParticipantHealth;
-  participantHealthId: number;
+  participantHealthId: number | undefined;
 }
 
 export interface ParticipantMedicine {
@@ -187,4 +222,6 @@ export interface file_format {
   file_path?: string | null;
   file_url?: string;
   file_type?: string;
+  file_icon?: JSX.Element;
+  file_anchor?: JSX.Element;
 }

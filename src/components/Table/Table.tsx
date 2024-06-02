@@ -9,7 +9,7 @@ type Item = {
   [key: string]: any;
 };
 
-const Table = ({ keys, desactivateRowFunction, doubleClickRowFunction, data, headers, itemsPerPage, resetPagination, customActions, showEditColumn = false, deleteRowFunction,attachment = false }: TableProps) => {
+const Table = ({ keys, desactivateRowFunction, doubleClickRowFunction, data, headers, itemsPerPage, resetPagination, customActions, showEditColumn = false, deleteRowFunction,attachment }: TableProps) => {
 
   const currentPageClass = 'flex items-center justify-center px-3 h-8 leading-tight text-medium-red bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-white dark:border-gray-700 dark:text-medium-red dark:hover:bg-gray-700 dark:hover:text-white cursor-pointer'
 
@@ -57,6 +57,8 @@ const Table = ({ keys, desactivateRowFunction, doubleClickRowFunction, data, hea
     }
   }, [resetPagination, setCurrentPage]);
 
+
+
   return (
     <>
       <div className="flex flex-col">
@@ -95,7 +97,7 @@ const Table = ({ keys, desactivateRowFunction, doubleClickRowFunction, data, hea
                           :
                           <Button
                             key={actionIndex}
-                            onClick={() => action.onClick(attachment?index:item.id)}
+                            onClick={() => action.onClick(attachment?index+((currentPage-1)*itemsPerPage):item.id)}
                             format className={` rounded-xl px-3 py-1 border  shadow-md ${attachment?"bg-green-500 border-none text-white hover:bg-green-400":"hover:bg-gray-300 hover:text-gray-800 border-gray-400 bg-white"} `}>{action.children}
                           </Button>
                         ))

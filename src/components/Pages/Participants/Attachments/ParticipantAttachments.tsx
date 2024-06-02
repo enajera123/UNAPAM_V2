@@ -1,4 +1,5 @@
 import Button from "@/components/Button/Button";
+import { DefaultExtension, ImageExtension, PdfExtension } from "@/components/Icons/Icons";
 import Table from "@/components/Table/Table";
 import { useParticipantAttachmentStore } from "@/store/participantAttachmentStore";
 import { Participant, ParticipantAttachment, file_format } from "@/types/prisma";
@@ -12,6 +13,22 @@ export default function Attachments({ participant }: { participant: Participant 
 
   const [files,setFiles] = useState<ParticipantAttachment[]>([])
   const {postParticipantAttachment,deleteParticipantAttachment} = useParticipantAttachmentStore()
+
+  const iconsExtension = {
+    "pdf":<PdfExtension />,
+    "png":<ImageExtension />,
+    "jpeg":<ImageExtension />,
+    "jpg":<ImageExtension />,
+    "svg":<ImageExtension />,
+    "gif":<ImageExtension />,
+    "webp":<ImageExtension />,
+  } as {[key:string]:JSX.Element}
+
+  const anchorFileDownload = (file:string,name:string,type:string,show:boolean) => {
+    return show ? <a  href={file} target="_blank"  download={`${name}.${type}`}>Ver Archivo</a> : <p>Archivo en proceso </p>
+  }
+
+ 
 
     const handleSetFiles = (event:React.ChangeEvent<HTMLInputElement>) =>{
       let file = null
@@ -35,7 +52,9 @@ export default function Attachments({ participant }: { participant: Participant 
                 attachmentFile: {
                   file_name: file.name.split(".")[0],
                   file_extension: file.type!,
+                  file_icon: iconsExtension[file.type!.split("/")[1]] ||<DefaultExtension /> as JSX.Element ,
                   file_file: base64String,
+                  file_anchor: anchorFileDownload('','','',false)
                 },
                 participant:participant!
               }
@@ -59,10 +78,21 @@ export default function Attachments({ participant }: { participant: Participant 
 
     const saveFile = async (index:number) =>{
       const itemToSave = files[index]
+      console.log(itemToSave)
+      delete itemToSave.attachmentFile.file_icon
+      delete itemToSave.attachmentFile.file_anchor
+      console.log(itemToSave)
       const result = refactorAttachmentFile(await postParticipantAttachment(itemToSave))
+      console.log(result)
       if(result){
         const updatedList = files.filter(i=>i.name!==itemToSave?.name)
-        setFiles([...updatedList,result])
+        setFiles([...updatedList,{...result,
+          attachmentFile: {
+          ...result.attachmentFile,
+          file_icon: iconsExtension[result.type!] || <DefaultExtension /> as JSX.Element,
+          file_anchor: anchorFileDownload(result.attachmentFile.file_file as string,result.name,result.attachmentFile.file_extension as string ,true)
+          }
+        }])
         successAlert("Archivo guardado exitosamente")
       }else{
         errorAlert("Error al guardar el archivo")
@@ -90,9 +120,15 @@ export default function Attachments({ participant }: { participant: Participant 
 
     useEffect(()=>{
       if(participant?.participantAttachments){
-        const refactorAttachments = participant?.participantAttachments.map((attachment)=>{
-            return refactorAttachmentFile(attachment)
-        }) as ParticipantAttachment[]
+        console.log(participant?.participantAttachments)
+        const refactorAttachments = participant?.participantAttachments.map((attachment)=>({
+             ...refactorAttachmentFile(attachment),
+             attachmentFile:{
+              ...refactorAttachmentFile(attachment)?.attachmentFile,
+              file_icon: iconsExtension[attachment.type!] || <DefaultExtension /> as JSX.Element,
+              file_anchor: anchorFileDownload(attachment.attachmentFile as string,attachment.name,attachment.type! ,true)
+             }
+        })) as ParticipantAttachment[]
         setFiles(refactorAttachments)
       }
     },[])
@@ -111,8 +147,8 @@ export default function Attachments({ participant }: { participant: Participant 
       <div className='container bg-white mt-6 p-4 rounded-xl'>
         <p className="text-3xl font-bold text-dark-gray flex justify-center">Documentos Adjuntos</p>
         <div className='mt-6'>
-          <Table keys={['attachmentFile.file_name','attachmentFile.file_extension','attachmentFile.file_file']} data={files!} 
-                 headers={headersFiles} itemsPerPage={3} showEditColumn={true} 
+          <Table keys={['attachmentFile.file_name','attachmentFile.file_icon','attachmentFile.file_anchor']} data={files!} 
+                 headers={headersFiles} itemsPerPage={5} showEditColumn={true} 
                  deleteRowFunction={deleteFile}
                  customActions={[
                     {
