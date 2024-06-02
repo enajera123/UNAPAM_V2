@@ -67,8 +67,8 @@ model ParticipantOnCourse {
   participantId Int
   courseId      Int
   state         StateParticipantOnCourse
-  courses       Course                   @relation(fields: [courseId], references: [id])
-  participants  Participant              @relation(fields: [participantId], references: [id])
+  courses       Course                   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  participants  Participant              @relation(fields: [participantId], references: [id], onDelete: Cascade)
 
   @@id([participantId, courseId])
   @@index([courseId], map: "ParticipantOnCourse_courseId_fkey")
@@ -92,7 +92,7 @@ model ParticipantHealth {
   bloodType            String
   participantId        Int                   @unique
   participantDisseases ParticipantDissease[]
-  participant          Participant           @relation(fields: [participantId], references: [id])
+  participant          Participant           @relation(fields: [participantId], references: [id], onDelete: Cascade)
   participantMedicines ParticipantMedicine[]
 }
 
@@ -101,7 +101,7 @@ model ParticipantDissease {
   disease             String
   description         String?
   participantHealthId Int
-  participantHealth   ParticipantHealth @relation(fields: [participantHealthId], references: [id])
+  participantHealth   ParticipantHealth @relation(fields: [participantHealthId], references: [id], onDelete: Cascade)
 
   @@index([participantHealthId], map: "ParticipantDissease_participantHealthId_fkey")
 }
@@ -111,7 +111,7 @@ model ParticipantMedicine {
   medicine            String
   description         String?
   participantHealthId Int
-  participantHealth   ParticipantHealth @relation(fields: [participantHealthId], references: [id])
+  participantHealth   ParticipantHealth @relation(fields: [participantHealthId], references: [id], onDelete: Cascade)
 
   @@index([participantHealthId], map: "ParticipantMedicine_participantHealthId_fkey")
 }

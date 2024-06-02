@@ -20,6 +20,7 @@ const config: Config = {
         'red-gradient': 'linear-gradient(271.67deg, #D10202 6.79%, #AB0202 96.13%)',
         'hover-red-gradient': 'linear-gradient(271.67deg, #F70202 6.79%, #D10202 96.13%)',
         'gray-gradient': 'linear-gradient(322.04deg, #ABABAB 2.25%, #5E5D5D 50.32%)',
+        'gray-dark': 'linear-gradient(322.04deg, #5E5D5D 2.25%, #2e2a2a 30.32%)',
         'white-gradient': 'linear-gradient(271.67deg, #FFFFFF 4.02%, #ABABAB 96.13%)',
       }
     }
