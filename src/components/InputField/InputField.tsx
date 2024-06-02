@@ -5,6 +5,7 @@ import { InputFieldProps } from "./type";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 
 const InputField = ({
+  id,
   value,
   onChange,
   label,
