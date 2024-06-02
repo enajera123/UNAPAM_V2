@@ -7,7 +7,7 @@ import { useParticipantHealthStore } from '@/store/participantHealthStore';
 import { confirmationAlertPromise, errorAlert, successAlert } from '@/utils/sweetAlert';
 import { useParticipantDisseaseStore } from '@/store/participantDisseaseStore';
 import { useParticipantMedicineStore } from '@/store/participantMedicineStore';
-import { DeleteIcon } from '@/components/Icons/Icons';
+import { DeleteIcon, PlusIcon } from '@/components/Icons/Icons';
 
 
 
@@ -185,7 +185,7 @@ export default function Health({ participant }: { participant: Participant | nul
                     <button
                       type="button"
                       className="m-4 w-44 bg-green-600 text-white p-2 rounded-lg"
-                      onClick={() => push({ disease: '', description: '', participantHealth: {}, participantHealthId: 0 })}>Agregar Enfermedad</button>
+                      onClick={() => push({ disease: '', description: '', participantHealth: {}, participantHealthId: 0 })}>Agregar Enfermedad<PlusIcon /></button>
                   </div>
                 )}
               </FieldArray>
@@ -232,7 +232,7 @@ export default function Health({ participant }: { participant: Participant | nul
                     <button
                       type="button"
                       className="m-4 w-44 bg-green-600 text-white p-2 rounded-lg"
-                      onClick={() => push({ medicine: '', description: '', participantHealth: {}, participantHealthId: 0 })}>Agregar Medicina</button>
+                      onClick={() => push({ medicine: '', description: '', participantHealth: {}, participantHealthId: 0 })}>Agregar Medicina<PlusIcon /></button>
                   </div>
                 )}
               </FieldArray>
