@@ -69,7 +69,7 @@ export async function PUT(req: NextRequest) {
 
         try {
             const emailSubject = "Recuperación de contraseña";
-            const emailMessage = getPasswordResetEmail(newPassword);
+            const emailMessage = getPasswordResetEmail(newPassword, user.id);
             await sendEmail(user.email, emailSubject, emailMessage);
         } catch (error) {
             console.error("Error while sending email:", error);

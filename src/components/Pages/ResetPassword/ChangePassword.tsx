@@ -1,11 +1,10 @@
 'use client'
-import React, { use, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Button from '@/components/Button/Button';
 import InputField from '@/components/InputField/InputField';
 import logoUNAPAM from '@/resources/LogoColorful.webp';
 import Image from 'next/image';
 import { GoKey } from 'react-icons/go';
-import useAuthState from '@/store/MainStore/userLoggedStore';
 import { useUsersStore } from '@/store/usersStore';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
@@ -14,22 +13,21 @@ import { errorAlert, successAlert } from '@/utils/sweetAlert';
 
 function ChangePassword() {
 
-    const { user } = useAuthState();
     const [newPassword, setNewPassword] = useState<string>('');
     const { putUserPassword } = useUsersStore();
     const router = useRouter();
     const { setLoader } = useMainStore();
-    const [token, setToken] = useState<string | undefined>();
     const searchParams = useSearchParams();
-    useEffect(() => {
-        setToken(searchParams.get('token') as string | undefined);
-    }, [searchParams]);
 
     const handleChangePassword = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        const token = searchParams.get('token');
+        const idParam = searchParams.get('id');
+        const userId = Number(idParam);
+        if (isNaN(userId)) {
+            errorAlert("Error con el ID ingresado");
+            return;
+        }
         e.preventDefault()
-        if (user === null) return;
-        const userId = user.id;
-        if (userId === undefined) return;
         setLoader(true);
         const response = await putUserPassword(userId, token ?? '', newPassword);
         setLoader(false);
