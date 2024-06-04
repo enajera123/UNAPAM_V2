@@ -33,6 +33,10 @@ export type ParameterEmail = {
   params: { email: string };
 };
 
+export type ParameterPhoneNumber = {
+  params: { phoneNumber: string };
+};
+
 export type ParameterBloodType = {
   params: { bloodType: string };
 };

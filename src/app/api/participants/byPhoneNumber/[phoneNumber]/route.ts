@@ -1,15 +1,15 @@
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { ParameterIdentification } from "@/types/api";
+import { ParameterPhoneNumber } from "@/types/api";
 
-export async function GET(req: NextRequest, { params }: ParameterIdentification) {
+export async function GET(req: NextRequest, { params }: ParameterPhoneNumber) {
 
     try {
-        const fetchedIdentification = params.identification;
+        const phoneNumber = params.phoneNumber;
       
         const participant = await prisma.participant.findFirst({
             where: {
-                identification: fetchedIdentification,
+                phoneNumber: phoneNumber,
             },
         });
 

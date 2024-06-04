@@ -9,7 +9,8 @@ import {
   getParticipantByEmail,
   getParticipantByFirstName,
   getParticipantByIdentification,
-  getParticipantsByCourseId
+  getParticipantsByCourseId,
+  getParticipantByPhoneNumber
 } from "@/services/participantsService";
 import { Participant, ParticipantAttachment } from "@/types/prisma";
 
@@ -76,6 +77,7 @@ export const useParticipantsStore = create<ParticipantState>((set) => ({
         p.email === email ? participant : p
       ),
     }));
+    return participant
   },
 
   getParticipantByFirstName: async (firstName: string) => {
@@ -94,6 +96,17 @@ export const useParticipantsStore = create<ParticipantState>((set) => ({
         p.identification === identification ? participant : p
       ),
     }));
+    return participant
+  },
+
+  getParticipantByPhoneNumber: async (phoneNumber: string) => {
+    const participant = await getParticipantByPhoneNumber(phoneNumber);
+    set((state) => ({
+      participants: state.participants.map((p) =>
+        p.phoneNumber === phoneNumber ? participant : p
+      ),
+    }));
+    return participant
   },
 
 }));

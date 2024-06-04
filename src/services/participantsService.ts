@@ -95,3 +95,15 @@ export async function getParticipantByIdentification(identification: string) {
     return null;
   }
 }
+
+export async function getParticipantByPhoneNumber(phoneNumber: string) {
+  try {
+    const response = await axios.get(
+      `/api/participants/byPhoneNumber/${phoneNumber}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
