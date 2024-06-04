@@ -68,8 +68,9 @@ export async function PUT(req: NextRequest) {
         });
 
         try {
+            const baseUrl = req.nextUrl.clone().origin+"/changePassword";
             const emailSubject = "Recuperación de contraseña";
-            const emailMessage = getPasswordResetEmail(newPassword, user.id);
+            const emailMessage = getPasswordResetEmail(newPassword, user.id, baseUrl);
             await sendEmail(user.email, emailSubject, emailMessage);
         } catch (error) {
             console.error("Error while sending email:", error);
