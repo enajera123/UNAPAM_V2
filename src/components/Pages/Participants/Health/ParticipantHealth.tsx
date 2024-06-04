@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Formik, Field, Form, FieldArray } from 'formik';
+import { Formik, Field, Form, FieldArray, ErrorMessage } from 'formik';
 import logoUNAPAM from '@/resources/LogoWhite.webp';
 import Image from 'next/image';
 import { Participant, ParticipantHealth, crearParticipantHealth } from '@/types/prisma';
@@ -8,6 +8,7 @@ import { confirmationAlertPromise, errorAlert, successAlert } from '@/utils/swee
 import { useParticipantDisseaseStore } from '@/store/participantDisseaseStore';
 import { useParticipantMedicineStore } from '@/store/participantMedicineStore';
 import { DeleteIcon, PlusIcon } from '@/components/Icons/Icons';
+import { validationSchemeHealth } from '@/validation/YupHealth';
 
 
 
@@ -114,7 +115,7 @@ export default function Health({ participant }: { participant: Participant | nul
     }
   }
   return (
-    <Formik initialValues={initialValues} onSubmit={onSubmit} enableReinitialize>
+    <Formik initialValues={initialValues} onSubmit={onSubmit} enableReinitialize validationSchema={validationSchemeHealth}>
       {({ values }) => (
         <Form className=' flex gap-5 flex-col'>
           <div className="container mx-auto bg-gray-gradient p-10 my-4 rounded-3xl ">
@@ -133,6 +134,7 @@ export default function Health({ participant }: { participant: Participant | nul
                     </option>
                   ))}
                 </Field>
+                <ErrorMessage component={"div"} className='text-red-400 text-sm' name="bloodType" />
               </div>
               <div className="w-2/3 flex justify-end">
                 <div className="ml-auto">
@@ -163,6 +165,7 @@ export default function Health({ participant }: { participant: Participant | nul
                                     placeholder="Enfermedad"
                                     className="bg-dark-gray my-3 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 "
                                   />
+                                  <ErrorMessage component={"div"} className='text-red-400 text-sm' name={`participantDisseases.${index}.disease`} />
                                 </td>
                                 <td className='w-full'>
                                   <Field
@@ -170,6 +173,7 @@ export default function Health({ participant }: { participant: Participant | nul
                                     placeholder="Descripción"
                                     className="bg-dark-gray my-3 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 "
                                   />
+                                  <ErrorMessage component={"div"} className='text-red-400 text-sm' name={`participantDisseases.${index}.description`} />
                                 </td>
                                 <td className=' text-center'>
                                   <button
@@ -211,6 +215,7 @@ export default function Health({ participant }: { participant: Participant | nul
                                     placeholder="Enfermedad"
                                     className="bg-dark-gray my-3 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 "
                                   />
+                                  <ErrorMessage component={"div"} className='text-red-400 text-sm' name={`participantMedicines.${index}.medicine`} />
                                 </td>
                                 <td className='w-full'>
                                   <Field
@@ -218,6 +223,7 @@ export default function Health({ participant }: { participant: Participant | nul
                                     placeholder="Descripción"
                                     className="bg-dark-gray my-3 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 "
                                   />
+                                  <ErrorMessage component={"div"} className='text-red-400 text-sm' name={`participantMedicines.${index}.description`} />
                                 </td>
                                 <td className=' flex justify-center'>
                                   <button
@@ -246,6 +252,7 @@ export default function Health({ participant }: { participant: Participant | nul
                   <option value={item.value} key={index}>{item.label}</option>
                 ))}
               </Field>
+              <ErrorMessage component={"div"} className='text-red-400 text-sm' name={`contactOne.relationship`} />
             </div>
             <div className="flex items-center text-white">
               <div className="flex-initial w-1/3">
@@ -253,18 +260,21 @@ export default function Health({ participant }: { participant: Participant | nul
                 <Field
                   name="contactOne.firstName" placeholder="Nombre"
                   className="bg-dark-gray placeholder:text-white/35 border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 pl-10 pr-10" />
+              <ErrorMessage component={"div"}  className='text-red-400 text-sm' name={`contactOne.firstName`} />
               </div>
               <div className="flex-initial w-1/3 pl-5 text-white">
                 <label htmlFor="primerApellido">Primer Apellido</label>
                 <Field
                   name="contactOne.firstSurname" placeholder="Apellido"
                   className="bg-dark-gray placeholder:text-white/35 border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 pl-10 pr-10" />
+                 <ErrorMessage component={"div"}  className='text-red-400 text-sm' name={`contactOne.firstSurname`} />
               </div>
               <div className="flex-initial w-1/3 pl-5 text-white">
                 <label htmlFor="telefono">Teléfono</label>
                 <Field
                   name="contactOne.phoneNumber" placeholder="xxxx-xxxx"
                   className="bg-dark-gray placeholder:text-white/35 border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 pl-10 pr-10" />
+                <ErrorMessage component={"div"}  className='text-red-400 text-sm' name={`contactOne.phoneNumber`} />
               </div>
             </div>
             <div className="flex-initial w-1/4 text-white">
@@ -282,18 +292,21 @@ export default function Health({ participant }: { participant: Participant | nul
                 <Field
                   name="contactTwo.firstName" placeholder="Nombre"
                   className="bg-dark-gray border placeholder:text-white/35 border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 pl-10 pr-10" />
+               <ErrorMessage component={"div"}  className='text-red-400 text-sm' name={`contactTwo.firstName`} />
               </div>
               <div className="flex-initial w-1/3 pl-5 text-white">
                 <label htmlFor="primerApellido">Primer Apellido</label>
                 <Field
                   name="contactTwo.firstSurname" placeholder="Apellido"
                   className="bg-dark-gray placeholder:text-white/35 border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 pl-10 pr-10" />
+                <ErrorMessage component={"div"} className='text-red-400 text-sm' name={`contactTwo.firstSurname`} />
               </div>
               <div className="flex-initial w-1/3 pl-5 text-white">
                 <label htmlFor="telefono">Teléfono</label>
                 <Field
                   name="contactTwo.phoneNumber" placeholder="xxxx-xxxx"
                   className="bg-dark-gray placeholder:text-white/35 border border-gray-300 text-white placeholder:text-white text-sm rounded-lg block w-full p-2.5 pl-10 pr-10" />
+              <ErrorMessage component={"div"}  className='text-red-400 text-sm'  name={`contactTwo.phoneNumber`} />
               </div>
             </div>
             <div className="flex mt-10 justify-end items-end gap-5">
