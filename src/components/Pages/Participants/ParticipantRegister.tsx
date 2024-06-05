@@ -122,20 +122,35 @@ export default function ParticipantRegister({ participant }: { participant: Part
         : { mensaje: "", state: true };
   }
 
-  const validarCamposUnicos = async (campoValidar:string,value:string) => {
+  const validarCamposUnicos = async (participant:Participant,campoValidar:string,value:string) => {
     if(campoValidar==="Identificacion"){
       const result = await getParticipantByIdentification(value);
       if (result?.id) {
-        return { mensaje: "Ya exíste un participante con esta identificación", state: false };
+        if(participant?.id){
+          if(result?.id===participant?.id){
+            return {mensaje:"",state:true}
+          }
+        }
+        return { mensaje: "Ya exíste un participante con esta identificación", state: false }; 
       }
     }else if(campoValidar === "Email"){
       const result = await getParticipantByEmail(value);
       if (result?.id) {
-          return { mensaje: "Ya exíste un participante con este correo", state: false };
+        if(participant?.id){
+          if(result?.id===participant?.id){
+            return {mensaje:"",state:true}
+          }
+        }
+        return { mensaje: "Ya exíste un participante con este correo", state: false };
       }
     }else if(campoValidar == "PhoneNumber"){
       const result = await getParticipantByPhoneNumber(value);
       if (result?.id) {
+        if(participant?.id){
+          if(result?.id===participant?.id){
+            return {mensaje:"",state:true}
+          }
+        }
           return { mensaje: "Ya exíste un participante con este número telefónico", state: false };
       }
     }
@@ -148,11 +163,11 @@ export default function ParticipantRegister({ participant }: { participant: Part
     const validation = validarCampos(newParticipant)
     
     if (validation.state) {
-        const uniquesValidation = await validarCamposUnicos("Identificacion",newParticipant.identification)
+        const uniquesValidation = await validarCamposUnicos(newParticipant,"Identificacion",newParticipant.identification)
         if(uniquesValidation.state){
-          const uniquesValidation = await validarCamposUnicos("Email",newParticipant.email)
+          const uniquesValidation = await validarCamposUnicos(newParticipant,"Email",newParticipant.email)
             if(uniquesValidation.state){
-              const uniquesValidation = await validarCamposUnicos("PhoneNumber",newParticipant.phoneNumber)
+              const uniquesValidation = await validarCamposUnicos(newParticipant,"PhoneNumber",newParticipant.phoneNumber)
                 if(uniquesValidation.state){
                   const response = participant !== null ? await putParticipant(participant?.id ?? 0, newParticipant) : await postParticipant(newParticipant)
                   if (response) {
