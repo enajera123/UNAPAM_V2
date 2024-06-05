@@ -28,7 +28,7 @@ function Login() {
         if (authenticatedUser && authenticatedUser.role) {
             setUser(authenticatedUser);
             setUserLoggued(true);
-            handleLogin(authenticatedUser.identification, authenticatedUser.role.toString());
+            await handleLogin(authenticatedUser.identification, authenticatedUser.role.toString());
             if (authenticatedUser.isPasswordChanged === 's') {
                 document.cookie = "jwtUNAPAM=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                 warningAlert('Su contraseña ha sido modifcada, Por favor, cambie su contraseña');

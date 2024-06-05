@@ -12,7 +12,7 @@ export async function handleLogin(identification: string, role: string) {
       },
       body: JSON.stringify(data),
     });
-    if (role !== 'administrator') window.location.reload()
+    // if (role !== 'administrator') window.location.reload()
 
     if (!response.ok) {
       console.log('Failed to create token1');
