@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useCourseStore as useCoursesStore } from '@/hooks/Stores/CourseStore/useCourseStore'
 import { ParticipantOnCourse,Course, StateParticipantOnCourse,State } from '@/types/prisma'
 import { useParticipantOnCourseStore } from '@/store/participantOnCourseStore'
-import { confirmationAlert, enrollCoursesConfirmationAlert, errorAlert, successAlert } from '@/utils/sweetAlert';
+import { enrollCoursesConfirmationAlert, errorAlert, successAlert } from '@/utils/sweetAlert';
 import { useHandleSearch } from '@/hooks/Table/useHandleSearch'
 import SearchBar from '@/components/SearchBar/SearchBar'
 
@@ -54,30 +54,28 @@ const EnrollCourses = ({participantId,participantCourses,updateParticipantCourse
         if(list){
             setButtonCursos(list.filter((i)=>i.state!=State.Inactive).map((course)=>({
                 ...course,
-                accion:participantCourses.find((i)=>i.courseId===course.id) ?
-                    participantCourses.find((i)=>i.courseId===course.id)?.state==='Registered' ? 
+                accion:participantCourses?.find((i)=>i.courseId===course.id) ?
+                    participantCourses?.find((i)=>i.courseId===course.id)?.state==='Registered' ? 
                     botonAccion(participantId,course?.id!,true,StateParticipantOnCourse.Retired,"Retirar") : 
-                    participantCourses.find((i)=>i.courseId===course.id)?.state==='Retired' ? 
+                    participantCourses?.find((i)=>i.courseId===course.id)?.state==='Retired' ? 
                     botonAccion(participantId,course?.id!,true,StateParticipantOnCourse.Registered,"Matricular") : <span>No disponible</span> :
                     botonAccion(participantId,course?.id!,false,StateParticipantOnCourse.Registered,"Matricular"),
 
-                finalizar:participantCourses.find((i)=>i.courseId===course.id) ? 
-                participantCourses.find((i)=>i.courseId===course.id)?.state==='Finished' ? 
-                <span>No disponible</span>:participantCourses.find((i)=>i.courseId===course.id)?.state==="Registered" ? 
+                finalizar:participantCourses?.find((i)=>i.courseId===course.id) ? 
+                participantCourses?.find((i)=>i.courseId===course.id)?.state==='Finished' ? 
+                <span>No disponible</span>:participantCourses?.find((i)=>i.courseId===course.id)?.state==="Registered" ? 
                 botonAccion(participantId,course?.id!,true,StateParticipantOnCourse.Finished,"Finalizar"):null:null,
-                estado:participantCourses.find((i)=>i.courseId===course.id)?participantCourses.find((i)=>i.courseId===course.id)?.state==='Finished'?<span>Finalizado</span>:
-                participantCourses.find((i)=>i.courseId===course.id)?.state==='Retired'?<span>Retirado</span>:
-                participantCourses.find((i)=>i.courseId===course.id)?.state==='Registered'?<span>Matriculado</span>:null:null
+                estado:participantCourses?.find((i)=>i.courseId===course.id)?participantCourses?.find((i)=>i.courseId===course.id)?.state==='Finished'?<span>Finalizado</span>:
+                participantCourses?.find((i)=>i.courseId===course.id)?.state==='Retired'?<span>Retirado</span>:
+                participantCourses?.find((i)=>i.courseId===course.id)?.state==='Registered'?<span>Matriculado</span>:null:null
             })) as Course[])
         }
     }
     useEffect(() => {
-        console.log(filteredData)
         updateCourses(filteredData)
     }, [filteredData,participantCourses])
 
     useEffect(() => {
-        console.log(courses)
         updateCourses(courses)
     },[courses,participantCourses])
 

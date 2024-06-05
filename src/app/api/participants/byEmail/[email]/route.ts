@@ -7,7 +7,7 @@ export async function GET(req: NextRequest, { params }: ParameterEmail) {
     try {
         const fetchedEmail = params.email;
       
-        const Participant = await prisma.participant.findMany({
+        const Participant = await prisma.participant.findFirst({
             where: {
                 email: fetchedEmail,
             },

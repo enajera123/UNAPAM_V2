@@ -47,7 +47,7 @@ export default function ParticipantRegister({ participant }: { participant: Part
   const [expirationDateMedicalInsurance, setExpirationDateMedicalInsurance] = useState('')
   const [expirationDateMedicalReport, setExpirationDateMedicalReport] = useState('')
   const [typeIdentification, setTypeIdentification] = useState('Nacional')
-  const { postParticipant, putParticipant } = useParticipantsStore()
+  const { postParticipant, putParticipant,getParticipantByEmail,getParticipantByIdentification,getParticipantByPhoneNumber } = useParticipantsStore()
   const { image, onChangeImage, setImage } = useImageStore()
   const [photo, setPhoto] = useState<string | undefined>("");
   const [participantOnCourses, setParticipantOnCourses] = useState<ParticipantOnCourse[]>(participant?.participantsOnCourses as ParticipantOnCourse[])
@@ -99,32 +99,80 @@ export default function ParticipantRegister({ participant }: { participant: Part
     } as Participant
   }
 
-  const validarCamposMinimos = (participant: Participant) => {
-    if (participant.identification && participant.identification !== "" &&
-      participant.firstName && participant.firstName !== "" &&
-      participant.firstSurname && participant.firstSurname !== "" &&
-      participant.email && participant.email !== ""
-    ) {
-      return true
+  const validarCampo = (fieldName:string,field:string,size:number) => {
+    return  (field && field !=="")
+            ? (field.length<=size)
+              ? {mensaje:"",state:true}
+              :{mensaje:`${fieldName} sobrepasa el tamaño limite de ${size} carácteres`,state:false}
+            :{mensaje:`${fieldName} campo requerido`,state:false}
+  }
+
+  const validarCampos = (participant: Participant) => {
+    let result = validarCampo("Identificación", participant.identification, 191);
+    return !result.state ? result
+        : !(result = validarCampo("Fecha de Nacimiento", participant.birthDate, 191)).state ? result
+        : !(result = validarCampo("Teléfono", participant.phoneNumber, 191)).state ? result
+        : !(result = validarCampo("Email", participant.email, 191)).state ? result
+        : !(result = validarCampo("Primer Nombre", participant.firstName, 191)).state ? result
+        : !(result = validarCampo("Primer Apellido", participant.firstSurname, 191)).state ? result
+        : !(result = validarCampo("Segundo Apellido", participant.secondSurname, 191)).state ? result
+        : participant.hasWhatsApp === null ? { mensaje: "Tiene WhatsApp requerido", state: false }
+        : participant.typeIdentification === null ? { mensaje: "Tipo de Identificación requerido", state: false }
+        : participant.grade === null ? { mensaje: "Tipo de Identificación requerido", state: false }
+        : { mensaje: "", state: true };
+  }
+
+  const validarCamposUnicos = async (campoValidar:string,value:string) => {
+    if(campoValidar==="Identificacion"){
+      const result = await getParticipantByIdentification(value);
+      if (result?.id) {
+        return { mensaje: "Ya exíste un participante con esta identificación", state: false };
+      }
+    }else if(campoValidar === "Email"){
+      const result = await getParticipantByEmail(value);
+      if (result?.id) {
+          return { mensaje: "Ya exíste un participante con este correo", state: false };
+      }
+    }else if(campoValidar == "PhoneNumber"){
+      const result = await getParticipantByPhoneNumber(value);
+      if (result?.id) {
+          return { mensaje: "Ya exíste un participante con este número telefónico", state: false };
+      }
     }
-    return false
+    return {mensaje:"",state:true}
   }
 
   const handleSave = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     const newParticipant = createParticipantToSave()
-    if (validarCamposMinimos(newParticipant)) {
-      const response = participant !== null ? await putParticipant(participant?.id ?? 0, newParticipant) : await postParticipant(newParticipant)
-      if (response) {
-        successAlert("Participante guardado exitosamente")
-        router.push(`/admin/participantRegister/${response.id}`)
-      } else {
-        errorAlert("Error al guardar el participante")
+    const validation = validarCampos(newParticipant)
+    
+    if (validation.state) {
+        const uniquesValidation = await validarCamposUnicos("Identificacion",newParticipant.identification)
+        if(uniquesValidation.state){
+          const uniquesValidation = await validarCamposUnicos("Email",newParticipant.email)
+            if(uniquesValidation.state){
+              const uniquesValidation = await validarCamposUnicos("PhoneNumber",newParticipant.phoneNumber)
+                if(uniquesValidation.state){
+                  const response = participant !== null ? await putParticipant(participant?.id ?? 0, newParticipant) : await postParticipant(newParticipant)
+                  if (response) {
+                    successAlert("Participante guardado exitosamente")
+                    router.push(`/admin/participantRegister/${response.id}`)
+                  } else {
+                    errorAlert("Error al guardar el participante")
+                  }
+                }else{
+                  errorAlert(uniquesValidation.mensaje)
+                }
+            }else{
+              errorAlert(uniquesValidation.mensaje)
+            }
+      }else{
+        errorAlert(uniquesValidation.mensaje)
       }
-    } else {
-      errorAlert("Hay campos requeridos sin completar")
+    }else{
+      errorAlert(validation?.mensaje!)
     }
-
   }
   const onLoadFiles = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
