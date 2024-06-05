@@ -4,6 +4,7 @@ import InputField from "@/components/InputField/InputField";
 import TextArea from "@/components/TextArea/TextArea";
 import { useCourseStore } from "@/store/coursesStore";
 import { Course, State, YesOrNo } from "@/types/prisma";
+import { generateCoursePDF } from "@/utils/reports/generatePDF";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BsFillPersonCheckFill } from "react-icons/bs";
@@ -35,6 +36,9 @@ export default function CourseRegister({ course }: { course: Course | null }) {
             setNeedMedicalReport(course.needMedicalReport.toString())
         }
     }, [course])
+    const handleGenerateReport = async () => {
+        generateCoursePDF(course as Course)
+    }
     const handleSaveCourse = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         const newCourse: Course = {
@@ -60,6 +64,7 @@ export default function CourseRegister({ course }: { course: Course | null }) {
             <p className="text-xl font-bold text-light-gray">Gestión de cursos</p>
             <div className="max-w-3xl container bg-dark-gray p-5 rounded-3xl">
                 <div className="flex flex-row items-center">
+
                     <div className="flex-initial w-1/2">
                         <InputField
                             value={courseNumber}
@@ -136,9 +141,15 @@ export default function CourseRegister({ course }: { course: Course | null }) {
                         onChange={(e) => setNeedMedicalReport(e.target.checked ? "Yes" : "No")}
                         label="Requiere dictamen" />
                 </div>
-                <div className="flex flex-row items-center justify-center ">
-                    <Button onClick={handleSaveCourse} className="bg-red-gradient w-60">Guardar</Button>
-                    {/* <Button className="bg-red-gradient w-60">Eliminar</Button> */}
+                <div className="flex flex-row items-center gap-10 justify-center ">
+                    {course?.id && <Button
+                        onClick={handleGenerateReport}
+                        format
+                        className="bg-gradient-to-r py-2.5 text-sm  from-yellow-500 to-yellow-600 rounded-md transition-all hover:from-yellow-600 hover:to-yellow-700 text-white w-60"
+                    >
+                        Generar Reporte del curso
+                    </Button>}
+                    <Button onClick={handleSaveCourse} className=" w-60">Guardar</Button>
                 </div>
 
             </div>
