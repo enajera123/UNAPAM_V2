@@ -34,6 +34,7 @@ function Login() {
                 warningAlert('Su contraseña ha sido modifcada, Por favor, cambie su contraseña');
                 return;
             }
+            console.log("router");
             router.push('/admin/information');
         }
         else {
