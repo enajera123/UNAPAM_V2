@@ -49,5 +49,5 @@ export async function generateCoursePDF(course: Course) {
             body: list
         })
     }
-    doc.save('a4.pdf')
+    doc.save(`${new Date().toISOString().split('T')[0]}_reporte_de_curso.pdf`)
 }
