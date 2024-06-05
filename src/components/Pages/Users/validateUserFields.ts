@@ -28,10 +28,18 @@ export async function validateFields(
 
 export async function validateUniqueFields(field: string, value: string) {
     if (field === "identification") {
+        let message = "";
+        let state = true;
         const userWithSameIdentification = await getUserByIdentification(value);
         if (userWithSameIdentification) {
-            return { mensaje: "La identificación ingresada ya ha sido registrada anteriormente.", state: false };
+            message= "La identificación ingresada ya ha sido registrada anteriormente."
+            state= false
         }
+        if (value.length > 9 || isNaN(Number(value))) {
+            message= "La identificación ingresada no es válida."
+            state= false
+        }
+        return { mensaje: message, state: state };
     } else if (field === "email") {
         if (!value.includes("@") || !value.includes(".")) {
             return { mensaje: "El correo electrónico ingresado no es válido.", state: false };
