@@ -35,7 +35,7 @@ export async function validateUniqueFields(field: string, value: string) {
             message= "La identificación ingresada ya ha sido registrada anteriormente."
             state= false
         }
-        if (value.length > 9 || isNaN(Number(value))) {
+        if (value.length < 9 || isNaN(Number(value))) {
             message= "La identificación ingresada no es válida."
             state= false
         }
