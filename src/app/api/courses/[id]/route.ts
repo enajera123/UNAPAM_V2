@@ -46,6 +46,14 @@ export async function GET(req: NextRequest, { params }: ParameterId) {
             where: {
                 id: fetchedId,
             },
+            include:{
+                participantsOnCourses:{
+                    include:{
+                        participants:true
+                    }
+                }
+            
+            }
         });
 
         return NextResponse.json(course, { status: 200 });
