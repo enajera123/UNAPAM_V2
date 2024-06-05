@@ -13,9 +13,6 @@ export type UsersState = {
   deleteUser: (id: number) => Promise<boolean>;
   forgotPassword: (identificacion: string) => Promise<boolean>;
   authenticateUser: (identification: string, passwordFromLogin: string) => Promise<User | null>;
-  getUserByIdentification: (identification: string) => Promise<User | null>;
-  getUserByEmail: (email: string) => Promise<User | null>;
-  getUserByPhoneNumber: (phoneNumber: string) => Promise<User | null>;
 };
 
 export type ReferenceContactState = {
