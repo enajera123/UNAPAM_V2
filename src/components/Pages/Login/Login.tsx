@@ -35,7 +35,8 @@ function Login() {
                 return;
             }
             console.log("router");
-            router.push('/admin/information');
+            window.location.href = '/admin/information';
+            // router.push('/admin/information');
         }
         else {
             errorAlert('Identificación o contraseña incorrecta, intente nuevamente');
