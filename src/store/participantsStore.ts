@@ -25,7 +25,9 @@ export const useParticipantsStore = create<ParticipantState>((set) => ({
   },
   getParticipants: async () => {
     const participants = await getParticipants();
+    if (!participants) return null
     set({ participants });
+    return participants
   },
 
   getParticipantById: async (id: number) => {

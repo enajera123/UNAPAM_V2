@@ -29,7 +29,6 @@ function UserRegister({ user }: { user: User | null }) {
     const [date, setDate] = useState("");
     const { putUser, postUser } = useUsersStore()
     const router = useRouter();
-
     const optionsRol = [
         { value: "Admin", label: "Administrador" },
         { value: "User", label: "Usuario" },
@@ -44,7 +43,7 @@ function UserRegister({ user }: { user: User | null }) {
             return;
         }
         if (!user?.id || user && (user.identification !== identification || user.email !== email || user.phoneNumber !== phone)) {
-        
+
             if (user?.identification !== identification) {
                 const uniqueFieldValidation = await validateUniqueFields('identification', identification);
                 if (!uniqueFieldValidation?.state && uniqueFieldValidation?.mensaje) {
@@ -52,7 +51,7 @@ function UserRegister({ user }: { user: User | null }) {
                     return;
                 }
             }
-        
+
             if (user?.email !== email) {
                 const uniqueFieldValidation = await validateUniqueFields('email', email);
                 if (!uniqueFieldValidation?.state && uniqueFieldValidation?.mensaje) {
@@ -60,7 +59,7 @@ function UserRegister({ user }: { user: User | null }) {
                     return;
                 }
             }
-        
+
             if (user?.phoneNumber !== phone) {
                 const uniqueFieldValidation = await validateUniqueFields('phoneNumber', phone);
                 if (!uniqueFieldValidation?.state && uniqueFieldValidation?.mensaje) {
@@ -78,7 +77,7 @@ function UserRegister({ user }: { user: User | null }) {
             phoneNumber: phone,
             email,
             password,
-            isPasswordChanged: "n",
+            isPasswordChanged: 'n',
             birthDate: date,
             state: "Active" as unknown as State
         }
@@ -172,13 +171,13 @@ function UserRegister({ user }: { user: User | null }) {
                             label="Email"
                             placeholder="Email"
                             iconStart={<MdOutlineEmail color="white" />} />
-                        <InputField
+                        {user === null && <InputField
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             label="Contraseña"
                             placeholder="Contraseña"
                             type="password"
-                            iconStart={<GoKey color="white" />} />
+                            iconStart={<GoKey color="white" />} />}
                     </div>
                     <Button onClick={(e) => handleSaveUser(e)} className="bg-red-gradient">Registrar</Button>
                 </div>

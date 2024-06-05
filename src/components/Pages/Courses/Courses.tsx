@@ -10,11 +10,10 @@ import Button from '@/components/Button/Button';
 import { Course, State } from '@/types/prisma';
 import { useRouter } from 'next/navigation';
 import { useCourseStore as useCoursesStore } from '@/hooks/Stores/CourseStore/useCourseStore'
-import { deleteCourse } from '@/services/coursesService';
 
 function Courses() {
     const [searchTerm, setSearchTerm] = useState("");
-    const { putCourse } = useCourseStore()
+    const { putCourse, deleteCourse } = useCourseStore()
     const { courses } = useCoursesStore()
     const [filteredData, setFilteredData] = useState<Course[]>(courses);
     const [randomNumber, setRandomNumber] = useState<number>(0);

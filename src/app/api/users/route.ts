@@ -1,7 +1,6 @@
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from 'bcrypt';
-import { upload_image } from "@/firebase/fileMethod";
 export async function GET(req: NextRequest, res: NextResponse) {
     try {
         const users = await prisma.user.findMany({});
@@ -18,7 +17,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 export async function POST(req: NextRequest, res: NextResponse) {
     try {
         const user = await req.json();
-        const existingUser = await prisma.user.findFirst({
+        const existingUser = await prisma.user.findUnique({
             where: {
                 email: user.email
             }

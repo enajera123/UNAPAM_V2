@@ -22,6 +22,7 @@ export async function POST(req: NextRequest, _res: NextResponse) {
 
         const response = new NextResponse("Login succesfully", { status: 201 });
         response.headers.set("Set-Cookie", serializedToken);
+        console.log(serializedToken)
         return response;
 
     } catch (error) {

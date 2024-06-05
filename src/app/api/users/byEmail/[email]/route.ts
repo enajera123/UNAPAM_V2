@@ -6,12 +6,11 @@ export async function GET(req: NextRequest, { params }: ParameterEmail) {
     try {
         const fetchedEmail = params.email;
 
-        const user = await prisma.user.findFirst({
+        const user = await prisma.user.findUnique({
             where: {
                 email: fetchedEmail
             }
         });
-
         if (!user) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }

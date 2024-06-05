@@ -11,26 +11,27 @@ import { useUsersStore } from '@/store/usersStore'
 import { useRouter } from 'next/navigation';
 import { User } from '@/types/prisma';
 import useAuthState from '@/store/MainStore/userLoggedStore';
-import { errorAlert } from '@/utils/sweetAlert';
+import { errorAlert, warningAlert } from '@/utils/sweetAlert';
 import { handleLogin } from '@/hooks/Auth/useAuth';
 
 function Login() {
 
     const [identificacion, setIdentificacion] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const { authenticateUser } = useUsersStore();
+    const { authenticateUser, forgotPassword } = useUsersStore();
     const { setUser, setUserLoggued } = useAuthState();
     const router = useRouter();
 
     const handleSave = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        const authenticatedUser:User|null = await authenticateUser(identificacion, password);
+        const authenticatedUser: User | null = await authenticateUser(identificacion, password);
         if (authenticatedUser && authenticatedUser.role) {
             setUser(authenticatedUser);
             setUserLoggued(true);
             handleLogin(authenticatedUser.identification, authenticatedUser.role.toString());
-            if(authenticatedUser.isPasswordChanged === 's') {
-                router.push('/changePassword');
+            if (authenticatedUser.isPasswordChanged === 's') {
+                document.cookie = "jwtUNAPAM=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                warningAlert('Su contraseña ha sido modifcada, Por favor, cambie su contraseña');
                 return;
             }
             router.push('/admin/information');
@@ -54,16 +55,16 @@ function Login() {
                         <InputField
                             label="Identificación"
                             placeholder="Identificación"
-                            iconStart={<HiOutlineIdentification color="white" />} 
-                            onChange={(e) => {setIdentificacion(e.target.value)}}
-                            />
+                            iconStart={<HiOutlineIdentification color="white" />}
+                            onChange={(e) => { setIdentificacion(e.target.value) }}
+                        />
                         <InputField
                             label="Contraseña"
                             placeholder="Contraseña"
                             type="password"
-                            iconStart={<GoKey color="white" />} 
-                            onChange={(e) => {setPassword(e.target.value)}}
-                            />
+                            iconStart={<GoKey color="white" />}
+                            onChange={(e) => { setPassword(e.target.value) }}
+                        />
                         <Link href="/forgotPassword">
                             <div className="text-white text-lg text-right">¿Recuperar contraseña?</div>
                         </Link>

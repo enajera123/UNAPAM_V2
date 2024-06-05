@@ -13,8 +13,9 @@ export function useHandleSearch<T>({ setFilterData, searchTerm, setRandomNumber 
         });
     };
     function handleSearch(data: T[]) {
+        console.log(data);
         const filtered = data.filter((item) => recursiveSearch(item as Record<string, unknown>, searchTerm));
-        console.log(filtered)
+        console.log('filtered',filtered)
         setFilterData(filtered);
         setRandomNumber(generateRandomNumber())
     }

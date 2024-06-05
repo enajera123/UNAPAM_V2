@@ -29,11 +29,27 @@ export const confirmationAlertPromise = (confirmedFunction: () => Promise<void>)
         await confirmedFunction();
     }
 })
+export const warningAlert = (message: string) => Swal.mixin({
+    icon: 'warning',
+    position: 'top-end',
+    showConfirmButton: false,
+    showCloseButton: true,
+    timer: 3000,
+    timerProgressBar: true,
+    title: 'Éxito',
+    text: message,
+    toast: true,
+    didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+}).fire()
 export const successAlert = (message: string) => Swal.mixin({
     icon: 'success',
     position: 'top-end',
     showConfirmButton: false,
-    timer: 3000,
+    showCloseButton: true,
+    timer: 2000,
     timerProgressBar: true,
     title: 'Éxito',
     text: message,

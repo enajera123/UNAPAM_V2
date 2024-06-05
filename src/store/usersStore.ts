@@ -94,6 +94,11 @@ export const useUsersStore = create<UsersState>((set) => ({
     const response = await forgotPassword(identification);
     if (!response) return false;
     return true;
-  }
+  },
+  logout: () => {
+    set({ users: [] });
+    document.cookie = "jwtUNAPAM=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.href = "/";
+  },
 
 }));

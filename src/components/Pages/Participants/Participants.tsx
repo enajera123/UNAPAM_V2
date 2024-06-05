@@ -2,6 +2,7 @@
 import Button from "@/components/Button/Button";
 import SearchBar from "@/components/SearchBar/SearchBar";
 import Table from "@/components/Table/Table";
+import { useParticipantStore } from "@/hooks/Stores/ParticipantStore/useParticipantStore";
 import { useHandleSearch } from "@/hooks/Table/useHandleSearch";
 import { useParticipantsStore } from "@/store/participantsStore";
 import { Participant } from "@/types/prisma";
@@ -14,14 +15,15 @@ function Participants({ participants, courseId }: { participants: Participant[] 
     const [searchTerm, setSearchTerm] = useState("");
     const [filteredData, setFilteredData] = useState<Participant[]>([]);
     const [randomNumber, setRandomNumber] = useState<number>(0);
-    const { getParticipants, deleteParticipant, participants: participantStore } = useParticipantsStore()
+    const {participants: participantStore} = useParticipantStore()
+    const {  deleteParticipant } = useParticipantsStore()
     const { handleSearch } = useHandleSearch({ setFilterData: setFilteredData, searchTerm, setRandomNumber })
     const participantWithCourse = participants?.map((participant) => ({ ...participant, course: participant.participantsOnCourses?.find(course => course.courseId === courseId) })) ?? []
     const router = useRouter()
-    useEffect(() => {
-        if (!participants)
-            getParticipants()
-    }, [])
+    // useEffect(() => {
+    //     if (!participants)
+    //         getParticipants()
+    // }, [])
     useEffect(() => {
         setFilteredData(participants !== null ? participantWithCourse : participantStore)
     }, [participantStore, participants])
@@ -35,7 +37,7 @@ function Participants({ participants, courseId }: { participants: Participant[] 
                 <SearchBar
                     searchTerm={searchTerm}
                     setSearchTerm={setSearchTerm}
-                    handleSearch={() => handleSearch(participantWithCourse || participantStore)}
+                    handleSearch={() => handleSearch(participants !== null ? participantWithCourse : participantStore)}
                     showSelect={false}
                 />
                 <Link href={'/admin/participantRegister'}><Button className="bg-red-gradient">Crear Participante</Button></Link>

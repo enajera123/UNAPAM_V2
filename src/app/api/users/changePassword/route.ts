@@ -57,7 +57,7 @@ export async function PUT(req: NextRequest) {
 
         const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-        const updatedUser = await prisma.user.updateMany({
+        const updatedUser = await prisma.user.update({
             where: {
                 identification: fetchedIdentification
             },
@@ -68,7 +68,7 @@ export async function PUT(req: NextRequest) {
         });
 
         try {
-            const baseUrl = req.nextUrl.clone().origin+"/changePassword";
+            const baseUrl = req.nextUrl.clone().origin + "/changePassword";
             const emailSubject = "Recuperación de contraseña";
             const emailMessage = getPasswordResetEmail(newPassword, user.id, baseUrl);
             await sendEmail(user.email, emailSubject, emailMessage);

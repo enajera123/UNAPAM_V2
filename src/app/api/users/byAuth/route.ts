@@ -7,12 +7,11 @@ export async function POST(req: NextRequest,res: NextResponse) {
                 
         const {identification, passwordFromLogin} = await req.json();
 
-        const existingUser = await prisma.user.findFirst({
+        const existingUser = await prisma.user.findUnique({
             where: {
                 identification: identification
             },
         });
-
         if (!existingUser) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
@@ -27,7 +26,6 @@ export async function POST(req: NextRequest,res: NextResponse) {
         }
         return NextResponse.json(userDatas, { status: 200 });
     } catch (error) {
-        
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
