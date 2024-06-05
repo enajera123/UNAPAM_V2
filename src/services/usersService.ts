@@ -90,3 +90,33 @@ export async function forgotPassword(identificacion: string) {
     return null;
   }
 }
+
+export async function getUserByPhoneNumber(phoneNumber: string) {
+  try {
+    const response = await axios.get(`/api/users/byPhoneNumber/${phoneNumber}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+export async function getUserByIdentification(identification: string) {
+  try {
+    const response = await axios.get(`/api/users/byIdentification/${identification}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+export async function getUserByEmail(email: string) {
+  try {
+    const response = await axios.get(`/api/users/byEmail/${email}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}

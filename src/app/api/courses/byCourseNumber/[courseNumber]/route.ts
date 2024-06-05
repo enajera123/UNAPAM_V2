@@ -6,7 +6,7 @@ export async function GET(req: NextRequest, { params }: ParameterCourseNumber) {
   try {
     const fetchedCourseNumber = params.courseNumber;
 
-    const course = await prisma.course.findMany({
+    const course = await prisma.course.findUnique({
       where: {
         courseNumber: fetchedCourseNumber,
       },
