@@ -9,6 +9,9 @@ import { useEffect, useState } from "react";
 import { BsFillPersonCheckFill } from "react-icons/bs";
 import { FaHashtag, FaRegCalendarAlt, FaUsers } from "react-icons/fa";
 import { IoNewspaperOutline } from "react-icons/io5";
+import { validateFields, validateUniqueFields } from "./validateCourseFields";
+import { errorAlert } from "@/utils/sweetAlert";
+import { useMainStore } from "@/store/MainStore/mainStore";
 
 export default function CourseRegister({ course }: { course: Course | null }) {
     const [courseNumber, setCourseNumber] = useState("");
@@ -22,6 +25,7 @@ export default function CourseRegister({ course }: { course: Course | null }) {
     const [needMedicalReport, setNeedMedicalReport] = useState("No");
     const { postCourse, putCourse } = useCourseStore()
     const router = useRouter()
+    const { setLoader } = useMainStore()
     useEffect(() => {
         if (course) {
             setCourseNumber(course.courseNumber)
@@ -37,6 +41,19 @@ export default function CourseRegister({ course }: { course: Course | null }) {
     }, [course])
     const handleSaveCourse = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
+        const errors = await validateFields(initialDate, finalDate, location, description, courseNumber, name, quota, teacher)
+        if (Object.values(errors).some(error => error)) {
+            const firstError = Object.values(errors).find(Boolean);
+            errorAlert(firstError ?? "Por favor, complete todos los campos correctamente");
+            return;
+        }
+        if (!course?.id || (course && course.courseNumber !== courseNumber)) {
+            const uniqueFieldValidation = await validateUniqueFields(courseNumber);
+            if (!uniqueFieldValidation?.state && uniqueFieldValidation?.mensaje) {
+                errorAlert(uniqueFieldValidation.mensaje)
+                return;
+            }
+        }
         const newCourse: Course = {
             state: "Active" as unknown as State,
             courseNumber,
@@ -49,9 +66,13 @@ export default function CourseRegister({ course }: { course: Course | null }) {
             description,
             needMedicalReport: needMedicalReport as unknown as YesOrNo
         }
+        setLoader(true)
         const response = course !== null ? await putCourse(course?.id ?? 0, newCourse) : await postCourse(newCourse)
+        setLoader(false)
         if (response) {
             router.push('/admin/courses')
+        } else {
+            errorAlert("Error al guardar el curso")
         }
     }
 
@@ -138,7 +159,6 @@ export default function CourseRegister({ course }: { course: Course | null }) {
                 </div>
                 <div className="flex flex-row items-center justify-center ">
                     <Button onClick={handleSaveCourse} className="bg-red-gradient w-60">Guardar</Button>
-                    {/* <Button className="bg-red-gradient w-60">Eliminar</Button> */}
                 </div>
 
             </div>

@@ -13,6 +13,9 @@ import { useEffect, useState } from "react";
 import { useUsersStore } from "@/store/usersStore";
 import { useRouter } from "next/navigation";
 import { Role, State, User } from "@/types/prisma";
+import { validateFields, validateUniqueFields } from "./validateUserFields";
+import { errorAlert } from "@/utils/sweetAlert";
+import { useMainStore } from "@/store/MainStore/mainStore";
 
 function UserRegister({ user }: { user: User | null }) {
     const [rol, setRol] = useState("User");
@@ -33,6 +36,39 @@ function UserRegister({ user }: { user: User | null }) {
     ];
     const handleSaveUser = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
+        const isEditing = !!user?.id;
+        const errors = await validateFields(rol, identification, name, firstSurname, secondSurname, phone, email, password, date, isEditing)
+        if (Object.values(errors).some(error => error)) {
+            const firstError = Object.values(errors).find(Boolean);
+            errorAlert(firstError ?? "Por favor, complete todos los campos correctamente");
+            return;
+        }
+        if (!user?.id || user && (user.identification !== identification || user.email !== email || user.phoneNumber !== phone)) {
+        
+            if (user?.identification !== identification) {
+                const uniqueFieldValidation = await validateUniqueFields('identification', identification);
+                if (!uniqueFieldValidation?.state && uniqueFieldValidation?.mensaje) {
+                    errorAlert(uniqueFieldValidation.mensaje)
+                    return;
+                }
+            }
+        
+            if (user?.email !== email) {
+                const uniqueFieldValidation = await validateUniqueFields('email', email);
+                if (!uniqueFieldValidation?.state && uniqueFieldValidation?.mensaje) {
+                    errorAlert(uniqueFieldValidation.mensaje)
+                    return;
+                }
+            }
+        
+            if (user?.phoneNumber !== phone) {
+                const uniqueFieldValidation = await validateUniqueFields('phoneNumber', phone);
+                if (!uniqueFieldValidation?.state && uniqueFieldValidation?.mensaje) {
+                    errorAlert(uniqueFieldValidation.mensaje)
+                    return;
+                }
+            }
+        }
         const newUser = {
             role: rol as unknown as Role,
             identification,

@@ -64,6 +64,7 @@ export const useCourseStore = create<CoursesState>((set) => ({
                 c.courseNumber === courseNumber ? course : c
             ),
         }));
+        return course;
     },
 
     getCourseByName: async (name: string) => {
