@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import { User } from '@/types/prisma';
 import useAuthState from '@/store/MainStore/userLoggedStore';
 import { errorAlert } from '@/utils/sweetAlert';
+import { handleLogin } from '@/hooks/Auth/useAuth';
 
 function Login() {
 
@@ -24,9 +25,10 @@ function Login() {
     const handleSave = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         const authenticatedUser:User|null = await authenticateUser(identificacion, password);
-        if (authenticatedUser) {
+        if (authenticatedUser && authenticatedUser.role) {
             setUser(authenticatedUser);
             setUserLoggued(true);
+            handleLogin(authenticatedUser.identification, authenticatedUser.role.toString());
             if(authenticatedUser.isPasswordChanged === 's') {
                 router.push('/changePassword');
                 return;
