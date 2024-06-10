@@ -99,7 +99,7 @@ model ParticipantHealth {
 model ParticipantDissease {
   id                  Int               @id @default(autoincrement())
   disease             String
-  description         String?
+  description         String?           @db.Text
   participantHealthId Int
   participantHealth   ParticipantHealth @relation(fields: [participantHealthId], references: [id], onDelete: Cascade)
 
@@ -109,7 +109,7 @@ model ParticipantDissease {
 model ParticipantMedicine {
   id                  Int               @id @default(autoincrement())
   medicine            String
-  description         String?
+  description         String?           @db.Text
   participantHealthId Int
   participantHealth   ParticipantHealth @relation(fields: [participantHealthId], references: [id], onDelete: Cascade)
 
@@ -125,7 +125,7 @@ model Course {
   location              String?
   professor             String
   quota                 Int
-  description           String?
+  description           String?               @db.Text
   state                 State                 @default(Active)
   needMedicalReport     YesOrNo
   participantsOnCourses ParticipantOnCourse[]
