@@ -9,7 +9,7 @@ type Item = {
   [key: string]: any;
 };
 
-const Table = ({ keys, desactivateRowFunction, doubleClickRowFunction, data, headers, itemsPerPage, resetPagination, customActions, showEditColumn = false, deleteRowFunction,attachment }: TableProps) => {
+const Table = ({ keys, desactivateRowFunction, doubleClickRowFunction, data, headers, itemsPerPage, resetPagination, customActions, showEditColumn = false, deleteRowFunction, attachment }: TableProps) => {
 
   const currentPageClass = 'flex items-center justify-center px-3 h-8 leading-tight text-medium-red bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-white dark:border-gray-700 dark:text-medium-red dark:hover:bg-gray-700 dark:hover:text-white cursor-pointer'
 
@@ -47,7 +47,7 @@ const Table = ({ keys, desactivateRowFunction, doubleClickRowFunction, data, hea
     }
     return (
       <td key={key} className="px-6 py-4">
-        {(key==='attachmentFile.file_file' && !item.id)?"":value}
+        {(key === 'attachmentFile.file_file' && !item.id) ? "" : value === 'Active' ? "Activo" : value === 'Inactive' ? "Inactivo" : value}
       </td>
     );
   }
@@ -71,7 +71,7 @@ const Table = ({ keys, desactivateRowFunction, doubleClickRowFunction, data, hea
                     {header}
                   </th>
                 ))}
-                {showEditColumn && <th scope="col" className="px-6 py-3">Actions</th>}
+                {showEditColumn && <th scope="col" className="px-6 py-3">Acciones</th>}
               </tr>
             </thead>
             <tbody>
@@ -86,20 +86,20 @@ const Table = ({ keys, desactivateRowFunction, doubleClickRowFunction, data, hea
                     <td className="px-6 py-4">
                       <div className="flex gap-2 justify-center">
                         {deleteRowFunction && <Button
-                          onClick={() => confirmationAlert(() => deleteRowFunction(attachment?index:item.id))}
+                          onClick={() => confirmationAlert(() => deleteRowFunction(attachment ? index : item.id))}
                           format className="bg-red-500 rounded-xl px-3 py-1 border border-red-400 shadow-md hover:bg-red-400 text-white">Eliminar</Button>}
                         {desactivateRowFunction && <Button
                           onClick={() => desactivateRowFunction(item.id)}
                           format className="bg-white rounded-xl px-3 py-1 border border-gray-400 shadow-md hover:bg-gray-300 hover:text-gray-800">{`${item.state === "Active" ? "Desactivar" : "Activar"}`}</Button>}
                         {customActions?.map((action, actionIndex) => (
-                          (attachment && item.id)?
-                          null
-                          :
-                          <Button
-                            key={actionIndex}
-                            onClick={() => action.onClick(attachment?index+((currentPage-1)*itemsPerPage):item.id)}
-                            format className={` rounded-xl px-3 py-1 border  shadow-md ${attachment?"bg-green-500 border-none text-white hover:bg-green-400":"hover:bg-gray-300 hover:text-gray-800 border-gray-400 bg-white"} `}>{action.children}
-                          </Button>
+                          (attachment && item.id) ?
+                            null
+                            :
+                            <Button
+                              key={actionIndex}
+                              onClick={() => action.onClick(attachment ? index + ((currentPage - 1) * itemsPerPage) : item.id)}
+                              format className={` rounded-xl px-3 py-1 border  shadow-md ${attachment ? "bg-green-500 border-none text-white hover:bg-green-400" : "hover:bg-gray-300 hover:text-gray-800 border-gray-400 bg-white"} `}>{action.children}
+                            </Button>
                         ))
                         }
                       </div>
