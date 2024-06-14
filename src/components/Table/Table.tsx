@@ -85,12 +85,7 @@ const Table = ({ keys, desactivateRowFunction, doubleClickRowFunction, data, hea
                   {showEditColumn && (
                     <td className="px-6 py-4">
                       <div className="flex gap-2 justify-center">
-                        {deleteRowFunction && <Button
-                          onClick={() => confirmationAlert(() => deleteRowFunction(attachment ? index : item.id))}
-                          format className="bg-red-500 rounded-xl px-3 py-1 border border-red-400 shadow-md hover:bg-red-400 text-white">Eliminar</Button>}
-                        {desactivateRowFunction && <Button
-                          onClick={() => desactivateRowFunction(item.id)}
-                          format className="bg-white rounded-xl px-3 py-1 border border-gray-400 shadow-md hover:bg-gray-300 hover:text-gray-800">{`${item.state === "Active" ? "Desactivar" : "Activar"}`}</Button>}
+
                         {customActions?.map((action, actionIndex) => (
                           (attachment && item.id) ?
                             null
@@ -102,6 +97,13 @@ const Table = ({ keys, desactivateRowFunction, doubleClickRowFunction, data, hea
                             </Button>
                         ))
                         }
+                        {desactivateRowFunction && <Button
+                          onClick={() => desactivateRowFunction(item.id)}
+                          format className="bg-white rounded-xl px-3 py-1 border border-gray-400 shadow-md hover:bg-gray-300 hover:text-gray-800">{`${item.state === "Active" ? "Desactivar" : "Activar"}`}</Button>}
+                        {deleteRowFunction && <Button
+                          onClick={() => confirmationAlert(() => deleteRowFunction(attachment ? index : item.id))}
+                          format className="bg-red-500 rounded-xl px-3 py-1 border border-red-400 shadow-md hover:bg-red-400 text-white">Eliminar</Button>}
+
                       </div>
                     </td>
                   )}

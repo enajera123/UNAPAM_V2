@@ -31,26 +31,30 @@ function Courses() {
         router.push(`/admin/participants/${courseId}`)
     }
     return (
-        <div className="mx-5 bg-gray-gradient flex flex-col justify-center items-center h-auto p-10 my-6 rounded-2xl">
-            <h1 className="text-white font-bold text-2xl mb-4 mt-0">
-                Cursos
-            </h1>
-            <div className="w-full gap-3 mb-3 flex justify-between items-center">
-                <SearchBar
-                    searchTerm={searchTerm}
-                    setSearchTerm={setSearchTerm}
-                    handleSearch={() => handleSearch(courses)}
-                    showSelect={false}
-                />
-                <Link href={'/admin/courseRegister'}><Button className="bg-red-gradient">Crear Curso</Button></Link>
-            </div>
-            {filteredData.length > 0 ? (
-                <div>
+        <div className="bg-gray-gradient w-11/12 mx-auto rounded-2xl">
+            <div className='m-5 p-5'>
+                <h1 className="text-white font-bold text-2xl mb-4 mt-0">
+                    Cursos
+                </h1>
+                <div className="w-full gap-3 mb-3 flex justify-between items-center">
+                    <SearchBar
+                        searchTerm={searchTerm}
+                        setSearchTerm={setSearchTerm}
+                        handleSearch={() => handleSearch(courses)}
+                        showSelect={false}
+                    />
+                    <Link href={'/admin/courseRegister'}><Button className="bg-red-gradient">Crear Curso</Button></Link>
+                </div>
+                {filteredData.length > 0 ? (
                     <Table
                         customActions={[
                             {
                                 children: <p>Ver Participantes</p>,
                                 onClick: seeParticipants
+                            },
+                            {
+                                children: 'Editar',
+                                onClick: (id) => router.push(`/admin/courseRegister/${id}`)
                             }
                         ]}
                         deleteRowFunction={deleteCourse}
@@ -63,10 +67,10 @@ function Courses() {
                         itemsPerPage={6}
                         resetPagination={randomNumber}
                     />
-                </div>
-            ) : (
-                <p>No se encontraron resultados</p>
-            )}
+                ) : (
+                    <p>No se encontraron resultados</p>
+                )}
+            </div>
         </div>
     );
 }

@@ -25,32 +25,42 @@ const Users: React.FC = () => {
     }
 
     return (
-        <div className="text-center">
-            <h1 className="text-white font-bold text-2xl mb-4 mt-0">Usuarios</h1>
-            <div className="w-full gap-3 mb-3 flex justify-between items-center">
-                <SearchBar
-                    searchTerm={searchTerm}
-                    setSearchTerm={setSearchTerm}
-                    handleSearch={() => handleSearch(users)}
-                    showSelect={false}
-                />
-                <Link href={'/admin/userRegister'}><Button className="bg-red-gradient">Crear Usuario</Button></Link>
+        <div className=" w-11/12 bg-gray-gradient mx-auto rounded-2xl">
+            <div className='m-5 p-5'>
+                <h1 className="text-white font-bold text-2xl mb-4 mt-0">
+                    Usuarios
+                </h1>
+                <div className="w-full gap-3 mb-3 flex justify-between items-center">
+                    <SearchBar
+                        searchTerm={searchTerm}
+                        setSearchTerm={setSearchTerm}
+                        handleSearch={() => handleSearch(users)}
+                        showSelect={false}
+                    />
+                    <Link href={'/admin/userRegister'}><Button className="bg-red-gradient">Crear Usuario</Button></Link>
+                </div>
+                {filteredData.length > 0 ? (
+                    <Table
+                        desactivateRowFunction={desactivateRowFunction}
+                        deleteRowFunction={deleteUser}
+                        doubleClickRowFunction={(id) => router.push('/admin/userRegister/' + id)}
+                        keys={["identification", "firstName", "firstSurname", "secondSurname", 'state']}
+                        data={filteredData}
+                        headers={["Identificación", "Nombre", "Primer Apellido", "Segundo Apellido", 'Estado',]}
+                        itemsPerPage={6}
+                        resetPagination={randomNumber}
+                        showEditColumn={true}
+                        customActions={[
+                            {
+                                children: 'Editar',
+                                onClick: (id) => router.push(`/admin/userRegister/${id}`)
+                            }
+                        ]}
+                    />
+                ) : (
+                    <p>No se encontraron resultados</p>
+                )}
             </div>
-            {filteredData.length > 0 ? (
-                <Table
-                    desactivateRowFunction={desactivateRowFunction}
-                    deleteRowFunction={deleteUser}
-                    doubleClickRowFunction={(id) => router.push('/admin/userRegister/' + id)}
-                    keys={["identification", "firstName", "firstSurname", "secondSurname", 'state']}
-                    data={filteredData}
-                    headers={["Identificación", "Nombre", "Primer Apellido", "Segundo Apellido", 'Estado',]}
-                    itemsPerPage={6}
-                    resetPagination={randomNumber}
-                    showEditColumn={true}
-                />
-            ) : (
-                <p>No se encontraron resultados</p>
-            )}
         </div>
     );
 }
