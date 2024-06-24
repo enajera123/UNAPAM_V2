@@ -24,7 +24,7 @@ export async function middleware(request: NextRequest) {
         return NextResponse.next()
     }
     if (unprotectedPaths.some(pathIn)) {return NextResponse.next()}
-    // if (publicPaths.some(pathIn)) return verifyAndRedirect()
+    // if (publicPaths.some(pathIn)) return verifyAndRedirect()s
     if (adminClientPaths.some(pathIn)) return verifyAndRedirect(true)
     if (url.pathname.startsWith('/api') /*&& !publicPaths.some(pathIn)*/    ) return verifyAndRedirect(true)
 
