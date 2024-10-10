@@ -1,34 +1,10 @@
 import prisma from "@/lib/prisma";
-import nodemailer from "nodemailer";
 import bcrypt from 'bcrypt';
 import { publicIpv4 } from "public-ip";
 import { getPasswordResetEmail } from "./htmlTemplate";
 import { NextRequest, NextResponse } from "next/server";
+import { sendEmail } from "@/utils/email";
 
-async function sendEmail(email: string, subject: string, message: string) {
-    const transporter = nodemailer.createTransport({
-        service: "gmail",
-        host: "smtp.gmail.com",
-        port: 587,
-        secure: false,
-        auth: {
-            user: process.env.GMAIL_USER,
-            pass: process.env.GMAIL_PASS,
-        },
-    });
-
-    const mailOptions = {
-        from: {
-            name: "UNAPAM",
-            address: "unasrbpam@gmail.com",
-        },
-        to: email,
-        subject: subject,
-        html: message,
-    };
-
-    return transporter.sendMail(mailOptions);
-}
 
 function generatePassword(length = 10) {
     const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
