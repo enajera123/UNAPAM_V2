@@ -9,6 +9,7 @@ import { Participant } from "@/types/prisma";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import ParticipantTable from "./ParticipantTable";
 
 
 function Participants({ courseId }: { courseId: number }) {
@@ -16,11 +17,9 @@ function Participants({ courseId }: { courseId: number }) {
     const [filteredData, setFilteredData] = useState<Participant[]>([]);
     const [randomNumber, setRandomNumber] = useState<number>(0);
     const { participants } = useParticipantStore()
-    const { deleteParticipant } = useParticipantsStore()
     const { handleSearch } = useHandleSearch({ setFilterData: setFilteredData, searchTerm, setRandomNumber })
-    const router = useRouter()
     useEffect(() => {
-        setFilteredData(courseId!==0?participants.filter((participant)=>participant.participantsOnCourses?.find(course => course.courseId == courseId)):participants)
+        setFilteredData(courseId !== 0 ? participants.filter((participant) => participant.participantsOnCourses?.find(course => course.courseId == courseId)) : participants)
     }, [participants])
 
     return (
@@ -40,25 +39,9 @@ function Participants({ courseId }: { courseId: number }) {
                 </div>
                 <div >
                     {filteredData?.length > 0 ? (
-                        <Table
-                            deleteRowFunction={deleteParticipant}
-                            doubleClickRowFunction={(id) => router.push(`/admin/participantRegister/${id}`)}
-                            showEditColumn={true}
-                            keys={['identification', 'firstName', 'firstSurname', 'secondSurname', 'expirationDateMedicalInsurance', 'expirationDateMedicalReport']}
-                            data={filteredData}
-                            headers={["Identificación", "Nombre", "Primer Apellido", "Segundo Apellido", "Vencimiento de Poliza", "Vencimiento de Dictamen"]}
-                            itemsPerPage={6}
-                            resetPagination={randomNumber}
-                            customActions={[
-                                {
-                                    children: 'Editar',
-                                    onClick: (id) => router.push(`/admin/participantRegister/${id}`)
-                                }
-                            ]
-                            }
-                        />
+                        <ParticipantTable filteredData={filteredData} />
                     ) : (
-                        <p>No se encontraron resultados</p>
+                        <p className='text-white'>No se encontraron resultados</p>
                     )}
                 </div>
             </div>

@@ -58,7 +58,7 @@ const Users: React.FC = () => {
                         ]}
                     />
                 ) : (
-                    <p>No se encontraron resultados</p>
+                    <p className='text-white'>No se encontraron resultados</p>
                 )}
             </div>
         </div>

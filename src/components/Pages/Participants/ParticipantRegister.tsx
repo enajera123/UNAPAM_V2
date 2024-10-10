@@ -2,7 +2,7 @@
 import Button from "@/components/Button/Button";
 import InputField from "@/components/InputField/InputField";
 import Select from "@/components/Select/Select";
-import { FaRegCalendarAlt } from "react-icons/fa";
+import { FaArrowLeft, FaRegCalendarAlt } from "react-icons/fa";
 import { HiOutlineIdentification } from "react-icons/hi";
 import { GoPerson } from 'react-icons/go';
 import { FiPhoneCall } from 'react-icons/fi';
@@ -47,7 +47,7 @@ export default function ParticipantRegister({ participant }: { participant: Part
   const [expirationDateMedicalInsurance, setExpirationDateMedicalInsurance] = useState('')
   const [expirationDateMedicalReport, setExpirationDateMedicalReport] = useState('')
   const [typeIdentification, setTypeIdentification] = useState('Nacional')
-  const { postParticipant, putParticipant,getParticipantByEmail,getParticipantByIdentification,getParticipantByPhoneNumber } = useParticipantsStore()
+  const { postParticipant, putParticipant, getParticipantByEmail, getParticipantByIdentification, getParticipantByPhoneNumber } = useParticipantsStore()
   const { image, onChangeImage, setImage } = useImageStore()
   const [photo, setPhoto] = useState<string | undefined>("");
   const [participantOnCourses, setParticipantOnCourses] = useState<ParticipantOnCourse[]>(participant?.participantsOnCourses as ParticipantOnCourse[])
@@ -99,93 +99,93 @@ export default function ParticipantRegister({ participant }: { participant: Part
     } as Participant
   }
 
-  const validarCampo = (fieldName:string,field:string,size:number) => {
-    return  (field && field !=="")
-            ? (field.length<=size)
-              ? {mensaje:"",state:true}
-              :{mensaje:`${fieldName} sobrepasa el tamaño limite de ${size} carácteres`,state:false}
-            :{mensaje:`${fieldName} campo requerido`,state:false}
+  const validarCampo = (fieldName: string, field: string, size: number) => {
+    return (field && field !== "")
+      ? (field.length <= size)
+        ? { mensaje: "", state: true }
+        : { mensaje: `${fieldName} sobrepasa el tamaño limite de ${size} carácteres`, state: false }
+      : { mensaje: `${fieldName} campo requerido`, state: false }
   }
 
   const validarCampos = (participant: Participant) => {
     let result = validarCampo("Identificación", participant.identification, 191);
     return !result.state ? result
-        : !(result = validarCampo("Fecha de Nacimiento", participant.birthDate, 191)).state ? result
+      : !(result = validarCampo("Fecha de Nacimiento", participant.birthDate, 191)).state ? result
         : !(result = validarCampo("Teléfono", participant.phoneNumber, 191)).state ? result
-        // : !(result = validarCampo("Email", participant.email, 191)).state ? result
-        : !(result = validarCampo("Primer Nombre", participant.firstName, 191)).state ? result
-        : !(result = validarCampo("Primer Apellido", participant.firstSurname, 191)).state ? result
-        : !(result = validarCampo("Segundo Apellido", participant.secondSurname, 191)).state ? result
-        : participant.hasWhatsApp === null ? { mensaje: "Tiene WhatsApp requerido", state: false }
-        : participant.typeIdentification === null ? { mensaje: "Tipo de Identificación requerido", state: false }
-        : participant.grade === null ? { mensaje: "Tipo de Identificación requerido", state: false }
-        : { mensaje: "", state: true };
+          // : !(result = validarCampo("Email", participant.email, 191)).state ? result
+          : !(result = validarCampo("Primer Nombre", participant.firstName, 191)).state ? result
+            : !(result = validarCampo("Primer Apellido", participant.firstSurname, 191)).state ? result
+              : !(result = validarCampo("Segundo Apellido", participant.secondSurname, 191)).state ? result
+                : participant.hasWhatsApp === null ? { mensaje: "Tiene WhatsApp requerido", state: false }
+                  : participant.typeIdentification === null ? { mensaje: "Tipo de Identificación requerido", state: false }
+                    : participant.grade === null ? { mensaje: "Tipo de Identificación requerido", state: false }
+                      : { mensaje: "", state: true };
   }
 
-  const validarCamposUnicos = async (participant:Participant,campoValidar:string,value:string) => {
-    if(campoValidar==="Identificacion"){
+  const validarCamposUnicos = async (participant: Participant, campoValidar: string, value: string) => {
+    if (campoValidar === "Identificacion") {
       const result = await getParticipantByIdentification(value);
       if (result?.id) {
-        if(participant?.id){
-          if(result?.id===participant?.id){
-            return {mensaje:"",state:true}
+        if (participant?.id) {
+          if (result?.id === participant?.id) {
+            return { mensaje: "", state: true }
           }
         }
-        return { mensaje: "Ya exíste un participante con esta identificación", state: false }; 
+        return { mensaje: "Ya exíste un participante con esta identificación", state: false };
       }
-    }else if(campoValidar === "Email"){
+    } else if (campoValidar === "Email") {
       const result = await getParticipantByEmail(value);
       if (result?.id) {
-        if(participant?.id){
-          if(result?.id===participant?.id){
-            return {mensaje:"",state:true}
+        if (participant?.id) {
+          if (result?.id === participant?.id) {
+            return { mensaje: "", state: true }
           }
         }
         return { mensaje: "Ya exíste un participante con este correo", state: false };
       }
-    }else if(campoValidar == "PhoneNumber"){
+    } else if (campoValidar == "PhoneNumber") {
       const result = await getParticipantByPhoneNumber(value);
       if (result?.id) {
-        if(participant?.id){
-          if(result?.id===participant?.id){
-            return {mensaje:"",state:true}
+        if (participant?.id) {
+          if (result?.id === participant?.id) {
+            return { mensaje: "", state: true }
           }
         }
-          return { mensaje: "Ya exíste un participante con este número telefónico", state: false };
+        return { mensaje: "Ya exíste un participante con este número telefónico", state: false };
       }
     }
-    return {mensaje:"",state:true}
+    return { mensaje: "", state: true }
   }
 
   const handleSave = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     const newParticipant = createParticipantToSave()
     const validation = validarCampos(newParticipant)
-    
+
     if (validation.state) {
-        const uniquesValidation = await validarCamposUnicos(newParticipant,"Identificacion",newParticipant.identification)
-        if(uniquesValidation.state){
-          const uniquesValidation = await validarCamposUnicos(newParticipant,"Email",newParticipant.email)
-            if(uniquesValidation.state){
-              const uniquesValidation = await validarCamposUnicos(newParticipant,"PhoneNumber",newParticipant.phoneNumber)
-                if(uniquesValidation.state){
-                  const response = participant !== null ? await putParticipant(participant?.id ?? 0, newParticipant) : await postParticipant(newParticipant)
-                  if (response) {
-                    successAlert("Participante guardado exitosamente")
-                    router.push(`/admin/participantRegister/${response.id}`)
-                  } else {
-                    errorAlert("Error al guardar el participante")
-                  }
-                }else{
-                  errorAlert(uniquesValidation.mensaje)
-                }
-            }else{
-              errorAlert(uniquesValidation.mensaje)
+      const uniquesValidation = await validarCamposUnicos(newParticipant, "Identificacion", newParticipant.identification)
+      if (uniquesValidation.state) {
+        const uniquesValidation = await validarCamposUnicos(newParticipant, "Email", newParticipant.email)
+        if (uniquesValidation.state) {
+          const uniquesValidation = await validarCamposUnicos(newParticipant, "PhoneNumber", newParticipant.phoneNumber)
+          if (uniquesValidation.state) {
+            const response = participant !== null ? await putParticipant(participant?.id ?? 0, newParticipant) : await postParticipant(newParticipant)
+            if (response) {
+              successAlert("Participante guardado exitosamente")
+              router.push(`/admin/participantRegister/${response.id}`)
+            } else {
+              errorAlert("Error al guardar el participante")
             }
-      }else{
+          } else {
+            errorAlert(uniquesValidation.mensaje)
+          }
+        } else {
+          errorAlert(uniquesValidation.mensaje)
+        }
+      } else {
         errorAlert(uniquesValidation.mensaje)
       }
-    }else{
+    } else {
       errorAlert(validation?.mensaje!)
     }
   }
@@ -209,7 +209,12 @@ export default function ParticipantRegister({ participant }: { participant: Part
   }
   return (
     <>
-      <div className="container mx-auto bg-gray-gradient p-10 h-auto max-w-4xl my-4 rounded-md gap-4">
+      <div className="container mx-auto bg-gray-gradient p-4 h-auto max-w-4xl my-4 rounded-md gap-4">
+        <div className="w-full">
+        <div onClick={() => router.push("/admin/participants")} className='p-2 border-white border rounded-lg  inline-block hover:rounded-none transition-all cursor-pointer'>
+            <FaArrowLeft size={20} color='white' />
+          </div>
+        </div>
         <div>
           <div className="grid grid-cols-4 gap-5 items-center mb-3">
             <Select
@@ -222,7 +227,7 @@ export default function ParticipantRegister({ participant }: { participant: Part
             />
             <InputField
               value={identification}
-              onChange={(e) => setIdentification(e.target.value)} 
+              onChange={(e) => setIdentification(e.target.value)}
               label="Identificación"
               type="text"
               placeholder="Identificación"

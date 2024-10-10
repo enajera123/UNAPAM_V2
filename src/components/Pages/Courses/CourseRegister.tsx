@@ -3,12 +3,12 @@ import Checkbox from "@/components/Checkbox/Checkbox";
 import InputField from "@/components/InputField/InputField";
 import TextArea from "@/components/TextArea/TextArea";
 import { useCourseStore } from "@/store/coursesStore";
-import { Course, State, YesOrNo } from "@/types/prisma";
+import { Course, State, StateParticipantOnCourse, YesOrNo } from "@/types/prisma";
 import { generateCoursePDF } from "@/utils/reports/generatePDF";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BsFillPersonCheckFill } from "react-icons/bs";
-import { FaHashtag, FaRegCalendarAlt, FaUsers } from "react-icons/fa";
+import { FaArrowLeft, FaHashtag, FaRegCalendarAlt, FaUsers } from "react-icons/fa";
 import { IoNewspaperOutline } from "react-icons/io5";
 import { validateFields, validateUniqueFields } from "./validateCourseFields";
 import { errorAlert } from "@/utils/sweetAlert";
@@ -26,7 +26,7 @@ export default function CourseRegister({ course }: { course: Course | null }) {
     const [needMedicalReport, setNeedMedicalReport] = useState("No");
     const { postCourse, putCourse } = useCourseStore()
     const router = useRouter()
-    const restQuota = course !== null ? course?.quota - (course?.participantsOnCourses?.length ?? 0) : null
+    const restQuota = course !== null ? course?.quota - (course?.participantsOnCourses?.filter(participant => participant.state === StateParticipantOnCourse.Registered)?.length ?? 0) : null
     const { setLoader } = useMainStore()
     useEffect(() => {
         if (course) {
@@ -83,6 +83,11 @@ export default function CourseRegister({ course }: { course: Course | null }) {
 
     return (
         <div className="max-w-5xl my-4 container mx-auto bg-gray-gradient p-10 flex flex-col justify-center items-center h-auto rounded-3xl">
+            <div className="w-full">
+                <div onClick={() => router.push("/admin/courses")} className='p-2 border-white border rounded-lg  inline-block hover:rounded-none transition-all cursor-pointer'>
+                    <FaArrowLeft size={30} color='white' />
+                </div>
+            </div>
             <div className="text-center">
                 <p className="text-xl font-bold text-light-gray">Gestión de cursos</p>
                 {course != null && <p className={`${(((restQuota ?? 0) * 100) / course.quota) < 40 ? "text-red-600" : "text-orange-400"} italic `}>Cupos restantes:{restQuota}</p>}

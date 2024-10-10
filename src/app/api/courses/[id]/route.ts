@@ -1,10 +1,11 @@
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { ParameterId } from "@/types/api";
+import { Course } from "@/types/prisma";
 export async function PUT(req: NextRequest, { params }: ParameterId) {
     try {
         const fetchedId = parseInt(params.id);
-        const course = await req.json();
+        const { participantsOnCourses, id, needMedicalReport, ...course } = await req.json() as Course;
         const response = await prisma.course.update({
             where: {
                 id: fetchedId,
@@ -16,6 +17,7 @@ export async function PUT(req: NextRequest, { params }: ParameterId) {
 
         return NextResponse.json(response, { status: 200 });
     } catch (error) {
+        console.log(error)
         return NextResponse.json(
             { error: "Internal Server Error" },
             { status: 500 }
@@ -46,13 +48,13 @@ export async function GET(req: NextRequest, { params }: ParameterId) {
             where: {
                 id: fetchedId,
             },
-            include:{
-                participantsOnCourses:{
-                    include:{
-                        participants:true
+            include: {
+                participantsOnCourses: {
+                    include: {
+                        participants: true
                     }
                 }
-            
+
             }
         });
 
