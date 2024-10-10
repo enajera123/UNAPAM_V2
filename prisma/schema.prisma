@@ -36,7 +36,7 @@ model Participant {
   firstName                      String
   firstSurname                   String
   secondSurname                  String
-  email                          String
+  email                          String?
   phoneNumber                    String
   birthDate                      String
   identification                 String

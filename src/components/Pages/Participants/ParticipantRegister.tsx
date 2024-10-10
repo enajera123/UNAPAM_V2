@@ -112,7 +112,7 @@ export default function ParticipantRegister({ participant }: { participant: Part
     return !result.state ? result
         : !(result = validarCampo("Fecha de Nacimiento", participant.birthDate, 191)).state ? result
         : !(result = validarCampo("Teléfono", participant.phoneNumber, 191)).state ? result
-        : !(result = validarCampo("Email", participant.email, 191)).state ? result
+        // : !(result = validarCampo("Email", participant.email, 191)).state ? result
         : !(result = validarCampo("Primer Nombre", participant.firstName, 191)).state ? result
         : !(result = validarCampo("Primer Apellido", participant.firstSurname, 191)).state ? result
         : !(result = validarCampo("Segundo Apellido", participant.secondSurname, 191)).state ? result

@@ -5,6 +5,9 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest, res: NextResponse) {
     try {
         const participants = await prisma.participant.findMany({
+            include:{
+                participantsOnCourses:true
+            }
         });
         return NextResponse.json(participants, { status: 200 });
     } catch (error) {

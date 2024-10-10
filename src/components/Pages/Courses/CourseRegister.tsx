@@ -26,6 +26,7 @@ export default function CourseRegister({ course }: { course: Course | null }) {
     const [needMedicalReport, setNeedMedicalReport] = useState("No");
     const { postCourse, putCourse } = useCourseStore()
     const router = useRouter()
+    const restQuota = course !== null ? course?.quota - (course?.participantsOnCourses?.length ?? 0) : null
     const { setLoader } = useMainStore()
     useEffect(() => {
         if (course) {
@@ -82,10 +83,12 @@ export default function CourseRegister({ course }: { course: Course | null }) {
 
     return (
         <div className="max-w-5xl my-4 container mx-auto bg-gray-gradient p-10 flex flex-col justify-center items-center h-auto rounded-3xl">
-            <p className="text-xl font-bold text-light-gray">Gestión de cursos</p>
+            <div className="text-center">
+                <p className="text-xl font-bold text-light-gray">Gestión de cursos</p>
+                {course != null && <p className={`${(((restQuota ?? 0) * 100) / course.quota) < 40 ? "text-red-600" : "text-orange-400"} italic `}>Cupos restantes:{restQuota}</p>}
+            </div>
             <div className="max-w-3xl container bg-dark-gray p-5 rounded-3xl">
                 <div className="flex flex-row items-center">
-
                     <div className="flex-initial w-1/2">
                         <InputField
                             value={courseNumber}

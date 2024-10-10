@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import nodemailer from "nodemailer";
 import bcrypt from 'bcrypt';
+import { publicIpv4 } from "public-ip";
 import { getPasswordResetEmail } from "./htmlTemplate";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -68,9 +69,8 @@ export async function PUT(req: NextRequest) {
         });
 
         try {
-            const baseUrl = req.nextUrl.clone().origin + "/changePassword";
             const emailSubject = "Recuperación de contraseña";
-            const emailMessage = getPasswordResetEmail(newPassword, user.id, baseUrl);
+            const emailMessage = getPasswordResetEmail(newPassword, user.id, await getBaseURL());
             await sendEmail(user.email, emailSubject, emailMessage);
         } catch (error) {
             console.error("Error while sending email:", error);
@@ -81,4 +81,8 @@ export async function PUT(req: NextRequest) {
     } catch (error) {
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
+}
+const getBaseURL = async () => {
+    const ip = await publicIpv4()
+    return `http://${ip}/changePassword`
 }

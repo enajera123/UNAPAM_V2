@@ -1,4 +1,4 @@
-import { Course } from '@/types/prisma'
+import { Course, StateParticipantOnCourse } from '@/types/prisma'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 
@@ -13,34 +13,43 @@ export async function generateCoursePDF(course: Course) {
     doc.text('Reporte del curso', doc.internal.pageSize.width / 2, 40, { align: 'center' });
     doc.setFont('helvetica', 'normal')
     doc.text(`Nombre: ${course.name}`, 10, 50)
-    doc.text(`Número de curso: ${course.courseNumber}`, 10, 55)
-    doc.text(`Descripción: ${course.description}`, 10, 60)
-    doc.text(`Profesor: ${course.professor}`, 10, 65)
-    doc.text(`Cupo: ${course.quota}`, 10, 70)
-    doc.text(`Fecha de inicio: ${course.initialDate}`, 10, 75)
-    doc.text(`Fecha de finalización: ${course.finalDate}`, 10, 80)
-    doc.text(`Estado: ${course.state}`, 10, 85)
-    doc.text(`Necesita reporte médico: ${course.needMedicalReport}`, 10, 90)
-    const list = (course.participantsOnCourses?.map((participant) => [participant.participants?.firstName || "", participant.participants?.firstSurname || "", participant.participants?.secondSurname || "", participant.state]) || [])
+    doc.text(`Código del curso: ${course.courseNumber}`, 10, 55)
+    doc.text(`Profesor: ${course.professor}`, 10, 60)
+    doc.text(`Cupo: ${course.quota}`, 10, 65)
+    doc.text(`Fecha de inicio: ${course.initialDate}`, 10, 70)
+    doc.text(`Fecha de finalización: ${course.finalDate}`, 10, 75)
+    doc.text(`Necesita reporte médico: ${course.needMedicalReport}`, 10, 80)
+    const list = (course.participantsOnCourses?.map((participant, index) => [index + 1, participant.participants?.identification || "", participant.participants?.email || "-", participant.participants?.firstName + " " + participant.participants?.firstSurname + " " + participant.participants?.secondSurname, participant.state === StateParticipantOnCourse.Registered ? "Matriculado" : participant.state === StateParticipantOnCourse.Retired ? "Retirado" : "Finalizado"]) || [])
     if (list.length === 0) {
         doc.setFont('helvetica', 'bold')
-        doc.text('No hay participantes', 10, 95)
+        doc.text('No hay participantes', 10, 85)
     } else {
-        doc.text('Participantes', 10, 95)
+        doc.text('Participantes', 10, 85)
         autoTable(doc, {
             head: [
                 [{
+                    content: '',
+                    styles: { fillColor: [255, 0, 0] },
+                }, {
+                    content: "Cedula",
+                    styles: { fillColor: [255, 0, 0] },
+                },
+                {
+                    content: "Correo",
+                    styles: { fillColor: [255, 0, 0] },
+                },
+                {
                     content: 'Nombre',
                     styles: { fillColor: [255, 0, 0] },
                 },
-                {
-                    content: 'Primer Apellido',
-                    styles: { fillColor: [255, 0, 0] },
-                },
-                {
-                    content: 'Segundo Apellido',
-                    styles: { fillColor: [255, 0, 0] },
-                },
+                // {
+                //     content: 'Primer Apellido',
+                //     styles: { fillColor: [255, 0, 0] },
+                // },
+                // {
+                //     content: 'Segundo Apellido',
+                //     styles: { fillColor: [255, 0, 0] },
+                // },
                 {
                     content: 'Estado',
                     styles: { fillColor: [255, 0, 0] },

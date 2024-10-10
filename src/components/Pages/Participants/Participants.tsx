@@ -11,18 +11,17 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 
-function Participants({ participants, courseId }: { participants: Participant[] | null, courseId: number }) {
+function Participants({ courseId }: { courseId: number }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [filteredData, setFilteredData] = useState<Participant[]>([]);
     const [randomNumber, setRandomNumber] = useState<number>(0);
-    const { participants: participantStore } = useParticipantStore()
+    const { participants } = useParticipantStore()
     const { deleteParticipant } = useParticipantsStore()
     const { handleSearch } = useHandleSearch({ setFilterData: setFilteredData, searchTerm, setRandomNumber })
-    const participantWithCourse = participants?.map((participant) => ({ ...participant, course: participant.participantsOnCourses?.find(course => course.courseId === courseId) })) ?? []
     const router = useRouter()
     useEffect(() => {
-        setFilteredData(participants !== null ? participantWithCourse : participantStore)
-    }, [participantStore, participants])
+        setFilteredData(courseId!==0?participants.filter((participant)=>participant.participantsOnCourses?.find(course => course.courseId == courseId)):participants)
+    }, [participants])
 
     return (
         <div className="bg-gray-gradient w-11/12 mx-auto rounded-2xl">
@@ -34,7 +33,7 @@ function Participants({ participants, courseId }: { participants: Participant[] 
                     <SearchBar
                         searchTerm={searchTerm}
                         setSearchTerm={setSearchTerm}
-                        handleSearch={() => handleSearch(participants !== null ? participantWithCourse : participantStore)}
+                        handleSearch={() => handleSearch(filteredData)}
                         showSelect={false}
                     />
                     <Link href={'/admin/participantRegister'}><Button className="bg-red-gradient">Crear Participante</Button></Link>
@@ -45,9 +44,9 @@ function Participants({ participants, courseId }: { participants: Participant[] 
                             deleteRowFunction={deleteParticipant}
                             doubleClickRowFunction={(id) => router.push(`/admin/participantRegister/${id}`)}
                             showEditColumn={true}
-                            keys={participants !== null ? ['identification', 'firstName', 'firstSurname', 'secondSurname', 'expirationDateMedicalInsurance', 'expirationDateMedicalReport', 'course.state'] : ['identification', 'firstName', 'firstSurname', 'secondSurname', 'expirationDateMedicalInsurance', 'expirationDateMedicalReport']}
+                            keys={['identification', 'firstName', 'firstSurname', 'secondSurname', 'expirationDateMedicalInsurance', 'expirationDateMedicalReport']}
                             data={filteredData}
-                            headers={participants !== null ? ["Identificación", "Nombre", "Primer Apellido", "Segundo Apellido", "Vencimiento de Poliza", "Vencimiento de Dictamen", 'Estado del curso'] : ["Identificación", "Nombre", "Primer Apellido", "Segundo Apellido", "Vencimiento de Poliza", "Vencimiento de Dictamen"]}
+                            headers={["Identificación", "Nombre", "Primer Apellido", "Segundo Apellido", "Vencimiento de Poliza", "Vencimiento de Dictamen"]}
                             itemsPerPage={6}
                             resetPagination={randomNumber}
                             customActions={[
