@@ -1,4 +1,4 @@
-import { User } from "@/types/prisma";
+import { User } from "@prisma/client";
 import axios from "axios";
 
 export async function getUsers() {
@@ -21,15 +21,6 @@ export async function getUserById(id: number) {
   }
 }
 
-export async function createUser(user: User) {
-  try {
-    const response = await axios.post<User>("/api/users", user);
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
 
 export async function updateUser(id: number, user: User) {
   try {
@@ -51,69 +42,9 @@ export async function deleteUser(id: number) {
   }
 }
 
-export async function authenticateUser(identification: string, passwordFromLogin: string) {
+export async function authenticateUser(identification: string, password: string) {
   try {
-    const response = await axios.post<User>("/api/users/byAuth", { identification, passwordFromLogin });
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
-
-export async function getUserByFirstName(firstName: string) {
-  try {
-    const response = await axios.get(`/api/users/byFirstName/${firstName}`);
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
-
-export async function updateUserPassword(id: number, currentPassword: string, newPassword: string) {
-  try {
-    const response = await axios.put(`/api/users/byId/${id}`, { currentPassword, newPassword });
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
-
-export async function forgotPassword(identificacion: string) {
-  try {
-    const response = await axios.put(`/api/users/changePassword`, { identificacion });
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
-
-export async function getUserByPhoneNumber(phoneNumber: string) {
-  try {
-    const response = await axios.get(`/api/users/byPhoneNumber/${phoneNumber}`);
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
-
-export async function getUserByIdentification(identification: string) {
-  try {
-    const response = await axios.get(`/api/users/byIdentification/${identification}`);
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
-
-export async function getUserByEmail(email: string) {
-  try {
-    const response = await axios.get(`/api/users/byEmail/${email}`);
+    const response = await axios.put<User>("/api/v1/users/auth", { identification, password });
     return response.data;
   } catch (error) {
     console.error(error);

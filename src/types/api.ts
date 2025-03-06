@@ -1,3 +1,5 @@
+import { User } from "@prisma/client";
+
 export type ParameterId = {
   params: { id: string };
 };
@@ -48,3 +50,8 @@ export type ParameterDisease = {
 export type ParameterMedicine = {
   params: { medicine: string };
 };
+
+export interface UserToken {
+  user: User;
+  token: string;
+}

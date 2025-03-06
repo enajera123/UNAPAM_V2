@@ -1,18 +1,25 @@
 import { create } from "zustand";
-import { UsersState } from "@/types/state";
 import {
   getUsers,
   getUserById,
-  getUserByFirstName,
-  authenticateUser,
-  updateUserPassword,
-  createUser,
   updateUser,
   deleteUser,
-  forgotPassword,
 } from "@/services/usersService";
-import { User } from "@/types/prisma";
-
+import { fetchData } from "@/utils/fetch";
+import { UserToken } from "@/types/api";
+import { User } from "@prisma/client";
+export type UsersState = {
+  users: User[];
+  setUsers: (users: User[]) => void;
+  getUsers: () => Promise<User[] | null>;
+  getUserById: (id: number) => Promise<User | null>;
+  logout: () => void;
+  sendRecoveryEmail: (identification: string) => Promise<boolean>;
+  changePassword: (id: number, password: string) => Promise<User | null>;
+  putUser: (id: number, user: User) => Promise<User | null>;
+  deleteUser: (id: number) => Promise<boolean>;
+  authenticateUser: (identification: string, passwordFromLogin: string) => Promise<User | null>;
+};
 export const useUsersStore = create<UsersState>((set) => ({
   users: [] as User[],
   setUsers: (users) => set({ users }),
@@ -23,7 +30,18 @@ export const useUsersStore = create<UsersState>((set) => ({
     set({ users });
     return users
   },
-
+  changePassword: async (id: number, password: string) => {
+    const response = await fetchData<User>(`/api/v1/users/auth/${id}/changePassword`, "PUT", { password });
+    if (response) {
+      set((state) => ({
+        users: state.users.map((u) =>
+          u.id === response.id ? response : u
+        ),
+      }));
+      return response
+    }
+    return null
+  },
   getUserById: async (id: number): Promise<User | null> => {
     const user = await getUserById(id);
     if (!user) return null;
@@ -31,27 +49,6 @@ export const useUsersStore = create<UsersState>((set) => ({
       users: state.users.map((u) => (u.id === id ? user : u)),
     }));
     return user;
-  },
-
-  getUserByFirstName: async (firstName: string) => {
-    const user = await getUserByFirstName(firstName);
-    set((state) => ({
-      users: state.users.filter((u) => (u.firstName === firstName ? user : u)),
-    }));
-  },
-
-  postUser: async (user: User): Promise<User | null> => {
-    try {
-      const newUser = await createUser(user);
-      if (newUser) {
-        set((state) => ({ users: [...state.users, newUser] }));
-        return newUser;
-      }
-      return null;
-    } catch (error) {
-      console.error("Error creating user:", error);
-      return null;
-    }
   },
 
   putUser: async (id: number, user: User): Promise<User | null> => {
@@ -69,32 +66,33 @@ export const useUsersStore = create<UsersState>((set) => ({
     return true;
   },
   authenticateUser: async (identification: string, passwordFromLogin: string) => {
-    const authenticatedUser = await authenticateUser(identification, passwordFromLogin);
-    if (authenticatedUser) {
+    // const authenticatedUser = await authenticateUser(identification, passwordFromLogin);
+    const response = await fetchData<UserToken>("/api/v1/users/auth", "PUT", { identification, password: passwordFromLogin });
+    console.log(response)
+    if (response.user.id) {
       set((state) => ({
         users: state.users.map((u) =>
-          u.id === authenticatedUser.id ? authenticatedUser : u
+          u.id === response.user.id ? response.user : u
         ),
       }));
-      return authenticatedUser
+      return response.user
     }
     return null
   },
-
-  putUserPassword: async (id: number, currentPassword: string, newPassword: string) => {
-    const updatedUser = await updateUserPassword(id, currentPassword, newPassword);
-    set((state) => ({
-      users: state.users.map((u) => (u.id === id ? updatedUser : u)),
-    }));
-    if (!updatedUser) return false;
-    return true;
+  sendRecoveryEmail: async (identification: string) => {
+    const response = await fetchData<User>("/api/v1/users/auth/sendRecoveryEmail", "PUT", { identification });
+    if (response) {
+      set((state) => ({
+        users: state.users.map((u) =>
+          u.id === response.id ? response : u
+        ),
+      }));
+      return true
+    }
+    return false
   },
 
-  forgotPassword: async (identification: string) => {
-    const response = await forgotPassword(identification);
-    if (!response) return false;
-    return true;
-  },
+
   logout: () => {
     set({ users: [] });
     document.cookie = "jwtUNAPAM=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";

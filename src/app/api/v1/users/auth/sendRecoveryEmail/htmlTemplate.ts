@@ -1,9 +1,6 @@
-export function getPasswordResetEmail(newPassword: string, id: number, link: string) {
-
-    const resetLink = `${link}?token=${newPassword}&id=${id}`
+export function getPasswordResetEmail(newPassword: string) {
 
     return `<!DOCTYPE html>
-<!DOCTYPE html>
 <html>
 <head>
     <title>Modificación de contraseña</title>
@@ -27,21 +24,21 @@ export function getPasswordResetEmail(newPassword: string, id: number, link: str
         p {
             color: #FFF; 
         }
-        a {
-            display: inline-block;
-            background-color: #ABABAB;
+        .password {
+            font-weight: bold;
             color: #FFF;
-            padding: 10px 20px;
-            text-decoration: none;
+            background-color: #ABABAB;
+            padding: 10px;
             border-radius: 5px;
+            display: inline-block;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Reestablecimiento de contraseña</h1>
-        <p>Para cambiar su contraseña, haz click en el siguiente enlace: </p>
-        <a href="${resetLink}">Cambiar contraseña</a>
+        <p>Su nueva contraseña es: </p>
+        <p class="password">${newPassword}</p>
     </div>
 </body>
 </html>

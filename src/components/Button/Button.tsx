@@ -1,11 +1,11 @@
 import { ButtonProps } from "./interface";
 
-const Button: React.FC<ButtonProps> = ({ children, className, format, ...props }) => {
+const Button: React.FC<ButtonProps> = ({ children, className, format, type, ...props }) => {
 
   return (
     <button
       {...props}
-      type="button"
+      type={type}
       className={`${format ? className : `text-white bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 bg-red-gradient hover:bg-hover-red-gradient ${className}`}`}
     >
       {children}

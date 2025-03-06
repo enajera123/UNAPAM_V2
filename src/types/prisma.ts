@@ -12,21 +12,20 @@ export enum State {
   Inactive="Inactive",
 }
 
-export interface User {
-  id?: number;
-  firstName: string;
-  firstSurname: string;
-  secondSurname: string;
-  phoneNumber: string;
-  birthDate: string;
-  identification: string;
-  state: State;
-  email: string;
-  password: string;
-  isPasswordChanged: string;
-  role: Role;
-
-}
+// export interface User {
+//   id?: number;
+//   firstName: string;
+//   firstSurname: string;
+//   secondSurname: string;
+//   phoneNumber: string;
+//   birthDate: string;
+//   identification: string;
+//   state: State;
+//   email: string;
+//   password: string;
+//   isPasswordChanged: string;
+//   role: Role;
+// }
 
 export enum Role {
   Admin,

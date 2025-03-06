@@ -27,7 +27,7 @@ model User {
   state             State
   email             String @unique
   password          String
-  isPasswordChanged String
+  isPasswordChanged YesOrNo
   role              Role
 }
 

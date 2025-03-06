@@ -1,19 +1,8 @@
-import { Course, GeneralInformation, Participant, ParticipantAttachment, ParticipantDissease, ParticipantHealth, ParticipantMedicine, ParticipantOnCourse, ReferenceContact, User } from "./prisma";
+import { User } from "@prisma/client";
+import { Course, GeneralInformation, Participant, ParticipantAttachment, ParticipantDissease, ParticipantHealth, ParticipantMedicine, ParticipantOnCourse, ReferenceContact} from "./prisma";
 
 
-export type UsersState = {
-  users: User[];
-  setUsers: (users: User[]) => void;
-  getUsers: () => Promise<User[] | null>;
-  getUserById: (id: number) => Promise<User | null>;
-  logout: () => void;
-  postUser: (user: User) => Promise<User | null>;
-  putUser: (id: number, user: User) => Promise<User | null>;
-  putUserPassword: (id: number, currentPassword: string, newPassword: string) => Promise<boolean>;
-  deleteUser: (id: number) => Promise<boolean>;
-  forgotPassword: (identificacion: string) => Promise<boolean>;
-  authenticateUser: (identification: string, passwordFromLogin: string) => Promise<User | null>;
-};
+
 
 export type ReferenceContactState = {
   contacts: ReferenceContact[];
