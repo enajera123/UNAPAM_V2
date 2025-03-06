@@ -1,36 +1,34 @@
-import React from "react";
-import { SelectProps } from "./type";
+import React, { SelectHTMLAttributes } from 'react'
+import { Field, ErrorMessage } from 'formik'
 
-const Select = ({ label, placeholder, icon, options, onChange, value }: SelectProps) => {
+interface CustomSelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
+  label: string
+  name: string
+  defaultValue?: string
+  className?: string
+}
+
+const Select: React.FC<CustomSelectProps> = ({
+  label,
+  name,
+  defaultValue,
+  className,
+  ...props
+}) => {
   return (
-    <form>
-      <label
-        htmlFor="countries"
-        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-      >
-        {label}
-      </label>
-      <div className="relative">
-        <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-          {icon}
-        </div>
-        <select
-          onChange={onChange}
-          id="countries"
-          value={value}
-          className="bg-dark-gray border border-white text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5 dark:bg-dark-gray dark:border-white dark:placeholder-gray-400 dark:text-white"
-        >
-          <option value={placeholder} disabled>{placeholder}</option>
-          {options.map((item) => (
-            <option key={item.value} value={item.value}>
-              {item.label}
-            </option>
-          ))}
-        </select>
-      </div>
-    </form>
-  );
-};
+    <label className='grid text-white'>
+      {label}
+      <Field
+        as='select'
+        className={`select select-sm select-bordered w-52  ${className}`}
+        name={name}
+        defaultValue={defaultValue}
+        {...props}
+      />
 
-export default Select;
+      <ErrorMessage className='text-secondary' name={name} component='div' />
+    </label>
+  )
+}
 
+export default Select

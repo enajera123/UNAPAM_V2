@@ -2,7 +2,6 @@ import { create } from "zustand";
 import {
   getUsers,
   getUserById,
-  updateUser,
   deleteUser,
 } from "@/services/usersService";
 import { fetchData } from "@/utils/fetch";
@@ -16,7 +15,8 @@ export type UsersState = {
   logout: () => void;
   sendRecoveryEmail: (identification: string) => Promise<boolean>;
   changePassword: (id: number, password: string) => Promise<User | null>;
-  putUser: (id: number, user: User) => Promise<User | null>;
+  updateUser: (id: number, user: User) => Promise<User | null>;
+  createUser: (user: User) => Promise<User | null>;
   deleteUser: (id: number) => Promise<boolean>;
   authenticateUser: (identification: string, passwordFromLogin: string) => Promise<User | null>;
 };
@@ -51,13 +51,25 @@ export const useUsersStore = create<UsersState>((set) => ({
     return user;
   },
 
-  putUser: async (id: number, user: User): Promise<User | null> => {
-    const updatedUser = await updateUser(id, user);
-    if (!updatedUser) return null
+  updateUser: async (id: number, user: User): Promise<User | null> => {
+    // const updatedUser = await updateUser(id, user);
+    const response = await fetchData<User>(`/api/v1/users/${id}`, "PUT", user);
+    if (!response.id) return null
     set((state) => ({
-      users: state.users.map((u) => (u.id === id ? updatedUser : u)),
+      users: state.users.map((u) => (u.id === id ? response : u)),
     }));
-    return updatedUser
+    return response
+  },
+  createUser: async (user: User): Promise<User | null> => {
+    try {
+      const response = await fetchData<User>("/api/v1/users", "POST", user);
+      if (!response.id) return null
+      set((state) => ({ users: [...state.users, response] }));
+      return response;
+    } catch (error) {
+      console.error("Error creating user:", error);
+      return null;
+    }
   },
   deleteUser: async (id: number) => {
     const response = await deleteUser(id);
