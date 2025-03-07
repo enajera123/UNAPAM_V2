@@ -2,7 +2,7 @@ import Button from '@/components/Button/Button';
 import { useCourseStore } from '@/store/coursesStore';
 import { Course, State } from '@/types/prisma';
 import { confirmationAlert } from '@/utils/sweetAlert';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material'
+import { Paper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material'
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
@@ -10,14 +10,20 @@ function CourseTable({ filteredData }: { filteredData: Course[] }) {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [page, setPage] = useState(0)
     const router = useRouter()
-    const { putCourse, deleteCourse } = useCourseStore()
+    const { updateCourse, deleteCourse } = useCourseStore()
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => setPage(newPage);
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
 
-    const desactivateRowFunction = async (course: Course) => putCourse(course?.id ?? -1, { ...course, state: course.state === "Inactive" as unknown as State ? "Active" as unknown as State : "Inactive" as unknown as State });
+    const toggleUserState = async (id: number) => {
+        const user = filteredData.find((u) => u.id === id);
+        if (user) {
+            const newState = user.state === "Inactive" ? "Active" : "Inactive";
+            await updateCourse(id, { ...user, state: newState as State });
+        }
+    }
     const seeParticipants = (courseId: number) => {
         router.push(`/admin/participants/${courseId}`)
     }
@@ -59,7 +65,11 @@ function CourseTable({ filteredData }: { filteredData: Course[] }) {
                                 <TableCell >{row.professor}</TableCell>
                                 <TableCell >{row.quota}</TableCell>
                                 <TableCell >{row.initialDate}</TableCell>
-                                <TableCell >{row.state === State.Active ? "Activo" : "Inactivo"}</TableCell>
+                                <TableCell >   <Switch
+                                    checked={row.state === "Active"}
+                                    onChange={() => row.id !== undefined && toggleUserState(row.id)}
+                                    color="error"
+                                /></TableCell>
                                 <TableCell >
                                     <div className='flex gap-2'>
                                         <Button
@@ -67,17 +77,10 @@ function CourseTable({ filteredData }: { filteredData: Course[] }) {
                                             format className={` rounded-xl px-3 py-1 border  shadow-md  hover:bg-gray-300 hover:text-gray-800 border-gray-400 bg-white `}
                                         >Ver Participantes</Button>
                                         <Button
-                                            onClick={() => desactivateRowFunction(row)}
-                                            format className={` rounded-xl px-3 py-1 border  shadow-md  hover:bg-gray-300 hover:text-gray-800 border-gray-400 bg-white `}
-                                        >{row.state === State.Active ? "Desactivar" : "Activar"}</Button>
-                                        <Button
-                                            onClick={() => router.push(`/admin/courseRegister/${row?.id ?? -1}`)}
-                                            format className={` rounded-xl px-3 py-1 border  shadow-md  hover:bg-gray-300 hover:text-gray-800 border-gray-400 bg-white `}
-                                        >Editar</Button>
-                                        <Button
                                             onClick={() => confirmationAlert(() => deleteCourse(row?.id ?? -1))}
                                             className={` rounded-xl px-3 py-1 border  shadow-md  hover:bg-gray-300 hover:text-gray-800 border-gray-400 bg-white `}
                                         >Eliminar</Button>
+
                                     </div>
                                 </TableCell>
                             </TableRow>
@@ -105,7 +108,7 @@ function CourseTable({ filteredData }: { filteredData: Course[] }) {
                     },
                 }}
             />
-        </Paper>
+        </Paper >
     )
 }
 

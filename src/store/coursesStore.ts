@@ -1,76 +1,57 @@
 import { create } from "zustand";
-import { CoursesState } from "@/types/state";
-import {
-    getCourses,
-    getCourseById,
-    createCourse,
-    updateCourse,
-    deleteCourse,
-    getCourseByCourseNumber,
-    getCourseByName,
-} from "@/services/coursesService";
+import { fetchData } from "@/utils/fetch";
 import { Course } from "@/types/prisma";
+
+export type CoursesState = {
+    courses: Course[];
+    setCourses: (courses: Course[]) => void;
+    getCourses: () => Promise<Course[] | null>;
+    getCourseById: (id: number) => Promise<Course | null>;
+    createCourse: (course: Course) => Promise<Course | null>;
+    updateCourse: (id: number, course: Course) => Promise<Course | null>;
+    deleteCourse: (id: number) => Promise<boolean>;
+};
 
 export const useCourseStore = create<CoursesState>((set) => ({
     courses: [] as Course[],
     setCourses: (courses) => set({ courses }),
 
     getCourses: async () => {
-        const courses = await getCourses();
-        if (!courses) return null
-        set({ courses });
-        return courses
+        const response = await fetchData<Course[]>("/api/v1/courses", "GET");
+        if (!response.length) return null;
+        set({ courses: response });
+        return response;
     },
 
     getCourseById: async (id: number) => {
-        const course = await getCourseById(id);
-        if (!course) return null
+        const response = await fetchData<Course>(`/api/v1/courses/${id}`, "GET");
         set((state) => ({
-            courses: state.courses.map((c) => (c.id === id ? course : c)),
+            courses: state.courses.map((c) => (c.id === id ? response : c)),
         }));
-        return course
+        return response;
     },
 
-    postCourse: async (course: Course) => {
-        const newCourse = await createCourse(course);
-        if (!newCourse) return null
-        if (newCourse) {
-            set((state) => ({ courses: [...state.courses, newCourse] }));
-        }
-        return newCourse
+    createCourse: async (course: Course) => {
+        const response = await fetchData<Course>("/api/v1/courses", "POST", course);
+        if (!response.id) return null;
+        set((state) => ({ courses: [...state.courses, response] }));
+        return response;
     },
 
-    putCourse: async (id: number, course: Course) => {
-        const updatedCourse = await updateCourse(id, course);
-        if (!updatedCourse) return null
+    updateCourse: async (id: number, course: Course) => {
+        const response = await fetchData<Course>(`/api/v1/courses/${id}`, "PUT", course);
+        if (!response.id) return null;
         set((state) => ({
-            courses: state.courses.map((c) => (c.id === id ? updatedCourse : c)),
+            courses: state.courses.map((c) => (c.id === id ? response : c)),
         }));
-        return updatedCourse
+        return response;
     },
 
     deleteCourse: async (id: number) => {
-        const deletedCourse = await deleteCourse(id);
-        set((state) => ({
-            courses: state.courses.filter((c) => c.id !== id),
-        }));
-        return deletedCourse
+        const response = await fetchData<boolean>(`/api/v1/courses/${id}`, "DELETE");
+        if (!response) return false;
+        set((state) => ({ courses: state.courses.filter((c) => c.id !== id) }));
+        return true;
     },
 
-    getCourseByCourseNumber: async (courseNumber: string) => {
-        const course = await getCourseByCourseNumber(courseNumber);
-        set((state) => ({
-            courses: state.courses.map((c) =>
-                c.courseNumber === courseNumber ? course : c
-            ),
-        }));
-        return course;
-    },
-
-    getCourseByName: async (name: string) => {
-        const course = await getCourseByName(name);
-        set((state) => ({
-            courses: state.courses.map((c) => (c.name === name ? course : c)),
-        }));
-    },
 }));

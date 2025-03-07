@@ -1,9 +1,4 @@
 import { create } from "zustand";
-import {
-  getUsers,
-  getUserById,
-  deleteUser,
-} from "@/services/usersService";
 import { fetchData } from "@/utils/fetch";
 import { UserToken } from "@/types/api";
 import { User } from "@prisma/client";
@@ -25,10 +20,10 @@ export const useUsersStore = create<UsersState>((set) => ({
   setUsers: (users) => set({ users }),
 
   getUsers: async () => {
-    const users = await getUsers();
-    if (!users) return null
-    set({ users });
-    return users
+    const response = await fetchData<User[]>("/api/v1/users", "GET");
+    if (!response.length) return null
+    set({ users: response });
+    return response
   },
   changePassword: async (id: number, password: string) => {
     const response = await fetchData<User>(`/api/v1/users/auth/${id}/changePassword`, "PUT", { password });
@@ -43,16 +38,14 @@ export const useUsersStore = create<UsersState>((set) => ({
     return null
   },
   getUserById: async (id: number): Promise<User | null> => {
-    const user = await getUserById(id);
-    if (!user) return null;
+    const response = await fetchData<User>(`/api/v1/users/${id}`, "GET");
     set((state) => ({
-      users: state.users.map((u) => (u.id === id ? user : u)),
+      users: state.users.map((u) => (u.id === id ? response : u)),
     }));
-    return user;
+    return response;
   },
 
   updateUser: async (id: number, user: User): Promise<User | null> => {
-    // const updatedUser = await updateUser(id, user);
     const response = await fetchData<User>(`/api/v1/users/${id}`, "PUT", user);
     if (!response.id) return null
     set((state) => ({
@@ -72,15 +65,13 @@ export const useUsersStore = create<UsersState>((set) => ({
     }
   },
   deleteUser: async (id: number) => {
-    const response = await deleteUser(id);
+    const response = await fetchData<User>(`/api/v1/users/${id}`, "DELETE");
     if (!response) return false
     set((state) => ({ users: state.users.filter((user) => user.id !== id) }));
     return true;
   },
   authenticateUser: async (identification: string, passwordFromLogin: string) => {
-    // const authenticatedUser = await authenticateUser(identification, passwordFromLogin);
     const response = await fetchData<UserToken>("/api/v1/users/auth", "PUT", { identification, password: passwordFromLogin });
-    console.log(response)
     if (response.user.id) {
       set((state) => ({
         users: state.users.map((u) =>

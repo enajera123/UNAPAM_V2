@@ -63,7 +63,11 @@ function UserTable({ filteredData }: { filteredData: User[] }) {
                                 <TableCell >{row.firstName}</TableCell>
                                 <TableCell >{row.firstSurname}</TableCell>
                                 <TableCell >{row.secondSurname}</TableCell>
-                                <TableCell >{`${row.state === "Active" ? "Activo" : "Inactivo"}`}</TableCell>
+                                <TableCell > <Switch
+                                    checked={row.state === "Active"}
+                                    onChange={() => toggleUserState(row.id)}
+                                    color="error"
+                                /></TableCell>
                                 <TableCell >
                                     <div className='flex justify-center gap-2'>
                                         <Button
@@ -74,11 +78,6 @@ function UserTable({ filteredData }: { filteredData: User[] }) {
                                             onClick={() => confirmationAlert(() => deleteUser(row?.id ?? -1))}
                                             className={` rounded-xl px-3 py-1 border  shadow-md  hover:bg-gray-300 hover:text-gray-800 border-gray-400 bg-white `}
                                         >Eliminar</Button>
-                                        <Switch
-                                            checked={row.state === "Active"}
-                                            onChange={() => toggleUserState(row.id)}
-                                            color="primary"
-                                        />
                                     </div>
                                 </TableCell>
                             </TableRow>

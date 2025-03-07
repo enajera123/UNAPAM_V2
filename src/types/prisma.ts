@@ -1,3 +1,5 @@
+import { YesOrNo } from "@prisma/client";
+
 export interface GeneralInformation {
   id?: number;
   name: string;
@@ -8,8 +10,8 @@ export interface GeneralInformation {
 }
 
 export enum State {
-  Active="Active",
-  Inactive="Inactive",
+  Active = "Active",
+  Inactive = "Inactive",
 }
 
 // export interface User {
@@ -86,16 +88,16 @@ export interface Participant {
 export interface ParticipantAttachment {
   id?: number;
   name: string;
-  type?:string;
+  type?: string;
   attachmentFile: file_format;
   participantId: number;
   participant?: Participant;
 }
 
 export enum StateParticipantOnCourse {
-  Retired="Retired",
-  Registered="Registered",
-  Finished="Finished",
+  Retired = "Retired",
+  Registered = "Registered",
+  Finished = "Finished",
 }
 
 export interface ParticipantOnCourse {
@@ -173,10 +175,6 @@ export interface ParticipantMedicine {
   participantHealthId: number;
 }
 
-export enum YesOrNo {
-  Yes,
-  No,
-}
 
 export interface Course {
   id?: number;

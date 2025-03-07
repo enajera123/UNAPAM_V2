@@ -87,14 +87,3 @@ export type GeneralInformationState = {
   putGeneralInformation: (id: number, information: GeneralInformation) => Promise<GeneralInformation | null>;
   deleteGeneralInformation: (id: number) => Promise<boolean>;
 };
-
-export type CoursesState = {
-  courses: Course[];
-  setCourses: (courses: Course[]) => void;
-  getCourses: () => Promise<Course[] | null>;
-  getCourseById: (id: number) => Promise<Course | null>;
-  getCourseByCourseNumber: (courseNumber: string) => Promise<Course | null>;
-  postCourse: (courses: Course) => Promise<Course | null>;
-  putCourse: (id: number, courses: Course) => Promise<Course | null>;
-  deleteCourse: (id: number) => Promise<boolean>;
-};
