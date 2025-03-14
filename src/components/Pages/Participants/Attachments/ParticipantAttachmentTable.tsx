@@ -1,32 +1,20 @@
 import Button from '@/components/Button/Button';
-import { useCourseStore } from '@/store/coursesStore';
-import { Course, State } from '@/types/prisma';
+import { ParticipantAttachment, State } from '@/types/prisma';
 import { confirmationAlert } from '@/utils/sweetAlert';
 import { Paper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material'
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
-function CourseTable({ filteredData }: { filteredData: Course[] }) {
+function ParticipantAttachmentTable({ filteredData, saveFile, deleteFile }: { filteredData: ParticipantAttachment[], deleteFile: (participantAttachment: ParticipantAttachment) => void, saveFile: (participantAttachment: ParticipantAttachment) => void }) {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [page, setPage] = useState(0)
     const router = useRouter()
-    const { updateCourse, deleteCourse } = useCourseStore()
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => setPage(newPage);
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
 
-    const toggleUserState = async (id: number) => {
-        const user = filteredData.find((u) => u.id === id);
-        if (user) {
-            const newState = user.state === "Inactive" ? "Active" : "Inactive";
-            await updateCourse(id, { ...user, state: newState as State });
-        }
-    }
-    const seeParticipants = (courseId: number) => {
-        router.push(`/admin/participants/${courseId}`)
-    }
     useEffect(() => {
         setPage(0)
     }, [filteredData])
@@ -37,18 +25,15 @@ function CourseTable({ filteredData }: { filteredData: Course[] }) {
                     <TableHead>
                         <TableRow >
                             <TableCell sx={{ fontWeight: "600", backgroundColor: "red", color: 'white' }}>Nombre</TableCell>
-                            <TableCell sx={{ fontWeight: "600", backgroundColor: "red", color: 'white' }}>Codigo</TableCell>
-                            <TableCell sx={{ fontWeight: "600", backgroundColor: "red", color: 'white' }}>Profesor</TableCell>
-                            <TableCell sx={{ fontWeight: "600", backgroundColor: "red", color: 'white' }}>Cupo</TableCell>
-                            <TableCell sx={{ fontWeight: "600", backgroundColor: "red", color: 'white' }}>Fecha de Inicio</TableCell>
-                            <TableCell sx={{ fontWeight: "600", backgroundColor: "red", color: 'white' }}>Estado</TableCell>
+                            <TableCell sx={{ fontWeight: "600", backgroundColor: "red", color: 'white' }}>Tipo</TableCell>
+                            <TableCell sx={{ fontWeight: "600", backgroundColor: "red", color: 'white' }}>Enlace</TableCell>
                             <TableCell sx={{ textAlign: "center", fontWeight: "600", backgroundColor: "red", color: 'white' }}>Acciones</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {(rowsPerPage > 0 ? filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : filteredData).map((row, index) => (
                             <TableRow
-                                onDoubleClick={() => router.push(`/admin/courseRegister/${row?.id ?? -1}`)}
+                                onDoubleClick={() => router.push(`/admin/participantAttachmentRegister/${row?.id ?? -1}`)}
                                 key={row.id}
                                 sx={{
                                     '&:last-child td, &:last-child th': { border: 0 },
@@ -59,9 +44,30 @@ function CourseTable({ filteredData }: { filteredData: Course[] }) {
                                 }}
                             >
                                 <TableCell component="th" scope="row">
+                                    {row.attachmentFile.file_name}
+                                </TableCell>
+                                <TableCell >{row.attachmentFile.file_icon}</TableCell>
+                                <TableCell >{row.attachmentFile.file_anchor}</TableCell>
+                                <TableCell >
+                                    <div className='flex gap-2'>
+                                        {!row.id &&
+                                            <Button
+                                                format
+                                                onClick={() => saveFile(row)}
+                                                // onClick={() => postParticipantAttachment(row)}
+                                                className={` rounded-xl px-3  border shadow-md hover:bg-green-600 border-green-600 transition-all bg-green-500 text-white `}
+                                            >Guardar</Button>}
+                                        <Button
+                                            onClick={() => confirmationAlert(() => deleteFile(row))}
+                                            className={` rounded-xl px-3 py-1 border  shadow-md  hover:bg-gray-300 hover:text-gray-800 border-gray-400 bg-white `}
+                                        >Eliminar</Button>
+
+                                    </div>
+                                </TableCell>
+                                {/* <TableCell component="th" scope="row">
                                     {row.name}
                                 </TableCell>
-                                <TableCell >{row.courseNumber}</TableCell>
+                                <TableCell >{row.participantAttachmentNumber}</TableCell>
                                 <TableCell >{row.professor}</TableCell>
                                 <TableCell >{row.quota}</TableCell>
                                 <TableCell >{row.initialDate}</TableCell>
@@ -77,11 +83,12 @@ function CourseTable({ filteredData }: { filteredData: Course[] }) {
                                             format className={` rounded-xl px-3 py-1 border  shadow-md  hover:bg-gray-300 hover:text-gray-800 border-gray-400 bg-white `}
                                         >Ver Participantes</Button>
                                         <Button
-                                            onClick={() => confirmationAlert(() => deleteCourse(row?.id ?? -1))}
+                                            onClick={() => confirmationAlert(() => deleteParticipantAttachment(row?.id ?? -1))}
                                             className={` rounded-xl px-3 py-1 border  shadow-md  hover:bg-gray-300 hover:text-gray-800 border-gray-400 bg-white `}
                                         >Eliminar</Button>
+
                                     </div>
-                                </TableCell>
+                                </TableCell> */}
                             </TableRow>
                         )
                         )}
@@ -111,4 +118,4 @@ function CourseTable({ filteredData }: { filteredData: Course[] }) {
     )
 }
 
-export default CourseTable
+export default ParticipantAttachmentTable
