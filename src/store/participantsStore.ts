@@ -1,114 +1,62 @@
 import { create } from "zustand";
-import { ParticipantState } from "@/types/state";
-import {
-  getParticipants,
-  getParticipantById,
-  createParticipant,
-  updateParticipant,
-  deleteParticipant,
-  getParticipantByEmail,
-  getParticipantByFirstName,
-  getParticipantByIdentification,
-  getParticipantsByCourseId,
-  getParticipantByPhoneNumber
-} from "@/services/participantsService";
-import { Participant, ParticipantAttachment } from "@/types/prisma";
+import { fetchData } from "@/utils/fetch";
+import { Participant } from "@/types/prisma";
+
+
+export type ParticipantState = {
+  participants: Participant[];
+  setParticipants: (participants: Participant[]) => void;
+  getParticipants: () => Promise<Participant[] | null>;
+  getParticipantById: (id: number) => Promise<Participant | null>;
+  createParticipant: (participant: Participant) => Promise<Participant | null>;
+  updateParticipant: (id: number, participant: Participant) => Promise<Participant | null>;
+  deleteParticipant: (id: number) => Promise<boolean>;
+};
 
 export const useParticipantsStore = create<ParticipantState>((set) => ({
   participants: [] as Participant[],
   setParticipants: (participants) => set({ participants }),
-  getParticipantsByCourseId: async (id: number) => {
-    const participants = await getParticipantsByCourseId(id);
-    if (!participants) return null
-    set({ participants });
-    return participants
-  },
+
   getParticipants: async () => {
-    const participants = await getParticipants();
-    if (!participants) return null
+    const participants = await fetchData<Participant[]>("/api/v1/participants", "GET");
+    if (!participants) return null;
     set({ participants });
-    return participants
+    return participants;
   },
 
   getParticipantById: async (id: number) => {
-    const participant = await getParticipantById(id);
-    if (!participant) return null
+    const participant = await fetchData<Participant>(`/api/v1/participants/${id}`, "GET");
+    if (!participant) return null;
     set((state) => ({
-      participants: state.participants.map((p) =>
-        p.id === id ? participant : p
-      ),
+      participants: state.participants.map((p) => (p.id === id ? participant : p)),
     }));
     return participant;
   },
 
-  postParticipant: async (participant: Participant) => {
-    const newParticipant = await createParticipant(participant);
-    if (!newParticipant) return null
-    if (newParticipant) {
-      set((state) => ({
-        participants: [...state.participants, newParticipant],
-      }));
-    }
-    return newParticipant
+  createParticipant: async (participant: Participant) => {
+    const newParticipant = await fetchData<Participant>("/api/v1/participants", "POST", participant);
+    if (!newParticipant) return null;
+    set((state) => ({
+      participants: [...state.participants, newParticipant],
+    }));
+    return newParticipant;
   },
 
-  putParticipant: async (id: number, participant: Participant) => {
-    const updatedParticipant = await updateParticipant(id, participant);
-    if (!updatedParticipant) return null
+  updateParticipant: async (id: number, participant: Participant) => {
+    const updatedParticipant = await fetchData<Participant>(`/api/v1/participants/${id}`, "PUT", participant);
+    if (!updatedParticipant) return null;
     set((state) => ({
-      participants: state.participants.map((p) =>
-        p.id === id ? updatedParticipant : p
-      ),
+      participants: state.participants.map((p) => (p.id === id ? updatedParticipant : p)),
     }));
-    return updatedParticipant
+    return updatedParticipant;
   },
 
   deleteParticipant: async (id: number) => {
-    const response = await deleteParticipant(id);
-    if (!response) return false
+    const response = await fetchData<boolean>(`/api/v1/participants/${id}`, "DELETE");
+    if (!response) return false;
     set((state) => ({
       participants: state.participants.filter((p) => p.id !== id),
     }));
     return true;
   },
-
-  getParticipantByEmail: async (email: string) => {
-    const participant = await getParticipantByEmail(email);
-    set((state) => ({
-      participants: state.participants.map((p) =>
-        p.email === email ? participant : p
-      ),
-    }));
-    return participant
-  },
-
-  getParticipantByFirstName: async (firstName: string) => {
-    const participant = await getParticipantByFirstName(firstName);
-    set((state) => ({
-      participants: state.participants.map((p) =>
-        p.firstName === firstName ? participant : p
-      ),
-    }));
-  },
-
-  getParticipantByIdentification: async (identification: string) => {
-    const participant = await getParticipantByIdentification(identification);
-    set((state) => ({
-      participants: state.participants.map((p) =>
-        p.identification === identification ? participant : p
-      ),
-    }));
-    return participant
-  },
-
-  getParticipantByPhoneNumber: async (phoneNumber: string) => {
-    const participant = await getParticipantByPhoneNumber(phoneNumber);
-    set((state) => ({
-      participants: state.participants.map((p) =>
-        p.phoneNumber === phoneNumber ? participant : p
-      ),
-    }));
-    return participant
-  },
-
 }));

@@ -2,7 +2,7 @@
 
 import Register from '@/components/Pages/Users/UserRegister'
 import { useUsersStore } from '@/store/usersStore'
-import { User } from '@/types/prisma'
+import { User } from '@prisma/client'
 import { useEffect, useState } from 'react'
 export default function UserRegister({ params }: { params: { id: string } }) {
     const { getUserById } = useUsersStore()

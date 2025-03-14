@@ -15,20 +15,6 @@ export type ReferenceContactState = {
   searchContact: (searchTerm: string) => void;
 };
 
-export type ParticipantState = {
-  participants: Participant[];
-  setParticipants: (participants: Participant[]) => void;
-  getParticipants: () => Promise<Participant | null>;
-  getParticipantById: (id: number) => Promise<Participant | null>;
-  getParticipantByEmail: (email: string) => Promise<Participant | null>;
-  getParticipantByIdentification: (identification: string) => Promise<Participant | null>;
-  getParticipantByPhoneNumber: (telephone: string) => Promise<Participant | null>;
-  getParticipantsByCourseId: (id: number) => Promise<Participant[] | null>;
-  postParticipant: (participant: Participant) => Promise<Participant | null>;
-  putParticipant: (id: number, participant: Participant) => Promise<Participant | null>;
-  deleteParticipant: (id: number) => Promise<boolean>;
-};
-
 export type ParticipantOnCourseState = {
   participantsOnCourse: ParticipantOnCourse[];
   setParticipantsOnCourse: (participantsOnCourse: ParticipantOnCourse[]) => void;
@@ -47,15 +33,6 @@ export type ParticipantMedicineState = {
   deleteParticipantMedicine: (id: number) => Promise<boolean>;
 };
 
-export type ParticipantHealthState = {
-  participantsHealth: ParticipantHealth[];
-  setParticipantsHealth: (participantsHealth: ParticipantHealth[]) => void;
-  getParticipantsHealth: () => void;
-  getParticipantHealthById: (id: number) => Promise<ParticipantHealth | null>;
-  postParticipantHealth: (participantHealth: ParticipantHealth) => Promise<ParticipantHealth | null>;
-  putParticipantHealth: (id: number, participantHealth: ParticipantHealth) => Promise<ParticipantHealth | null>;
-  deleteParticipantHealth: (id: number) => Promise<boolean>;
-};
 
 export type ParticipantDisseaseState = {
   participantsDisease: ParticipantDissease[];

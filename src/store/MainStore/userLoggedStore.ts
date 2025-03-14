@@ -1,5 +1,5 @@
+import { User } from '@prisma/client';
 import { create } from 'zustand';
-import { User } from '@/types/prisma';
 interface AuthState {
     user: User | null
     setUser: (user: User) => void,
@@ -19,7 +19,7 @@ const useAuthState = create<AuthState>((set) => ({
     },
     logout: () => {
         localStorage.removeItem('user');
-        set({ user: null });    
+        set({ user: null });
     },
 }));
 

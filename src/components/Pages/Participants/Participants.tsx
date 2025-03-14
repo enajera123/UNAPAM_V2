@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ParticipantTable from "./ParticipantTable";
+import { StateParticipantOnCourse } from "@prisma/client";
 
 
 function Participants({ courseId }: { courseId: number }) {
@@ -19,7 +20,7 @@ function Participants({ courseId }: { courseId: number }) {
     const { participants } = useParticipantStore()
     const { handleSearch } = useHandleSearch({ setFilterData: setFilteredData, searchTerm, setRandomNumber })
     useEffect(() => {
-        setFilteredData(courseId !== 0 ? participants.filter((participant) => participant.participantsOnCourses?.find(course => course.courseId == courseId)) : participants)
+        setFilteredData(courseId != 0 ? participants.filter((participant) => participant.participantsOnCourses?.find(course => course.courseId == courseId) && participant.participantsOnCourses?.find(course => course.courseId == courseId)?.state === StateParticipantOnCourse.Registered) : participants)
     }, [participants])
 
     return (

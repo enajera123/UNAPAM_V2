@@ -3,6 +3,9 @@ import { Grade, PrismaClient, State, StateParticipantOnCourse, TypeIdentificatio
 const prisma = new PrismaClient();
 async function seedDatabase() {
     try {
+        await prisma.participant.deleteMany()
+        await prisma.course.deleteMany()
+        
         for (let index = 0; index < 500; index++) {
             await prisma.participant.create({
                 data: {

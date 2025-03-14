@@ -3,12 +3,12 @@ import { useEffect } from "react";
 import { useCourseStore as useCoursesStore } from "@/store/coursesStore";
 export function useCourseStore() {
     const { setLoader } = useMainStore()
-    const { getCourses, courses } = useCoursesStore()
+    const { getCourses, courses, setCourses } = useCoursesStore()
     useEffect(() => {
         setLoader(true)
         getCourses().then(() =>
             setLoader(false)
         ).catch(() => setLoader(false))
     }, [])
-    return { courses }
+    return { courses, setCourses }
 }

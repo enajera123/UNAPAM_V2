@@ -1,99 +1,52 @@
 import { create } from "zustand";
-import { ParticipantHealthState } from "@/types/state";
-import {
-  getParticipantsHealth,
-  getParticipantHealthById,
-  createParticipantHealth,
-  updateParticipantHealth,
-  deleteParticipantHealth,
-  getParticipantHealthByBloodType,
-  getParticipantHealthByParticipantId,
-} from "@/services/participantHealthService";
+import { fetchData } from "@/utils/fetch";
 import { ParticipantHealth } from "@/types/prisma";
+export type ParticipantHealthState = {
+  // participantsHealth: ParticipantHealth[];
+  // setParticipantsHealth: (participantsHealth: ParticipantHealth[]) => void;
+  // getParticipantsHealth: () => void;
+  // getParticipantHealthById: (id: number) => Promise<ParticipantHealth | null>;
+  createParticipantHealth: (participantHealth: ParticipantHealth) => Promise<ParticipantHealth | null>;
+  updateParticipantHealth: (id: number, participantHealth: ParticipantHealth) => Promise<ParticipantHealth | null>;
+};
 
-export const useParticipantHealthStore = create<ParticipantHealthState>(
-  (set) => ({
-    participantsHealth: [] as ParticipantHealth[],
-    setParticipantsHealth: (participantsHealth) => set({ participantsHealth }),
+export const useParticipantHealthStore = create<ParticipantHealthState>((set) => ({
+  // participantsHealth: [] as ParticipantHealth[],
+  // setParticipantsHealth: (participantsHealth) => set({ participantsHealth }),
 
-    getParticipantsHealth: async () => {
-      const participantsHealth = await getParticipantsHealth();
-      set({ participantsHealth });
-    },
+  // getParticipantsHealth: async () => {
+  //   const response = await fetchData<ParticipantHealth[]>("/api/v1/participants/participantHealth", "GET");
+  //   if (!response.length) return null;
+  //   set({ participantsHealth: response });
+  //   return response;
+  // },
 
-    getParticipantHealthById: async (id: number) => {
-      const participantHealth = await getParticipantHealthById(id);
-      if (!participantHealth) return null;
-      set((state) => ({
-        participantsHealth: state.participantsHealth.map((p) =>
-          p.id === id ? participantHealth : p
-        ),
-      }));
-      return participantHealth;
-    },
+  // getParticipantHealthById: async (id: number) => {
+  //   const response = await fetchData<ParticipantHealth>(`/api/v1/participants/participantHealth/${id}`, "GET");
+  //   if (!response) return null;
+  //   set((state) => ({
+  //     participantsHealth: state.participantsHealth.map((p) => (p.id === id ? response : p)),
+  //   }));
+  //   return response;
+  // },
 
-    postParticipantHealth: async (participantHealth: ParticipantHealth) => {
-      const newParticipantHealth = await createParticipantHealth(
-        participantHealth
-      );
-      if (!newParticipantHealth) return null;
-      if (newParticipantHealth) {
-        set((state) => ({
-          participantsHealth: [
-            ...state.participantsHealth,
-            newParticipantHealth,
-          ],
-        }));
-      }
-      return newParticipantHealth;
-    },
+  createParticipantHealth: async (participantHealth: ParticipantHealth) => {
+    const response = await fetchData<ParticipantHealth>("/api/v1/participants/participantHealth", "POST", participantHealth);
+    if (!response) return null;
+    // set((state) => ({
+    //   participantsHealth: [...state.participantsHealth, response],
+    // }));
+    return response;
+  },
 
-    putParticipantHealth: async (
-      id: number,
-      participantHealth: ParticipantHealth
-    ) => {
-      const updatedParticipantHealth = await updateParticipantHealth(
-        id,
-        participantHealth
-      );
-      if (!updatedParticipantHealth) return null;
-      set((state) => ({
-        participantsHealth: state.participantsHealth.map((p) =>
-          p.id === id ? updatedParticipantHealth : p
-        ),
-      }));
-      return updatedParticipantHealth;
-    },
+  updateParticipantHealth: async (id: number, participantHealth: ParticipantHealth) => {
+    const response = await fetchData<ParticipantHealth>(`/api/v1/participants/participantHealth/${id}`, "PUT", participantHealth);
+    if (!response) return null;
+    // set((state) => ({
+    //   participantsHealth: state.participantsHealth.map((p) => (p.id === id ? response : p)),
+    // }));
+    return response;
+  },
 
-    deleteParticipantHealth: async (id: number) => {
-      const response = await deleteParticipantHealth(id);
-      if (!response) return false;
-      set((state) => ({
-        participantsHealth: state.participantsHealth.filter((p) => p.id !== id),
-      }));
-      return true;
-    },
 
-    getParticipantHealthByBloodType: async (bloodType: string) => {
-      const participantHealth = await getParticipantHealthByBloodType(
-        bloodType
-      );
-      set((state) => ({
-        participantsHealth: state.participantsHealth.map((p) =>
-          p.bloodType === bloodType ? participantHealth : p
-        ),
-      }));
-    },
-
-    getParticipantHealthByParticipantId: async (participantId: number) => {
-      const participantHealth = await getParticipantHealthByParticipantId(
-        participantId
-      );
-      set((state) => ({
-        participantsHealth: state.participantsHealth.map((p) =>
-          p.participantId === participantId ? participantHealth : p
-        ),
-      }));
-    },
-  })
-);
+}));
