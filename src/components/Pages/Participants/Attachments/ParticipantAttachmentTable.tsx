@@ -49,7 +49,7 @@ function ParticipantAttachmentTable({ filteredData, saveFile, deleteFile }: { fi
                                 <TableCell >{row.attachmentFile.file_icon}</TableCell>
                                 <TableCell >{row.attachmentFile.file_anchor}</TableCell>
                                 <TableCell >
-                                    <div className='flex gap-2'>
+                                    <div className='flex justify-center items-center gap-2'>
                                         {!row.id &&
                                             <Button
                                                 format
