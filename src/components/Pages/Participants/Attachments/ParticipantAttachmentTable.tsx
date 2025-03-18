@@ -54,7 +54,6 @@ function ParticipantAttachmentTable({ filteredData, saveFile, deleteFile }: { fi
                                             <Button
                                                 format
                                                 onClick={() => saveFile(row)}
-                                                // onClick={() => postParticipantAttachment(row)}
                                                 className={` rounded-xl px-3  border shadow-md hover:bg-green-600 border-green-600 transition-all bg-green-500 text-white `}
                                             >Guardar</Button>}
                                         <Button
@@ -64,31 +63,6 @@ function ParticipantAttachmentTable({ filteredData, saveFile, deleteFile }: { fi
 
                                     </div>
                                 </TableCell>
-                                {/* <TableCell component="th" scope="row">
-                                    {row.name}
-                                </TableCell>
-                                <TableCell >{row.participantAttachmentNumber}</TableCell>
-                                <TableCell >{row.professor}</TableCell>
-                                <TableCell >{row.quota}</TableCell>
-                                <TableCell >{row.initialDate}</TableCell>
-                                <TableCell >   <Switch
-                                    checked={row.state === "Active"}
-                                    onChange={() => row.id !== undefined && toggleUserState(row.id)}
-                                    color="error"
-                                /></TableCell>
-                                <TableCell >
-                                    <div className='flex gap-2'>
-                                        <Button
-                                            onClick={() => seeParticipants(row?.id ?? -1)}
-                                            format className={` rounded-xl px-3 py-1 border  shadow-md  hover:bg-gray-300 hover:text-gray-800 border-gray-400 bg-white `}
-                                        >Ver Participantes</Button>
-                                        <Button
-                                            onClick={() => confirmationAlert(() => deleteParticipantAttachment(row?.id ?? -1))}
-                                            className={` rounded-xl px-3 py-1 border  shadow-md  hover:bg-gray-300 hover:text-gray-800 border-gray-400 bg-white `}
-                                        >Eliminar</Button>
-
-                                    </div>
-                                </TableCell> */}
                             </TableRow>
                         )
                         )}
