@@ -1,7 +1,7 @@
 import Button from '@/components/Button/Button';
-import { ParticipantAttachment, State } from '@/types/prisma';
+import { ParticipantAttachment } from '@/types/prisma';
 import { confirmationAlert } from '@/utils/sweetAlert';
-import { Paper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material'
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material'
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
