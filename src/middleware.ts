@@ -8,28 +8,20 @@ async function verifyToken(token: string) {
         return null
     }
 }
-
+const unprotectedPaths = ['/api/v1/users/auth', '/api/v1/users/auth/sendRecoveryEmail']
 export async function middleware(request: NextRequest) {
-    // const url = request.nextUrl.clone()
-    // const unprotectedPaths = ['/api/users/byId', '/api/users/auth', '/api/users/changePassword', '/api/users/byAuth']
-    // // const publicPaths = []
-    // const adminClientPaths = ['/admin']
-    // const pathIn = (path: string) => url.pathname.startsWith(path)
-    // const verifyAndRedirect = async (adminOnly = false) => {
-    //     const jwt = request.cookies.get('jwtUNAPAM')
-    //     const payload = await verifyToken(jwt?.value ?? "")
-    //     if (!payload || (adminOnly && (payload.role !== 'Admin' && payload.role !== 'User'))) {
-    //         return NextResponse.redirect(new URL("/", url))
-    //     }
-    //     return NextResponse.next()
-    // }
-    // if (unprotectedPaths.some(pathIn)) {return NextResponse.next()}
-    // // if (publicPaths.some(pathIn)) return verifyAndRedirect()s
-    // if (adminClientPaths.some(pathIn)) return verifyAndRedirect(true)
-    // if (url.pathname.startsWith('/api') /*&& !publicPaths.some(pathIn)*/    ) return verifyAndRedirect(true)
-
+    const url = request.nextUrl.clone()
+    if (unprotectedPaths.includes(url.pathname)) return NextResponse.next()
+    const token = request.cookies.get('jwtUNAPAM')
+    if (!token) return NextResponse.redirect(new URL("/", url))
+    const payload = await verifyToken(token.value)
+    console.log(payload)
+    if (!payload) return NextResponse.redirect(new URL("/", url))
     return NextResponse.next()
 }
 export const config = {
-    matcher: "/:path*",
+    matcher: [
+        '/api/:path*',
+        '/admin/:path*',
+    ]
 };

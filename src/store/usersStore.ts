@@ -72,6 +72,11 @@ export const useUsersStore = create<UsersState>((set) => ({
   },
   authenticateUser: async (identification: string, passwordFromLogin: string) => {
     const response = await fetchData<UserToken>("/api/v1/users/auth", "PUT", { identification, password: passwordFromLogin });
+    console.log(response)
+    if (response.token) {
+      document.cookie = `jwtUNAPAM=${response.token}; path=/;`;
+      // return response.user
+    }
     if (response.user.id) {
       set((state) => ({
         users: state.users.map((u) =>

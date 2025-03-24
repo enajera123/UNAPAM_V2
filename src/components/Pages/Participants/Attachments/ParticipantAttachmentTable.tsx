@@ -54,7 +54,7 @@ function ParticipantAttachmentTable({ filteredData, saveFile, deleteFile }: { fi
                                             <Button
                                                 format
                                                 onClick={() => saveFile(row)}
-                                                className={` rounded-xl px-3  border shadow-md hover:bg-green-600 border-green-600 transition-all bg-green-500 text-white `}
+                                                className={`py-2.5 rounded-xl px-3  border shadow-md hover:bg-green-600 border-green-600 transition-all bg-green-500 text-white `}
                                             >Guardar</Button>}
                                         <Button
                                             onClick={() => confirmationAlert(() => deleteFile(row))}
