@@ -27,7 +27,7 @@ function ParticipantTable({ filteredData }: { filteredData: Participant[] }) {
                 <Table stickyHeader sx={{ minWidth: 650 }} aria-label="a dense table">
                     <TableHead>
                         <TableRow >
-                            <TableCell sx={{ fontWeight: "600", backgroundColor: "red", color: 'white' }}>Identifiación</TableCell>
+                            <TableCell sx={{ fontWeight: "600", backgroundColor: "red", color: 'white' }}>Identificación</TableCell>
                             <TableCell sx={{ fontWeight: "600", backgroundColor: "red", color: 'white' }}>Nombre</TableCell>
                             <TableCell sx={{ fontWeight: "600", backgroundColor: "red", color: 'white' }}>Primer Apellido</TableCell>
                             <TableCell sx={{ fontWeight: "600", backgroundColor: "red", color: 'white' }}>Segundo Apellido</TableCell>
