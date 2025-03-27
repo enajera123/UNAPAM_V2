@@ -27,7 +27,7 @@ const SearchBar = ({ searchTerm, setSearchTerm, selectedOption, setSelectedOptio
 
     return (
         <div className="flex w-full gap-4 items-center">
-            {searchTerm && <Button onClick={handleClearSearch}><AiOutlineClose size={20} /></Button>}
+            {searchTerm && <Button type="button" onClick={handleClearSearch}><AiOutlineClose size={20} /></Button>}
             <input
                 type="text"
                 className="bg-medium-gray border border-black text-white placeholder:text-white text-sm rounded-lg block w-full p-3"
@@ -46,7 +46,7 @@ const SearchBar = ({ searchTerm, setSearchTerm, selectedOption, setSelectedOptio
                     <option value="name">Nombre y apellidos</option>
                 </select>
             )}
-            <Button onClick={handleSearch}>  <AiOutlineSearch size={24} /></Button>
+            <Button type="button" onClick={handleSearch}>  <AiOutlineSearch size={24} /></Button>
         </div>
     );
 };

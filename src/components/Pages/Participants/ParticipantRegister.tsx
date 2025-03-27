@@ -20,6 +20,7 @@ import { ParticipantOnCourse } from "@/types/prisma";
 import { Field, Form, Formik } from "formik";
 import { getInitialValuesParticipant } from "@/types/schemas/participantRegisterSchema";
 import { optionsScholarship } from "@/utils/data";
+import CustomDateTimePicker from "@/components/CustomDatePicker";
 
 export default function ParticipantRegister({ participant }: { participant: Participant | null }) {
   const router = useRouter();
@@ -105,12 +106,13 @@ export default function ParticipantRegister({ participant }: { participant: Part
           <Form>
             <div className={activeTab === "general" ? "block" : "hidden"}>
               <div className="grid grid-cols-4 gap-5 items-center mb-3">
-                <Select className="bg-dark-gray border border-white text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5 dark:bg-dark-gray dark:border-white dark:placeholder-gray-400 dark:text-white" label="Tipo de identificación" name="typeIdentification">
+                <Select className="border text-sm rounded-lg block w-full ps-10 p-2.5 bg-dark-gray border-white placeholder-gray-400 text-white" label="Tipo de identificación" name="typeIdentification">
                   <option value="DIMEX">DIMEX</option>
                   <option value="Nacional">Nacional</option>
                 </Select>
                 <InputField name="identification" label="Identificación" type="text" placeholder="Identificación" iconStart={<HiOutlineIdentification color="white" />} />
-                <InputField name="birthDate" label="Fecha de nacimiento" placeholder="Fecha de nacimiento" type="date" iconStart={<FaRegCalendarAlt color="white" />} />
+                <CustomDateTimePicker label="Fecha de nacimiento" name="birthDate" />
+                {/* <InputField name="birthDate" label="Fecha de nacimiento" placeholder="Fecha de nacimiento" type="date" iconStart={<FaRegCalendarAlt color="white" />} /> */}
                 <ProfileImage image={image} onChangeImage={onChangeImage} />
               </div>
               <div className="grid grid-cols-3 gap-5">
@@ -128,7 +130,7 @@ export default function ParticipantRegister({ participant }: { participant: Part
                   <InputField name="phoneNumber" label="" placeholder="Telefono" iconStart={<FiPhoneCall color="white" />} />
                 </div>
                 <InputField name="email" label="Email" placeholder="Email" iconStart={<MdOutlineEmail color="white" />} />
-                <Select className="bg-dark-gray border border-white text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5 dark:bg-dark-gray dark:border-white dark:placeholder-gray-400 dark:text-white" name="grade" label="Escolaridad">
+                <Select className="border text-sm rounded-lg block w-full ps-10 p-2.5 bg-dark-gray border-white placeholder-gray-400 text-white" name="grade" label="Escolaridad">
                   {optionsScholarship.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
                 </Select>
               </div>

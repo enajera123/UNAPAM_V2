@@ -6,10 +6,10 @@ import { useHandleSearch } from '@/hooks/Table/useHandleSearch';
 import SearchBar from '@/components/SearchBar/SearchBar';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material';
 import Button from '@/components/Button/Button';
-import { ParticipantOnCourse, Course, StateParticipantOnCourse, Participant } from '@/types/prisma';
+import { ParticipantOnCourse, Course, StateParticipantOnCourse, Participant, State } from '@/types/prisma';
 
 const EnrollCourses = ({ participant }: { participant: Participant }) => {
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(20);
     const [page, setPage] = useState(0);
     const { postParticipantOnCourse, putParticipantOnCourse } = useParticipantOnCourseStore();
     const { courses, setCourses } = useCoursesStore();
@@ -18,7 +18,9 @@ const EnrollCourses = ({ participant }: { participant: Participant }) => {
     const [randomNumber, setRandomNumber] = useState<number>(0);
     const { handleSearch } = useHandleSearch<Course>({ setFilterData: setFilteredData, searchTerm, setRandomNumber });
     const [participantState, setParticipantState] = useState<Participant>(participant);
-
+    useEffect(() => {
+        setFilteredData(courses);
+    }, [courses]);
     useEffect(() => setParticipantState(participant), [participant]);
     useEffect(() => setPage(0), [filteredData]);
 
@@ -61,7 +63,7 @@ const EnrollCourses = ({ participant }: { participant: Participant }) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {(rowsPerPage > 0 ? courses.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : courses).map((course, index) => {
+                            {(rowsPerPage > 0 ? filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : filteredData).filter(course => course.state === State.Active).map((course, index) => {
                                 const availableQuota = course.quota - (course.participantsOnCourses?.filter(p => p.state !== StateParticipantOnCourse.Retired)?.length ?? 0);
                                 const participantOnCourse = participantState.participantsOnCourses?.find(i => i.courseId === course.id);
                                 const isRegistered = participantOnCourse?.state === StateParticipantOnCourse.Registered;
@@ -80,12 +82,12 @@ const EnrollCourses = ({ participant }: { participant: Participant }) => {
                                             {availableQuota > 0 || isRegistered ? (
                                                 participantOnCourse ? (
                                                     isRegistered ? (
-                                                        <Button type='button' onClick={() => enrollCoursesConfirmationAlert(() => updateParticipantCourses({ participantId: participantState.id ?? 0, courseId: course.id ?? 0, state: StateParticipantOnCourse.Retired }), "retirar")}>Retirar</Button>
+                                                        <Button type='button' onClick={() => enrollCoursesConfirmationAlert(() => updateParticipantCourses({ participantId: participantState.id ?? 0, courseId: course.id ?? 0, state: StateParticipantOnCourse.Retired }), "retirar", course, participant)}>Retirar</Button>
                                                     ) : isRetired ? (
-                                                        <Button type='button' onClick={() => enrollCoursesConfirmationAlert(() => updateParticipantCourses({ participantId: participantState.id ?? 0, courseId: course.id ?? 0, state: StateParticipantOnCourse.Registered }), "matricular")}>Matricular</Button>
+                                                        <Button type='button' onClick={() => enrollCoursesConfirmationAlert(() => updateParticipantCourses({ participantId: participantState.id ?? 0, courseId: course.id ?? 0, state: StateParticipantOnCourse.Registered }), "matricular", course, participant)}>Matricular</Button>
                                                     ) : <span>No disponible</span>
                                                 ) : (
-                                                    <Button type='button' onClick={() => enrollCoursesConfirmationAlert(() => updateParticipantCourses({ participantId: participantState.id ?? 0, courseId: course.id ?? 0, state: StateParticipantOnCourse.Registered }), "matricular")}>Matricular</Button>
+                                                    <Button type='button' onClick={() => enrollCoursesConfirmationAlert(() => updateParticipantCourses({ participantId: participantState.id ?? 0, courseId: course.id ?? 0, state: StateParticipantOnCourse.Registered }), "matricular", course, participant)}>Matricular</Button>
                                                 )
                                             ) : (
                                                 <span className='text-red-700 font-bold'>No hay cupos disponibles</span>
@@ -103,9 +105,9 @@ const EnrollCourses = ({ participant }: { participant: Participant }) => {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                     onPageChange={handleChangePage}
                     component="div"
-                    rowsPerPageOptions={[10, 15, 25, 50, { label: 'Todo', value: -1 }]}
+                    rowsPerPageOptions={[20, 40, 100, { label: 'Todo', value: -1 }]}
                     colSpan={3}
-                    count={courses.length}
+                    count={filteredData.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     slotProps={{

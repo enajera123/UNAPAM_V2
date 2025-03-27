@@ -33,7 +33,7 @@ function Participants({ courseId }: { courseId: number }) {
                     <SearchBar
                         searchTerm={searchTerm}
                         setSearchTerm={setSearchTerm}
-                        handleSearch={() => handleSearch(filteredData)}
+                        handleSearch={() => handleSearch(participants)}
                         showSelect={false}
                     />
                     <Link href={'/admin/participantRegister'}><Button className="bg-red-gradient">Crear Participante</Button></Link>

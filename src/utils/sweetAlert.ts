@@ -1,3 +1,4 @@
+import { Course, Participant } from '@/types/prisma'
 import Swal from 'sweetalert2'
 export const confirmationAlert = async (confirmedFunction: Function) => Swal.fire({
     title: '¿Estas seguro?',
@@ -73,18 +74,32 @@ export const errorAlert = (message: string) => Swal.mixin({
         toast.addEventListener('mouseleave', Swal.resumeTimer)
     }
 }).fire()
-
-export const enrollCoursesConfirmationAlert = (confirmedFunction: Function, option: string) => Swal.fire({
-    title: `¿Desea ${option} este curso?`,
-    text: '',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Confirmar',
-    confirmButtonColor: 'green',
-    cancelButtonColor: 'red',
-    cancelButtonText: 'Cancelar'
-}).then((result) => {
-    if (result.isConfirmed) {
-        confirmedFunction()
-    }
-})
+export const enrollCoursesConfirmationAlert = (
+    confirmedFunction: Function,
+    option: string,
+    courseInfo?: Course,
+    participantInfo?: Participant
+) => {
+    const courseDetails = courseInfo
+        ? `<div style="text-align: left; margin-top: 10px;">
+            <p><strong>Nombre:</strong> ${participantInfo?.firstName}</p>
+            <p><strong>Curso:</strong> ${courseInfo.name || "N/A"}</p>
+            <p><strong>Horario:</strong> ${courseInfo.initialDate + " " + courseInfo.description || "N/A"}</p>
+            <p><strong>Aula:</strong> ${courseInfo.location || "N/A"}</p>
+        </div>`
+        : "";
+    Swal.fire({
+        title: `¿Desea ${option} este curso?`,
+        html: `${courseDetails}`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Confirmar',
+        confirmButtonColor: 'green',
+        cancelButtonColor: 'red',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            confirmedFunction();
+        }
+    });
+};
