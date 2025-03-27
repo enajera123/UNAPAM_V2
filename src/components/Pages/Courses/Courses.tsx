@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useHandleSearch } from '@/hooks/Table/useHandleSearch';
 import Link from 'next/link';
 import Button from '@/components/Button/Button';
-import { Course } from '@/types/prisma';
+import { Course, State } from '@/types/prisma';
 import { useCourseStore as useCoursesStore } from '@/hooks/Stores/CourseStore/useCourseStore'
 import CourseTable from './CourseTable';
 
@@ -17,7 +17,7 @@ function Courses() {
     const [randomNumber, setRandomNumber] = useState<number>(0);
     const { handleSearch } = useHandleSearch<Course>({ setFilterData: setFilteredData, searchTerm, setRandomNumber })
     useEffect(() => {
-        setFilteredData(courses)
+        setFilteredData(courses.sort(course=>course.state === State.Active ? -1 : 1))
     }, [courses])
     return (
         <div className="bg-gray-gradient mx-2 rounded-2xl">
